@@ -19,6 +19,8 @@ struct newspp {
     vector<vector<pair<int, wT>>> ori_adj;
     vector<vector<pair<int, wT>>> adj;
     vector<wT> d;
+    vector<int> pred, path_sz;
+    vector<int> rev_map;
 
     vector<unordered_map<int, int>> neig;
     newspp(int n_): n(n_) {
@@ -26,6 +28,7 @@ struct newspp {
         neig.assign(n, {});
         k = floor(pow(log2(n), 1.0 / 3.0));
         t = floor(pow(log2(n), 2.0 / 3.0));
+        debug(k, t);
     }
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
@@ -44,15 +47,19 @@ struct newspp {
         }
         cnt++;
         adj.assign(cnt, {});
-        d.assign(cnt, {});
-        dad.assign(cnt, {});
-        root.assign(cnt, {});
+        root.resize(cnt);
+        
+        rev_map.resize(cnt);
+        d.resize(cnt);
+        path_sz.resize(cnt, 0);
+        pred.resize(cnt);
 
         for(int i = 0; i < n; i++) { // create 0-weight cycles
             for(auto cur = neig[i].begin(); cur != neig[i].end(); cur++) {
                 auto nxt = next(cur);
                 if(nxt == neig[i].end()) nxt = neig[i].begin();
                 adj[cur->second].emplace_back(nxt->second, wT());
+                rev_map[cur->second] = i;
             }
         }
         for(int i = 0; i < n; i++) { // add edges
@@ -63,19 +70,33 @@ struct newspp {
                 neig[i][n] = cnt;
             }
         }
+        debug("custom nodes");
+        for(int i = 0; i < n; i++) {
+            for(auto [j, id]: neig[i]) debug(i + 1, id);
+        }
+        for(int i = 0; i < cnt; i++) {
+            debug(customToReal(i) + 1, i, adj[i]);
+        }
     }
     
     int toAnyCustomNode(int real_id) {
         return neig[real_id].begin()->second;
     }
+    int customToReal(int id) {
+        return rev_map[id];
+    }
 
     vector<wT> execute(int s) {
-        s = toAnyCustomNode(s);
         fill(d.begin(), d.end(), oo);
+        fill(path_sz.begin(), path_sz.end(), oo);
+        for(int i = 0; i < pred.size(); i++) pred[i] = i;
+
+        s = toAnyCustomNode(s);
         d[s] = 0;
+        path_sz[s] = 0;
         
         const int l = ceil(log2(n) / t);
-        bmssp(l, oo, {s});
+        bmssp(l, make_tuple(oo, 0, 0, 0), {s});
 
         vector<wT> res(n);
         for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
@@ -83,46 +104,49 @@ struct newspp {
     }
     
     // ===================================================================
-    
+
+    using uniqueDistT = tuple<wT, int, int, int>;
     struct batchPQ {
         int n;
-        using elementT = pair<wT, int>;
-        set<elementT> s;
-        map<int, wT> inv;
-        int M, B;
+        set<uniqueDistT> s;
+        map<int, uniqueDistT> inv;
+        int M;
+        uniqueDistT B;
 
-        batchPQ(int M_, int B_): M(M_), B(B_) {}
+        batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) {}
         unsigned size() {
             return s.size();
         }
-        void insert(elementT x) {
-            s.insert(x);
-            inv[x.second] = x.first;
-        }
-        void batchPrepend(const vector<elementT> &v) {
-            for(auto &x: v) {
-                auto it = inv.find(x.second);
-                if(it != s.end() && it->second > x.first) {
-                    s.erase({it->second, it->first});
+
+        void insert(uniqueDistT x) {
+            auto it = inv.find(get<2>(x));
+            if(it != inv.end()) {
+                if(it->second > x) {
+                    s.erase(it->second);
                     inv.erase(it);
+
+                    s.insert(x);
+                    inv[get<2>(x)] = x;
                 }
+            } else {
                 s.insert(x);
-                inv[x.second] = x.first;
+                inv[get<2>(x)] = x;
             }
         }
-        pair<wT, vector<int>> pull() {
-            wT bigKey;
+        void batchPrepend(const vector<uniqueDistT> &v) {
+            for(auto &x: v) {
+                insert(x);
+            }
+        }
+        pair<uniqueDistT, vector<int>> pull() {
             vector<int> res;
             while(s.size() && res.size() < M) {
-                res.push_back(s.begin()->second);
-                bigKey = s.begin()->first;
+                res.push_back(get<2>(*s.begin()));
                 s.erase(s.begin());
+                inv.erase(res.back());
             }
-            int x = B;
-            if(s.size()) {
-                x = s.begin()->first;
-                assert(x > bigKey);
-            }
+            uniqueDistT x = B;
+            if(s.size()) x = *s.begin();
             return {x, res};
         }
     };
@@ -134,9 +158,12 @@ struct newspp {
     }
     template<typename T>
     void removeDuplicates(vector<T> &v) {
-        unordered_set<T> s(v.begin(), v.end());
-        v.clear();
-        append(v, s);
+        // unordered_set<T> s(v.begin(), v.end());
+        // v.clear();
+        // append(v, s);
+        // this is n log n, which is not cool. Change later
+        sort(v.begin(), v.end());
+        v.erase(unique(v.begin(), v.end()), v.end());
     }
     template<typename T>
     bool isUnique(vector<T> v) {
@@ -145,11 +172,20 @@ struct newspp {
         v.erase(unique(v.begin(), v.end()), v.end());
         return v2.size() == v.size();
     }
-
+    uniqueDistT getDist(int u, int v, int w) { // for unique paths assumption
+        return {d[u] + w, path_sz[u] + 1, v, u};
+    }
+    uniqueDistT getDist(int u) {
+        return {d[u], path_sz[u], u, pred[u]};
+    }
+    void updateDist(int u, int v, int w) {
+        pred[v] = u;
+        d[v] = d[u] + w;
+        path_sz[v] = path_sz[u] + 1;
+    }
     // ===================================================================
-
     vector<int> dad, root;
-    pair<vector<int>, vector<int>> findPivots(wT B, vector<int> S) {
+    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, vector<int> S) {
         unordered_set<int> w(S.begin(), S.end());
         vector<int> active = S;
         for(int x: S) root[x] = x;
@@ -157,9 +193,9 @@ struct newspp {
             vector<int> nw_active;
             for(int u: active) {
                 for(auto [v, w]: adj[u]) {
-                    if(d[u] + w <= d[v]) {
-                        d[v] = d[u] + w;
-                        if(d[v] < B) {
+                    if(getDist(u, v, w) <= getDist(v)) {
+                        updateDist(u, v, w);
+                        if(getDist(v) < B) {
                             root[v] = root[u];
                             nw_active.push_back(v);
                         }
@@ -172,84 +208,90 @@ struct newspp {
             }
             swap(active, nw_active);
         }
+        unordered_map<int, int> sz;
+        for(int u: w) sz[root[u]]++;
         vector<int> P;
-        for(int x: active) P.push_back(root[x]);
-        removeDuplicates(P);
+
+        for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
 
         return {P, vector<int>(w.begin(), w.end())};
     }
 
-    pair<wT, vector<int>> baseCase(wT B, int x) {
-        vector<int> found = {x};
+    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
+        vector<int> found;
 
-        set<pair<wT, int>> heap;
-        heap.insert({d[x], x});
+        set<uniqueDistT> heap;
+        heap.insert(getDist(x));
         while(heap.size() && found.size() < k + 1) {
-            auto [du, u] = *heap.begin();
+            int u = get<2>(*heap.begin());
+            heap.erase(heap.begin());
             found.push_back(u);
             for(auto [v, w]: adj[u]) {
-                if(du + w <= d[v] && du + w < B) {
-                    heap.erase({d[v], v});
-                    d[v] = du + w;
-                    heap.insert({d[v], v});
+                auto new_dist = getDist(u, v, w);
+                auto old_dist = getDist(v);
+                if(new_dist <= old_dist && new_dist < B) {
+                    heap.erase(old_dist);
+                    updateDist(u, v, w);
+                    heap.insert(new_dist);
                 }
             }
         }
         if(found.size() <= k) return {B, found};
 
-        int nB = -1;
-        for(int u: found) nB = max(nB, d[u]);
+        uniqueDistT nB = {-1, 0, 0, 0};
+        for(int u: found) nB = max(nB, getDist(u));
         vector<int> U;
-        for(int u: found) if(d[u] < nB) U.push_back(u);
-        return {B, U};
+        for(int u: found) if(getDist(u) < nB) U.push_back(u);
+        return {nB, U};
     }
 
-    pair<wT, vector<int>> bmssp(int l, wT B, vector<int> S) {
+    pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, vector<int> S) {
         assert(S.size() <= (2ll << (l * t)));
-        debug(l, B, S);
         if(l == 0) return baseCase(B, S[0]);
 
         auto [P, W] = findPivots(B, S);
 
-        const int M = (2ll << ((l - 1) * t));
+        const int M = (1ll << ((l - 1) * t));
         batchPQ D(M, B);
-        for(int p: P) D.insert({d[p], p});
+        for(int p: P) D.insert(getDist(p));
 
-        int nB_ = oo;
-        for(int p: P) nB_ = min(nB_, d[p]);
+        uniqueDistT nB_ = {oo, 0, 0, 0};
+        for(int p: P) nB_ = min(nB_, getDist(p));
 
         vector<int> found; // found
-        while(found.size() < k * (2ll << ((long long)l * t)) && D.size()) {
+        while(found.size() < k * (1ll << (l * t)) && D.size()) {
             auto [nB, S] = D.pull();
-            auto ret = bmssp(l - 1, B, S);
+            auto ret = bmssp(l - 1, nB, S);
             nB_ = ret.first;
             vector<int> cur_found = ret.second;
             append(found, cur_found);
             
-            vector<pair<wT, int>> promissedButNotFound;
+            vector<uniqueDistT> promissedButNotFound;
             for(int u: cur_found) {
                 for(auto [v, w]: adj[u]) {
-                    if(d[u] + w <= d[v]) {
-                        d[v] = d[u] + w;
-                        if(nB <= d[v] && d[v] < B) {
-                            D.insert({d[v], v});
-                        } else if( nB_ <= d[v] && d[v] < nB) {
-                            promissedButNotFound.emplace_back(d[v], v);
+                    auto new_dist = getDist(u, v, w);
+                    if(new_dist <= getDist(v)) {
+                        updateDist(u, v, w);
+                        if(nB <= new_dist && new_dist < B) {
+                            D.insert(new_dist);
+                        } else if(nB_ <= new_dist && new_dist < nB) {
+                            promissedButNotFound.emplace_back(new_dist);
                         }
                     }
                 }
             }
             for(int x: S) {
-                if(nB_ <= d[x] && d[x] < nB) promissedButNotFound.emplace_back(d[x], x);
+                if(nB_ <= getDist(x) && getDist(x) < nB) promissedButNotFound.emplace_back(getDist(x));
             }
-            // removeDuplicates(promissedButNotFound);
             assert(isUnique(promissedButNotFound));
             D.batchPrepend(promissedButNotFound);
         }
-        wT retB = min(nB_, B);
+        uniqueDistT retB = nB_;
+        if(D.size() == 0) retB = B;
         
-        for(int x: W) if(d[x] < retB) found.push_back(x);
+        for(int x: W) if(getDist(x) < retB) found.push_back(x);
         removeDuplicates(found);
+        assert(isUnique(found));
         return {retB, found};
     }
 };
@@ -269,7 +311,7 @@ void solve() {
 }
  
 signed main() {
-    fastio;
+    // fastio;
  
     int t = 1;
     // in(t);
