@@ -26,9 +26,6 @@ struct newspp {
     newspp(int n_): n(n_) {
         ori_adj.assign(n, {});
         neig.assign(n, {});
-        k = floor(pow(log2(n), 1.0 / 3.0));
-        t = floor(pow(log2(n), 2.0 / 3.0));
-        debug(k, t);
     }
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
@@ -70,6 +67,10 @@ struct newspp {
                 neig[i][n] = cnt;
             }
         }
+        debug(n, cnt);
+        k = floor(pow(log2(cnt), 1.0 / 3.0));
+        t = floor(pow(log2(cnt), 2.0 / 3.0));
+        debug(k, t);
         debug("custom nodes");
         for(int i = 0; i < n; i++) {
             for(auto [j, id]: neig[i]) debug(i + 1, id);
@@ -95,10 +96,11 @@ struct newspp {
         d[s] = 0;
         path_sz[s] = 0;
         
-        const int l = ceil(log2(n) / t);
+        const int l = ceil(log2(adj.size()) / t);
         bmssp(l, make_tuple(oo, 0, 0, 0), {s});
 
         vector<wT> res(n);
+        debug(d);
         for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
         return res;
     }
@@ -132,11 +134,13 @@ struct newspp {
                 s.insert(x);
                 inv[get<2>(x)] = x;
             }
+            assert(*prev(s.end()) < B);
         }
         void batchPrepend(const vector<uniqueDistT> &v) {
             for(auto &x: v) {
                 insert(x);
             }
+            if(v.size()) assert(*prev(s.end()) < B);
         }
         pair<uniqueDistT, vector<int>> pull() {
             vector<int> res;
@@ -147,7 +151,11 @@ struct newspp {
             }
             uniqueDistT x = B;
             if(s.size()) x = *s.begin();
+
+            if(s.size()) assert(*prev(s.end()) < B);
+
             return {x, res};
+            
         }
     };
 
@@ -178,14 +186,14 @@ struct newspp {
     uniqueDistT getDist(int u) {
         return {d[u], path_sz[u], u, pred[u]};
     }
-    void updateDist(int u, int v, int w) {
+    void updateDist(int u, int v, wT w) {
         pred[v] = u;
         d[v] = d[u] + w;
         path_sz[v] = path_sz[u] + 1;
     }
     // ===================================================================
-    vector<int> dad, root;
-    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, vector<int> S) {
+    vector<int> root;
+    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, const vector<int> &S) {
         unordered_set<int> w(S.begin(), S.end());
         vector<int> active = S;
         for(int x: S) root[x] = x;
@@ -210,22 +218,22 @@ struct newspp {
         }
         unordered_map<int, int> sz;
         for(int u: w) sz[root[u]]++;
-        vector<int> P;
 
+        vector<int> P;
         for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
 
         return {P, vector<int>(w.begin(), w.end())};
     }
 
     pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
-        vector<int> found;
+        vector<int> complete;
 
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
-        while(heap.size() && found.size() < k + 1) {
+        while(heap.size() && complete.size() < k + 1) {
             int u = get<2>(*heap.begin());
             heap.erase(heap.begin());
-            found.push_back(u);
+            complete.push_back(u);
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
@@ -236,63 +244,83 @@ struct newspp {
                 }
             }
         }
-        if(found.size() <= k) return {B, found};
+        if(complete.size() <= k) return {B, complete};
 
-        uniqueDistT nB = {-1, 0, 0, 0};
-        for(int u: found) nB = max(nB, getDist(u));
-        vector<int> U;
-        for(int u: found) if(getDist(u) < nB) U.push_back(u);
-        return {nB, U};
+        uniqueDistT nB = getDist(complete.back());
+        complete.pop_back();
+        debug("baseCase complete", nB, complete);
+        return {nB, complete};
     }
 
-    pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, vector<int> S) {
-        assert(S.size() <= (2ll << (l * t)));
-        if(l == 0) return baseCase(B, S[0]);
+    pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
+        for(int u: S) assert(getDist(u) < B);
+        debug(l, B, S);
+        assert(S.size() <= (1 << (l * t)));
+        if(l == 0) {
+            assert(S.size() == 1);
+            return baseCase(B, S[0]);
+        }
 
         auto [P, W] = findPivots(B, S);
 
-        const int M = (1ll << ((l - 1) * t));
+        const int M = (1 << ((l - 1) * t));
         batchPQ D(M, B);
         for(int p: P) D.insert(getDist(p));
 
-        uniqueDistT nB_ = {oo, 0, 0, 0};
-        for(int p: P) nB_ = min(nB_, getDist(p));
+        uniqueDistT complete_B = B;
+        for(int p: P) complete_B = min(complete_B, getDist(p));
 
-        vector<int> found; // found
-        while(found.size() < k * (1ll << (l * t)) && D.size()) {
-            auto [nB, S] = D.pull();
-            auto ret = bmssp(l - 1, nB, S);
-            nB_ = ret.first;
-            vector<int> cur_found = ret.second;
-            append(found, cur_found);
+        vector<int> complete;
+        while(complete.size() < k * (1ll << (l * t)) && D.size()) {
+            auto [trying_B, S] = D.pull();
+
+            auto ret = bmssp(l - 1, trying_B, S);
+            assert(complete_B <= ret.first);
+            complete_B = ret.first;
+            vector<int> nw_complete = ret.second;
+            append(complete, nw_complete);
+
+            assert(isUnique(complete)); // point 6, page 10
+            assert(complete_B <= trying_B);
+            assert(trying_B <= B);
             
-            vector<uniqueDistT> promissedButNotFound;
-            for(int u: cur_found) {
+            debug("ON", l, B, S);
+            debug("complete", nw_complete);
+
+            vector<uniqueDistT> new_frontier;
+            for(int u: nw_complete) {
+                assert(getDist(u) < complete_B);
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
                         updateDist(u, v, w);
-                        if(nB <= new_dist && new_dist < B) {
-                            D.insert(new_dist);
-                        } else if(nB_ <= new_dist && new_dist < nB) {
-                            promissedButNotFound.emplace_back(new_dist);
+                        if(trying_B <= new_dist && new_dist < B) {
+                            debug("new frontier", v);
+                            D.insert(new_dist); // d[v] can be greater equal than min(D)
+                        } else if(complete_B <= new_dist && new_dist < trying_B) {
+                            debug("new frontier", v);
+                            new_frontier.emplace_back(new_dist); // d[v] is less than all in D
                         }
                     }
                 }
             }
             for(int x: S) {
-                if(nB_ <= getDist(x) && getDist(x) < nB) promissedButNotFound.emplace_back(getDist(x));
+                if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x)), debug("new frontier", x);
             }
-            assert(isUnique(promissedButNotFound));
-            D.batchPrepend(promissedButNotFound);
+            // new_frontier is not necessarily all unique
+            D.batchPrepend(new_frontier);
         }
-        uniqueDistT retB = nB_;
-        if(D.size() == 0) retB = B;
+        uniqueDistT retB;
+        if(D.size() == 0) retB = B; // successful
+        else retB = complete_B;     // partial
         
-        for(int x: W) if(getDist(x) < retB) found.push_back(x);
-        removeDuplicates(found);
-        assert(isUnique(found));
-        return {retB, found};
+        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
+        removeDuplicates(complete);
+
+        assert(P.size() <= complete.size() / k); // point 4, page 10
+        debug("ON", l, B, S);
+        debug(P, B, retB, complete);
+        return {retB, complete};
     }
 };
 
