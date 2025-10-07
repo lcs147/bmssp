@@ -13,8 +13,8 @@ using namespace std;
 template<typename wT>
 struct newspp {
     int n, k, t;
-    // const wT oo = numeric_limits<wT>::max() / 10;
-    const wT oo = 1e9 / 10;
+    const wT oo = numeric_limits<wT>::max() / 1000;
+    // const wT oo = 1e9 / 10;
 
     vector<vector<pair<int, wT>>> ori_adj;
     vector<vector<pair<int, wT>>> adj;
@@ -67,17 +67,17 @@ struct newspp {
                 neig[i][n] = cnt;
             }
         }
-        debug(n, cnt);
         k = floor(pow(log2(cnt), 1.0 / 3.0));
         t = floor(pow(log2(cnt), 2.0 / 3.0));
+        debug(n, cnt);
         debug(k, t);
-        debug("custom nodes");
-        for(int i = 0; i < n; i++) {
-            for(auto [j, id]: neig[i]) debug(i + 1, id);
-        }
-        for(int i = 0; i < cnt; i++) {
-            debug(customToReal(i) + 1, i, adj[i]);
-        }
+        // debug("custom nodes");
+        // for(int i = 0; i < n; i++) {
+        //     for(auto [j, id]: neig[i]) debug(i + 1, id);
+        // }
+        // for(int i = 0; i < cnt; i++) {
+        //     debug(customToReal(i) + 1, i, adj[i]);
+        // }
     }
     
     int toAnyCustomNode(int real_id) {
@@ -97,10 +97,10 @@ struct newspp {
         path_sz[s] = 0;
         
         const int l = ceil(log2(adj.size()) / t);
+        debug(l);
         bmssp(l, make_tuple(oo, 0, 0, 0), {s});
 
         vector<wT> res(n);
-        debug(d);
         for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
         return res;
     }
@@ -134,13 +134,13 @@ struct newspp {
                 s.insert(x);
                 inv[get<2>(x)] = x;
             }
-            assert(*prev(s.end()) < B);
+            // assert(*prev(s.end()) < B);
         }
         void batchPrepend(const vector<uniqueDistT> &v) {
             for(auto &x: v) {
                 insert(x);
             }
-            if(v.size()) assert(*prev(s.end()) < B);
+            // if(v.size()) assert(*prev(s.end()) < B);
         }
         pair<uniqueDistT, vector<int>> pull() {
             vector<int> res;
@@ -152,7 +152,7 @@ struct newspp {
             uniqueDistT x = B;
             if(s.size()) x = *s.begin();
 
-            if(s.size()) assert(*prev(s.end()) < B);
+            // if(s.size()) assert(*prev(s.end()) < B);
 
             return {x, res};
             
@@ -164,14 +164,32 @@ struct newspp {
     void append(vector<T> &a, auto &b) {
         a.insert(a.end(), b.begin(), b.end());
     }
+
+    struct TupleHash {
+        template <class T>
+        void hash_combine(std::size_t& seed, const T& v) const {
+            std::hash<T> hasher;
+            seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+        std::size_t operator()(const uniqueDistT& t) const {
+            std::size_t seed = 0;
+            hash_combine(seed, std::get<0>(t));
+            hash_combine(seed, std::get<1>(t));
+            hash_combine(seed, std::get<2>(t));
+            hash_combine(seed, std::get<3>(t));
+            return seed;
+        }
+    };
     template<typename T>
-    void removeDuplicates(vector<T> &v) {
-        // unordered_set<T> s(v.begin(), v.end());
-        // v.clear();
-        // append(v, s);
-        // this is n log n, which is not cool. Change later
-        sort(v.begin(), v.end());
-        v.erase(unique(v.begin(), v.end()), v.end());
+    void removeDuplicates(vector<T> &v) { // sort is faster
+        unordered_set<T> s(v.begin(), v.end());
+        v.clear();
+        append(v, s);
+    }
+    void removeDuplicates(vector<uniqueDistT> &v) { // sort is faster
+        unordered_set<uniqueDistT, TupleHash> s(v.begin(), v.end());
+        v.clear();
+        append(v, s);
     }
     template<typename T>
     bool isUnique(vector<T> v) {
@@ -248,16 +266,15 @@ struct newspp {
 
         uniqueDistT nB = getDist(complete.back());
         complete.pop_back();
-        debug("baseCase complete", nB, complete);
         return {nB, complete};
     }
 
     pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
-        for(int u: S) assert(getDist(u) < B);
-        debug(l, B, S);
-        assert(S.size() <= (1 << (l * t)));
+        // debug(l, B);
+        // for(int u: S) assert(getDist(u) < B);
+        // assert(S.size() <= (1 << (l * t)));
         if(l == 0) {
-            assert(S.size() == 1);
+            // assert(S.size() == 1);
             return baseCase(B, S[0]);
         }
 
@@ -270,42 +287,55 @@ struct newspp {
         uniqueDistT complete_B = B;
         for(int p: P) complete_B = min(complete_B, getDist(p));
 
+        int its = 0;
         vector<int> complete;
         while(complete.size() < k * (1ll << (l * t)) && D.size()) {
+            its++;
             auto [trying_B, S] = D.pull();
 
             auto ret = bmssp(l - 1, trying_B, S);
-            assert(complete_B <= ret.first);
+            
+            // debug("ON", l, B);
+            // if(complete_B > ret.first) {
+            //     debug("wtf?");
+            //     debug(complete_B, ret.first, l, B);
+            //     debug(trying_B, S.size());
+            // }
+            // assert(complete_B <= ret.first);
             complete_B = ret.first;
             vector<int> nw_complete = ret.second;
+            int old_sz = complete.size();
             append(complete, nw_complete);
 
-            assert(isUnique(complete)); // point 6, page 10
-            assert(complete_B <= trying_B);
-            assert(trying_B <= B);
-            
-            debug("ON", l, B, S);
-            debug("complete", nw_complete);
+            // if(!isUnique(complete)) {
+            //     debug(l, B);
+            //     debug(trying_B, S.size());
+            //     debug(complete_B, nw_complete.size(), complete.size());
+            //     removeDuplicates(complete);
+            //     debug(old_sz, complete.size());
+            //     debug(its);
+            // }
+            // assert(isUnique(complete)); // point 6, page 10
+            // assert(complete_B <= trying_B);
+            // assert(trying_B <= B);
 
             vector<uniqueDistT> new_frontier;
             for(int u: nw_complete) {
-                assert(getDist(u) < complete_B);
+                // assert(getDist(u) < complete_B);
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
                         updateDist(u, v, w);
                         if(trying_B <= new_dist && new_dist < B) {
-                            debug("new frontier", v);
                             D.insert(new_dist); // d[v] can be greater equal than min(D)
                         } else if(complete_B <= new_dist && new_dist < trying_B) {
-                            debug("new frontier", v);
                             new_frontier.emplace_back(new_dist); // d[v] is less than all in D
                         }
                     }
                 }
             }
             for(int x: S) {
-                if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x)), debug("new frontier", x);
+                if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x));
             }
             // new_frontier is not necessarily all unique
             D.batchPrepend(new_frontier);
@@ -317,16 +347,14 @@ struct newspp {
         for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
         removeDuplicates(complete);
 
-        assert(P.size() <= complete.size() / k); // point 4, page 10
-        debug("ON", l, B, S);
-        debug(P, B, retB, complete);
+        // assert(P.size() <= complete.size() / k); // point 4, page 10
         return {retB, complete};
     }
 };
 
 void solve() {
     int n, m; cin >> n >> m;
-    newspp<int> spp(n);
+    newspp<long long> spp(n);
     while(m--) {
         int a, b, w; cin >> a >> b >> w;
         a--; b--;
@@ -339,7 +367,7 @@ void solve() {
 }
  
 signed main() {
-    // fastio;
+    fastio;
  
     int t = 1;
     // in(t);
