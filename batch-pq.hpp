@@ -9,40 +9,59 @@
 #include<iostream>
 #include <unordered_map>
 #include <utility>
+#include <limits>
 
 using namespace std;
 
+#define int long long
+
+
 template<typename wT>
 struct batchPQ {
+    
+    const int oo = 1e18;
+    
     int n;
     
     using uniqueDistT = tuple<wT, int, int, int>; // dist, hops, u, pred[u]
     using elementT = pair<int,uniqueDistT>;
+    
+    
+    struct CompareUB {
+        template <typename It>
+        bool operator()(const std::pair<uniqueDistT, It>& a, const std::pair<uniqueDistT, It>& b) const {
+            return a.first < b.first;
+        }
+    };
 
-    vector<list<elementT>> D0,D1;
-    set<pair<int,int>> UBs; // (UB, id_block)
-    vector<int> blocks_UB;
+
+    typename std::list<std::list<elementT>>::iterator it_min;
+
+    list<list<elementT>> D0,D1;
+    set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
+    
     int M, B;
     unordered_map<int, uniqueDistT> actual_value;
-    unordered_map<int, pair<int, typename list<elementT>::iterator>> where_is;
+    unordered_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is;
     
     // Initialize
     batchPQ(int M_, int B_): M(M_), B(B_) { // O(1)
         D1.push_back(list<elementT>());
-        UBs.insert({B,0});
-        blocks_UB.push_back(B);
+        UBs.insert({{B,oo,-1,-1},D1.begin()});
     }
 
-    void delete_(uniqueDistT x){        // THINK MORE ABOUT THE DELETION
+    void delete_(uniqueDistT x){    // THINK MORE ABOUT THE DELETION
         uniqueDistT b = x;
         int a = get<2>(b);
 
-        auto [id_block,it] = where_is[a];
-        D1[id_block].erase(it);
+        auto [it_block,it] = where_is[a];
+        
+        (*it_block).erase(it);
         where_is.erase(a);
 
-        if(D1[id_block].size() == 0){
-            UBs.erase({blocks_UB[id_block],id_block});
+        if((*it_block).size() == 0){
+            auto it_UB_block = UBs.lower_bound({b,it_min});    
+            UBs.erase(it_UB_block);
         }
     }
 
@@ -60,66 +79,73 @@ struct batchPQ {
         }
 
         // Searching for the first block with UB which is >= 
-        auto it_block = UBs.lower_bound({get<0> (b),-1});
-        auto [ub,id_block] = (*it_block);
+        auto it_UB_block = UBs.lower_bound({b,it_min});
+        auto [ub,it_block] = (*it_UB_block);
 
         // Inserting key/value (a,b)
-        D1[id_block].push_back({a,b});
-        auto it = D1[id_block].end(); it--;
+        (*it_block).push_back({a,b});
+        auto it = (*it_block).end(); it--;
 
-        where_is[a] = {id_block, it};
+        where_is[a] = {it_block, it};
         actual_value[a] = b;
 
         // Checking if exceeds the sixe limit M
-        if(D1[id_block].size() > M){
+        if((*it_block).size() > M){
             cout << "Estorou\n";
-            split(id_block);
+            split(it_block);
         }
     }   
 
-    void split(int id_block){ // O(M) + O(lg(Block Numbers))
-        D1[id_block].sort([](const auto& x, const auto& y) {
+    void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
+
+        (*it_block).sort([](const auto& x, const auto& y) {
             return x.second < y.second;
         }); // O(M log M) WRONG WAY, CHANGE HERE
 
-        int sz = D1[id_block].size();
-
-        D1.push_back(list<elementT>());
-        int new_block = D1.size() - 1;    
-
-        auto it = D1[id_block].begin();
+        
+        int sz = (*it_block).size();
+        
+        
+        auto pos = it_block;
+        pos++;
+        
+        auto new_block = D1.insert(pos,list<elementT>());
+        
+        auto it = (*it_block).begin();
 
         for(int i=0;i<sz/2;i++){it++;} // O(M)
 
-        int UB1 = get<0>(it->second);
+        auto UB1 = it->second;
         for(int i=sz/2;i<sz;i++){ // O(M)
-            D1[new_block].push_back((*it));
-            auto it_new = D1[new_block].end(); it_new--;
+            (*new_block).push_back((*it));
+            auto it_new = (*new_block).end(); it_new--;
             where_is[(*it).first] = {new_block, it_new};
 
-            it = D1[id_block].erase(it);
+            it = (*it_block).erase(it);
         }
 
         // Updating UBs   
         // O(lg(Block Numbers))
-        int UB2 = blocks_UB[id_block];
+        auto it_lb = UBs.lower_bound({UB1,it_block});
+        auto [UB2,aux] = (*it_lb);
+        UBs.erase({UB2,it_block});
 
         UBs.insert({UB2,new_block});
-        blocks_UB.push_back(UB2);
+        UBs.insert({UB1,it_block}); 
+    }
 
-        UBs.erase({blocks_UB[id_block],id_block});
-        UBs.insert({UB1,id_block});
-        blocks_UB[id_block] = UB1;
+    void batchPrepend(const vector<uniqueDistT> &v) {
+        
     }
 
     void print(){
         cout <<  D1.size() << "\n";
         cout << UBs.size() << "\n";
 
-        for(int i=0;i<D1.size();i++){
-            
-            cout << "Block " << i << " UB: " <<  blocks_UB[i] << "\n";
-            for(auto [a,b]: D1[i]){
+        int i = 0;
+        for(auto block : D1){   
+            cout << "Block " << i++ << " UB: " << "\n";
+            for(auto [a,b]: block){
                 cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
             }
             cout << "\n";
