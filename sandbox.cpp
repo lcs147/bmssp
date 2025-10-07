@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main() {
+signed main() {
     batchPQ<int> pq(2, 10);
 
      // dist, hops, u, pred[u]
