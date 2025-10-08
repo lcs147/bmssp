@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
-#define int long long
+
 #define fastio ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
  
 #ifdef LOCAL
@@ -9,6 +8,26 @@ using namespace std;
 #else
 #define debug(...)
 #endif
+
+// #include <boost/unordered_map.hpp>
+// #include <boost/unordered_set.hpp>
+// template<typename K, typename V>
+// using hash_map = boost::unordered_map<K, V>;
+// template<typename K>
+// using hash_set = boost::unordered_set<K>;
+
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+
+template<typename K, typename V>
+using hash_map = gp_hash_table<K, V>;
+template<typename K>
+using hash_set = hash_map<K, null_type>;
+
+// template<typename K, typename V>
+// using hash_map = map<K, V>;
+// template<typename K>
+// using hash_set = set<K>;
 
 template<typename wT>
 struct newspp {
@@ -22,13 +41,24 @@ struct newspp {
     vector<int> pred, path_sz;
     vector<int> rev_map;
 
-    vector<unordered_map<int, int>> neig;
+    vector<hash_map<int, int>> neig;
+    vector<hash_map<int, int>> edge;
     newspp(int n_): n(n_) {
         ori_adj.assign(n, {});
         neig.assign(n, {});
+        edge.assign(n, {});
     }
     void addEdge(int a, int b, wT w) {
-        ori_adj[a].emplace_back(b, w);
+        auto it = edge[a].find(b);
+        if(it == edge[a].end()) {
+            ori_adj[a].emplace_back(b, w);
+            edge[a][b] = ori_adj[a].size() - 1;
+        } else {
+            const int id = it->second;
+            if(ori_adj[a][id].second > w) {
+                ori_adj[a][id].second = w;
+            }
+        }
     }
 
     void prepare_graph() {
@@ -165,43 +195,25 @@ struct newspp {
         a.insert(a.end(), b.begin(), b.end());
     }
 
-    struct TupleHash {
-        template <class T>
-        void hash_combine(std::size_t& seed, const T& v) const {
-            std::hash<T> hasher;
-            seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        }
-        std::size_t operator()(const uniqueDistT& t) const {
-            std::size_t seed = 0;
-            hash_combine(seed, std::get<0>(t));
-            hash_combine(seed, std::get<1>(t));
-            hash_combine(seed, std::get<2>(t));
-            hash_combine(seed, std::get<3>(t));
-            return seed;
-        }
-    };
     template<typename T>
     void removeDuplicates(vector<T> &v) { // sort is faster
-        unordered_set<T> s(v.begin(), v.end());
+        hash_set<T> s(v.begin(), v.end());
         v.clear();
         append(v, s);
+        // sort(v.begin(), v.end());
+        // v.erase(unique(v.begin(), v.end()), v.end());
     }
-    void removeDuplicates(vector<uniqueDistT> &v) { // sort is faster
-        unordered_set<uniqueDistT, TupleHash> s(v.begin(), v.end());
-        v.clear();
-        append(v, s);
-    }
-    template<typename T>
-    bool isUnique(vector<T> v) {
-        auto v2 = v;
-        sort(v.begin(), v.end());
-        v.erase(unique(v.begin(), v.end()), v.end());
-        return v2.size() == v.size();
-    }
-    uniqueDistT getDist(int u, int v, int w) { // for unique paths assumption
+    // template<typename T>
+    // bool isUnique(const vector<T> &v) {
+    //     auto v2 = v;
+    //     sort(v.begin(), v.end());
+    //     v.erase(unique(v.begin(), v.end()), v.end());
+    //     return v2.size() == v.size();
+    // }
+    inline uniqueDistT getDist(int u, int v, int w) { // for unique paths assumption
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
-    uniqueDistT getDist(int u) {
+    inline uniqueDistT getDist(int u) {
         return {d[u], path_sz[u], u, pred[u]};
     }
     void updateDist(int u, int v, wT w) {
@@ -211,8 +223,8 @@ struct newspp {
     }
     // ===================================================================
     vector<int> root;
-    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, const vector<int> &S) {
-        unordered_set<int> w(S.begin(), S.end());
+    pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) {
+        hash_set<int> w(S.begin(), S.end());
         vector<int> active = S;
         for(int x: S) root[x] = x;
         for(int i = 1; i <= k; i++) {
@@ -228,30 +240,32 @@ struct newspp {
                     }
                 }
             }
-            w.insert(nw_active.begin(), nw_active.end());
+            for(const auto &x: nw_active) w.insert(x);
             if(w.size() > k * S.size()) {
-                return {S, vector<int>(w.begin(), w.end())};
+                return {S, w};
             }
             swap(active, nw_active);
         }
-        unordered_map<int, int> sz;
+        hash_map<int, int> sz;
         for(int u: w) sz[root[u]]++;
 
         vector<int> P;
         for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
 
-        return {P, vector<int>(w.begin(), w.end())};
+        return {P, w};
     }
 
-    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
-        vector<int> complete;
+    pair<uniqueDistT, hash_set<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
+        hash_set<int> complete;
 
+        int last = -1;
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
         while(heap.size() && complete.size() < k + 1) {
             int u = get<2>(*heap.begin());
             heap.erase(heap.begin());
-            complete.push_back(u);
+            complete.insert(u);
+            last = u;
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
@@ -264,12 +278,12 @@ struct newspp {
         }
         if(complete.size() <= k) return {B, complete};
 
-        uniqueDistT nB = getDist(complete.back());
-        complete.pop_back();
+        uniqueDistT nB = getDist(last);
+        complete.erase(last);
         return {nB, complete};
     }
 
-    pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
+    pair<uniqueDistT, hash_set<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
         // debug(l, B);
         // for(int u: S) assert(getDist(u) < B);
         // assert(S.size() <= (1 << (l * t)));
@@ -287,10 +301,11 @@ struct newspp {
         uniqueDistT complete_B = B;
         for(int p: P) complete_B = min(complete_B, getDist(p));
 
-        int its = 0;
-        vector<int> complete;
-        while(complete.size() < k * (1ll << (l * t)) && D.size()) {
-            its++;
+        // int its = 0;
+        hash_set<int> complete;
+        const int cota = k * (1ll << (l * t));
+        while(complete.size() < cota && D.size()) {
+            // its++;
             auto [trying_B, S] = D.pull();
 
             auto ret = bmssp(l - 1, trying_B, S);
@@ -303,9 +318,10 @@ struct newspp {
             // }
             // assert(complete_B <= ret.first);
             complete_B = ret.first;
-            vector<int> nw_complete = ret.second;
+            auto &nw_complete = ret.second;
             int old_sz = complete.size();
-            append(complete, nw_complete);
+            for(int x: nw_complete) complete.insert(x);
+            // append(complete, nw_complete);
 
             // if(!isUnique(complete)) {
             //     debug(l, B);
@@ -343,9 +359,10 @@ struct newspp {
         uniqueDistT retB;
         if(D.size() == 0) retB = B; // successful
         else retB = complete_B;     // partial
-        
-        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
-        removeDuplicates(complete);
+
+        for(int x: W) if(getDist(x) < retB) complete.insert(x); // this get the completed vertices from 
+        // for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
+        // removeDuplicates(complete);
 
         // assert(P.size() <= complete.size() / k); // point 4, page 10
         return {retB, complete};
