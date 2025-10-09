@@ -5,7 +5,8 @@ using namespace std;
 using uniqueDistT = tuple<int, int, int, int>;
 
 signed main() {
-    batchPQ<int> pq(4, 20);
+    uniqueDistT B = {20,30,-1,-1};
+    batchPQ<int> pq(4, B);
 
      // dist, hops, u, pred[u]
 
@@ -26,6 +27,7 @@ signed main() {
     pq.insert({9,2,12,2});
     pq.insert({17,2,13,2});
     
+    cout << "Size: "<<  pq.size() << "\n";
 
     vector<uniqueDistT> v;
     v.push_back({2,3,14,-1});
@@ -44,9 +46,11 @@ signed main() {
     v.push_back({9,2,25,2});
     v.push_back({17,2,26,2});
 
+    
     pq.batchPrepend(v);
+    cout << "Size: "<<  pq.size() << "\n";
 
-    pq.print();
+//    pq.print();
 
     auto [b,v2] = pq.pull();
 
@@ -57,7 +61,9 @@ signed main() {
     }
 
     cout << "\n\n";
-    pq.print();
+  //  pq.print();
+
+    cout << "Size: "<<  pq.size() << "\n";
 
     return 0;
 }
