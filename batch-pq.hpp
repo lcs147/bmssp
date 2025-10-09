@@ -13,16 +13,9 @@
 
 using namespace std;
 
-#define int long long
-
 
 template<typename wT>
-struct batchPQ {
-    
-    const int oo = 1e18;
-    
-    int n;
-    
+struct batchPQ { 
     using uniqueDistT = tuple<wT, int, int, int>; // dist, hops, u, pred[u]
     using elementT = pair<int,uniqueDistT>;
     
@@ -39,14 +32,21 @@ struct batchPQ {
     list<list<elementT>> D0,D1;
     set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
     
-    int M, B;
+    int M,size_;
+    uniqueDistT B;
+
     unordered_map<int, uniqueDistT> actual_value;
     unordered_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
     
     // Initialize
-    batchPQ(int M_, int B_): M(M_), B(B_) { // O(1)
+    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
         D1.push_back(list<elementT>());
-        UBs.insert({{B,oo,-1,-1},D1.begin()});
+        UBs.insert({B_,D1.begin()});
+        size_ = 0;
+    }
+
+    int size(){
+        return size_;
     }
 
     void delete_(uniqueDistT x){    // THINK MORE ABOUT THE DELETION
@@ -61,8 +61,10 @@ struct batchPQ {
 
             if((*it_block).size() == 0){
                 auto it_UB_block = UBs.lower_bound({b,it_min});    
-                UBs.erase(it_UB_block);
-                D1.erase(it_block);
+                if((*it_UB_block).first != B){
+                    UBs.erase(it_UB_block);
+                    D1.erase(it_block);
+                }
             }
         }else{
             auto [it_block,it] = where_is[0][a];
@@ -70,9 +72,15 @@ struct batchPQ {
             where_is[0].erase(a);
             if((*it_block).size() == 0) D0.erase(it_block); 
         }
+
+        actual_value.erase(a);
+        size_--;
     }
 
     void insert(uniqueDistT x){ // O(lg(Block Numbers))
+
+        //cout << "Insert "; print(x);
+
         uniqueDistT b = x;
         int a = get<2>(b);
 
@@ -95,6 +103,8 @@ struct batchPQ {
 
         where_is[1][a] = {it_block, it};
         actual_value[a] = b;
+
+        size_++;
 
         // Checking if exceeds the sixe limit M
         if((*it_block).size() > M){
@@ -190,12 +200,14 @@ struct batchPQ {
 
     void batchPrepend(list<elementT> &l) { // O(|l| log(|l|/M) ) 
         int sz = l.size();
+        //cout << sz << " " << M << "\n";
         
+        if(sz == 0) return;
         if(sz <= M){
-            
+
             D0.push_front(list<elementT>());
             auto new_block = D0.begin();
-
+            
             for(auto x : l){
                 int exist = actual_value.contains(x.first); 
 
@@ -209,47 +221,67 @@ struct batchPQ {
                 auto it_new = (*new_block).end(); it_new--;
                 where_is[0][x.first] = {new_block, it_new};
                 actual_value[x.first] = x.second;
+                size_++;
             }
+
+           // print();
 
             return;
         }
 
         uniqueDistT med = selectMedian(l, sz/2);
 
+      //  print(med);
+
         list<elementT> less,great;
         for(auto [a,b]: l){
-            if(b <= med){
+            if(b < med){
                 less.push_back({a,b});
-            }else if(b > med){
+            }else if(b >= med){
                 great.push_back({a,b});
             }
         }
+
+        // cout << "LESS\n";
+        // for(auto [a,b]: less){
+        //     print(b);
+        // }
+
+
+        // cout << "GREAT\n";
+        // for(auto [a,b]: great){
+        //     print(b);
+        // }
+
 
         batchPrepend(great);
         batchPrepend(less);
     }
 
     void batchPrepend(const vector<uniqueDistT> &v){
+        //cout << "batchPrepend\n";
         list<elementT> l;
         int sz = v.size();
         for(auto x: v){
+           // print(x);
             l.push_back({get<2>(x),x});
         }
-
         batchPrepend(l);
+        //cout << "batchPrepend2\n";
     }
 
     pair<uniqueDistT, vector<int>> pull(){ // O(M)
+        //cout << "PULL\n";
         list<elementT> s0,s1;
 
         auto it_block = D0.begin();
-        while(it_block != D0.end() && s0.size() < M){ // O(M)   
+        while(it_block != D0.end() && s0.size() <= M){ // O(M)   
             for(auto x: (*it_block) ) s0.push_back(x);
             it_block++;
         }
 
         it_block = D1.begin();
-        while(it_block != D1.end() && s1.size() < M){   //O(M)
+        while(it_block != D1.end() && s1.size() <= M){   //O(M)
             for(auto x: (*it_block) ) s1.push_back(x);
             it_block++;
         }
@@ -259,14 +291,16 @@ struct batchPQ {
             ret.reserve(s1.size()+s0.size());
             for(auto [a,b] : s0) {
                 ret.push_back(get<2>(b));
+                //print(b);
                 delete_({b});
             }
             for(auto [a,b] : s1){
                 ret.push_back(get<2>(b));
+                //print(b);
                 delete_({b});
             } 
 
-            return {{B,oo,-1,-1}, ret};
+            return {B, ret};
         }else{
             list<elementT> l;
             for(auto x : s0) l.push_back(x);
@@ -281,7 +315,7 @@ struct batchPQ {
                     delete_({b});
                 }
             }
- 
+            
             return {med,ret};
         }
     }
