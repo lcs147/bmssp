@@ -15,12 +15,8 @@ using namespace std;
 // using hash_map = boost::unordered_map<K, V>;
 // template<typename K>
 // using hash_set = boost::unordered_set<K>;
-<<<<<<< HEAD
- 
-=======
 
 // #include "batch-pq.hpp"
->>>>>>> f3f551d (algo está errado)
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
  
