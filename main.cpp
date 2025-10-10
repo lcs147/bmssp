@@ -592,8 +592,8 @@ struct newspp {
         return {P, vis};
     }
  
-    pair<uniqueDistT, hash_set<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
-        hash_set<int> complete;
+    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
+        vector<int> complete;
  
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
@@ -680,10 +680,10 @@ struct newspp {
                         // }
                     }
                     for(int x: S) {
-                        if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x));
+                        if(complete_B <= getDist(x) && getDist(x) < trying_B) can_prepend.emplace_back(getDist(x));
                     }
                     // new_frontier is not necessarily all unique
-                    D.batchPrepend(new_frontier);
+                    D.batchPrepend(can_prepend);
                 }
             }
             for(int x: miniS) {
