@@ -32,7 +32,7 @@ using hash_set = hash_map<K, null_type>;
 template<typename wT>
 struct newspp {
     int n, k, t;
-    const wT oo = numeric_limits<wT>::max() / 1000;
+    const wT oo = numeric_limits<wT>::max() / 10;
     // const wT oo = 1e9 / 10;
  
     vector<vector<pair<int, wT>>> ori_adj;
@@ -164,28 +164,22 @@ struct newspp {
                 s.insert(x);
                 inv[get<2>(x)] = x;
             }
-            // assert(*prev(s.end()) < B);
         }
         void batchPrepend(const vector<uniqueDistT> &v) {
             for(auto &x: v) {
                 insert(x);
             }
-            // if(v.size()) assert(*prev(s.end()) < B);
         }
-        pair<uniqueDistT, vector<int>> pull() {
-            vector<int> res;
+        pair<uniqueDistT, vector<uniqueDistT>> pull() {
+            vector<uniqueDistT> res;
             while(s.size() && res.size() < M) {
-                res.push_back(get<2>(*s.begin()));
+                res.push_back(*s.begin());
+                inv.erase(get<2>(res.back()));
                 s.erase(s.begin());
-                inv.erase(res.back());
             }
             uniqueDistT x = B;
             if(s.size()) x = *s.begin();
- 
-            // if(s.size()) assert(*prev(s.end()) < B);
- 
             return {x, res};
-            
         }
     };
  
@@ -203,13 +197,13 @@ struct newspp {
         sort(v.begin(), v.end());
         v.erase(unique(v.begin(), v.end()), v.end());
     }
-    // template<typename T>
-    // bool isUnique(const vector<T> &v) {
-    //     auto v2 = v;
-    //     sort(v.begin(), v.end());
-    //     v.erase(unique(v.begin(), v.end()), v.end());
-    //     return v2.size() == v.size();
-    // }
+    template<typename T>
+    bool isUnique(const vector<T> &v) {
+        auto v2 = v;
+        sort(v2.begin(), v2.end());
+        v2.erase(unique(v2.begin(), v2.end()), v2.end());
+        return v2.size() == v.size();
+    }
     inline uniqueDistT getDist(int u, int v, int w) { // for unique paths assumption
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -224,7 +218,7 @@ struct newspp {
     // ===================================================================
     vector<int> root;
     pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) {
-        hash_set<int> w(S.begin(), S.end());
+        hash_set<int> vis(S.begin(), S.end());
         vector<int> active = S;
         for(int x: S) root[x] = x;
         for(int i = 1; i <= k; i++) {
@@ -240,32 +234,33 @@ struct newspp {
                     }
                 }
             }
-            for(const auto &x: nw_active) w.insert(x);
-            if(w.size() > k * S.size()) {
-                return {S, w};
+            for(const auto &x: nw_active) vis.insert(x);
+            // vis.insert(nw_active.begin(), nw_active.end());
+            if(vis.size() > k * S.size()) {
+                return {S, vis};
             }
-            swap(active, nw_active);
+            active = move(nw_active);
         }
         hash_map<int, int> sz;
-        for(int u: w) sz[root[u]]++;
+        for(int u: vis) sz[root[u]]++;
  
         vector<int> P;
         for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
- 
-        return {P, w};
+        
+        // assert(P.size() <= vis.size() / k);
+        return {P, vis};
     }
  
     pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
+        if(getDist(x) >= B) return {B, {}};
         vector<int> complete;
  
-        int last = -1;
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
         while(heap.size() && complete.size() < k + 1) {
             int u = get<2>(*heap.begin());
             heap.erase(heap.begin());
             complete.push_back(u);
-            last = u;
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
@@ -278,97 +273,94 @@ struct newspp {
         }
         if(complete.size() <= k) return {B, complete};
  
-        uniqueDistT nB = getDist(last);
+        uniqueDistT nB = getDist(complete.back());
+        // {   // sanity check
+        //     int cntbig = 0;
+        //     for(int u: complete) if(getDist(u) >= nB) cntbig++;
+        //     assert(cntbig == 1);
+        //     for(int u: complete) assert(getDist(u) < B);
+        //     assert(complete.size() == k + 1);
+        // }
         complete.pop_back();
         return {nB, complete};
     }
- 
+
     pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
-        // debug(l, B);
-        // for(int u: S) assert(getDist(u) < B);
-        // assert(S.size() <= (1 << (l * t)));
         if(l == 0) {
-            // assert(S.size() == 1);
             return baseCase(B, S[0]);
         }
  
         auto [P, W] = findPivots(B, S);
  
-        const int M = (1 << ((l - 1) * t));
-        batchPQ D(M, B);
+        const int batch_size = (1 << ((l - 1) * t));
+        batchPQ D(batch_size, B);
         for(int p: P) D.insert(getDist(p));
+
+        // All in D visit all v | d(v) < B, sp(v) goes through S
+        // for all d(v) < B, always go through S? Req 2 Alg 3 says yes
+        // So always in the beggining of the iteration, all in D visit all in d(v) < B
  
-        uniqueDistT complete_B = B;
-        for(int p: P) complete_B = min(complete_B, getDist(p));
+        uniqueDistT last_complete_B = B;
+        for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
-        // int its = 0;
         vector<int> complete;
-        const int cota = k * (1ll << (l * t));
-        while(complete.size() < cota && (int) D.size()) {
-            // its++;
-            auto [trying_B, S] = D.pull();
- 
-            auto ret = bmssp(l - 1, trying_B, S);
+        const int cota = k * (1 << (l * t));
+        while(complete.size() < cota && D.size()) {
+            auto [trying_B, smallestFew] = D.pull();
+            vector<int> miniS;
+            {   // just like in dijkstra without decrease key
+                miniS.reserve(smallestFew.size());
+                for(auto &dist: smallestFew) if(dist <= getDist(get<2>(dist))) miniS.push_back(get<2>(dist));
+                if(miniS.size() == 0) continue;
+            }
+            // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
+
+            auto [complete_B, nw_complete] = bmssp(l - 1, trying_B, miniS);
             
-            // debug("ON", l, B);
-            // if(complete_B > ret.first) {
-            //     debug("wtf?");
-            //     debug(complete_B, ret.first, l, B);
-            //     debug(trying_B, S.size());
-            // }
-            // assert(complete_B <= ret.first);
-            complete_B = ret.first;
-            auto &nw_complete = ret.second;
-            int old_sz = complete.size();
-            // for(int x: nw_complete) complete.push_back(x);
+            // all new complete_B are greater than the old ones <= point 6, page 10
+            // assert(last_complete_B < complete_B);
+
             append(complete, nw_complete);
+            // point 6, page 10 => complete does not intersect with nw_complete
+            // assert(isUnique(complete));
  
-            // if(!isUnique(complete)) {
-            //     debug(l, B);
-            //     debug(trying_B, S.size());
-            //     debug(complete_B, nw_complete.size(), complete.size());
-            //     removeDuplicates(complete);
-            //     debug(old_sz, complete.size());
-            //     debug(its);
-            // }
-            // assert(isUnique(complete)); // point 6, page 10
-            // assert(complete_B <= trying_B);
-            // assert(trying_B <= B);
- 
-            vector<uniqueDistT> new_frontier;
+            vector<uniqueDistT> can_prepend;
             for(int u: nw_complete) {
-                // assert(getDist(u) < complete_B);
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
                         updateDist(u, v, w);
                         if(trying_B <= new_dist && new_dist < B) {
-                            D.insert(new_dist); // d[v] can be greater equal than min(D)
+                            D.insert(new_dist); // d[v] can be greater equal than min(D), occur 1x per vertex
                         } else if(complete_B <= new_dist && new_dist < trying_B) {
-                            new_frontier.emplace_back(new_dist); // d[v] is less than all in D
+                            can_prepend.emplace_back(new_dist); // d[v] is less than all in D, can occur 1x at each level per vertex
                         }
+                        // else if(new_dist <= complete_B) {
+                        //     assert(find(nw_complete.begin(), nw_complete.end(), v) != nw_complete.end());
+                        // }
                     }
                 }
             }
-            for(int x: S) {
-                if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x));
+            for(int x: miniS) {
+                if(complete_B <= getDist(x) && getDist(x) < trying_B) can_prepend.emplace_back(getDist(x));
+                // second condition is probably not necessary
             }
-            // new_frontier is not necessarily all unique
-            D.batchPrepend(new_frontier);
+            // can_prepend is not necessarily all unique
+            D.batchPrepend(can_prepend);
+
+            last_complete_B = complete_B;
         }
         uniqueDistT retB;
-        if(D.size() == 0) retB = B; // successful
-        else retB = complete_B;     // partial
+        if(D.size() == 0) retB = B;     // successful
+        else retB = last_complete_B;    // partial
  
-        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from 
-        // for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
+        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
         removeDuplicates(complete);
  
-        // assert(P.size() <= complete.size() / k); // point 4, page 10
         return {retB, complete};
     }
 };
- 
+
 void solve() {
     int n, m; cin >> n >> m;
     newspp<long long> spp(n);
@@ -382,7 +374,7 @@ void solve() {
     for(auto x: d) cout << x << " ";
     cout << endl;
 }
- 
+
 signed main() {
     fastio;
  
