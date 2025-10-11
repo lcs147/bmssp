@@ -33,7 +33,7 @@ using hash_set = hash_map<K, null_type>;
 template<typename wT>
 struct newspp {
     int n, k, t;
-    const wT oo = numeric_limits<wT>::max() / 1000;
+    const wT oo = numeric_limits<wT>::max() / 10;
     // const wT oo = 1e9 / 10;
  
     vector<vector<pair<int, wT>>> ori_adj;
@@ -139,389 +139,390 @@ struct newspp {
     // ===================================================================
  
     using uniqueDistT = tuple<wT, int, int, int>;
+    
     struct batchPQ { 
-    // using uniqueDistT = tuple<wT, int, int, int>; // dist, hops, u, pred[u]
-    using elementT = pair<int,uniqueDistT>;
+        // using uniqueDistT = tuple<wT, int, int, int>; // dist, hops, u, pred[u]
+        using elementT = pair<int,uniqueDistT>;
+        
+        
+        struct CompareUB {
+            template <typename It>
+            bool operator()(const std::pair<uniqueDistT, It>& a, const std::pair<uniqueDistT, It>& b) const {
+                if (a.first != b.first) return a.first < b.first;
+                return  std::addressof(*a.second) < std::addressof(*b.second);
+            }
+        };
     
+        typename std::list<std::list<elementT>>::iterator it_min;
     
-    struct CompareUB {
-        template <typename It>
-        bool operator()(const std::pair<uniqueDistT, It>& a, const std::pair<uniqueDistT, It>& b) const {
-            if (a.first != b.first) return a.first < b.first;
-            return  std::addressof(*a.second) < std::addressof(*b.second);
+        list<list<elementT>> D0,D1;
+        set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
+        
+        int M,size_;
+        uniqueDistT B;
+    
+        unordered_map<int, uniqueDistT> actual_value;
+        unordered_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
+        
+        // Initialize
+        batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
+            D1.push_back(list<elementT>());
+            UBs.insert({B_,D1.begin()});
+            size_ = 0;
         }
-    };
- 
-    typename std::list<std::list<elementT>>::iterator it_min;
- 
-    list<list<elementT>> D0,D1;
-    set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
     
-    int M,size_;
-    uniqueDistT B;
- 
-    unordered_map<int, uniqueDistT> actual_value;
-    unordered_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
+        int size(){
+            return size_;
+        }
     
-    // Initialize
-    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
-        D1.push_back(list<elementT>());
-        UBs.insert({B_,D1.begin()});
-        size_ = 0;
-    }
- 
-    int size(){
-        return size_;
-    }
- 
-    void delete_(uniqueDistT x){    
-        int a = get<2>(x);
-        uniqueDistT b = actual_value[a];
+        void delete_(uniqueDistT x){    
+            int a = get<2>(x);
+            uniqueDistT b = actual_value[a];
 
-        if(where_is[1].contains(a)){
-            auto [it_block,it] = where_is[1][a];
-            
-            (*it_block).erase(it);
-            where_is[1].erase(a);
- 
-            if((*it_block).size() == 0){
-                auto it_UB_block = UBs.upper_bound({b,it_block});  
+            if(where_is[1].contains(a)){
+                auto [it_block,it] = where_is[1][a];
                 
-                if((*it_UB_block).first != B){
-                    UBs.erase(it_UB_block);
-                    D1.erase(it_block);
-                }
-            }
-        }else{
-            auto [it_block,it] = where_is[0][a];
-            (*it_block).erase(it);
-            where_is[0].erase(a);
-            if((*it_block).size() == 0) D0.erase(it_block); 
-        }
- 
-        actual_value.erase(a);
-        size_--;
-    }
- 
-    void insert(uniqueDistT x){ // O(lg(Block Numbers))
- 
-        // cout << "Insert "; print(x);
-        // print();
-        // cout << "UBs\n";
-        // for(auto[ubs,its]: UBs){
-        //     cout << std::addressof(*its) << " ";
-        //     print(ubs);
-        // }
-
-        
-        uniqueDistT b = x;
-        int a = get<2>(b);
- 
-        // checking if exists
-        int exist = actual_value.contains(a); 
- 
-        if(exist && actual_value[a] > b){
-            delete_(x);
-        }else if(exist){
-            return;
-        }
-
-        // print();
-        // cout << "UBs\n";
-        // for(auto[ubs,its]: UBs){
-        //     cout << std::addressof(*its) << " ";
-        //     print(ubs);
-        // }
-
-        
-        // Searching for the first block with UB which is > 
-        auto it_UB_block = UBs.upper_bound({b,it_min});
-        auto [ub,it_block] = (*it_UB_block);
-        
-        // print(ub);
-        // cout << std::addressof(*it_block) << "\n";
- 
-        // Inserting key/value (a,b)
-        (*it_block).push_back({a,b});
-        auto it = (*it_block).end(); it--;
- 
-        where_is[1][a] = {it_block, it};
-        actual_value[a] = b;
- 
-        size_++;
- 
-        // Checking if exceeds the sixe limit M
-        if((*it_block).size() > M){
-            split(it_block);
-        }
-    }   
- 
-    uniqueDistT medianOfMedians(list<elementT> l){
-        int n = l.size();
-        vector<elementT> v;
-        v.reserve(5);
-        
-        auto it = l.begin();
-        list<elementT> medians;
- 
-        while(it != l.end()){
-            for(int j=0;j<5;j++){
-                v.push_back(*it);
-                it++;
- 
-                if(it == l.end()) break;
-            }
- 
-            sort(v.begin(), v.end(), [](const auto& x, const auto& y) {
-                return x.second < y.second;
-            });
- 
-            medians.push_back(v[(v.size()/2)]);
-            v.clear();
-        }
- 
-        if(medians.size() == 1){
-            return medians.front().second;
-        }else{
-            return medianOfMedians(medians);
-        }
-    }
- 
-    uniqueDistT selectMedian(list<elementT> &l, int k){
- 
-        uniqueDistT p = medianOfMedians(l);
-        list<elementT> less,great;
- 
-        for(auto [a,b]: l){
-            if(b < p){
-                less.push_back({a,b});
-            }else if(b > p){
-                great.push_back({a,b});
-            }
-        }
- 
-        if(less.size() > k){
-            return selectMedian(less,k);
-        }else if(less.size() < k){
-            return selectMedian(great, k - less.size() - 1);
-        }else{
-            return p;
-        }
-    }
- 
-    void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
-        
-        // cout << "M " << M << "\n";
-        // print();
-
-        // cout << "UBs\n";
-        // for(auto[ubs,its]: UBs){
-        //     print(ubs);
-        // }
-
-        int sz = (*it_block).size();
-        uniqueDistT med = selectMedian((*it_block),(sz/2)); // O(M)
-        
-        // cout << "\n";
-        // print(med);
-        
-        auto pos = it_block;
-        pos++;
-        
-        auto new_block = D1.insert(pos,list<elementT>());
-        auto it = (*it_block).begin();
- 
-        while(it != (*it_block).end()){ // O(M)
-            if((*it).second >= med){
-                (*new_block).push_back((*it));
-                auto it_new = (*new_block).end(); it_new--;
-                where_is[1][(*it).first] = {new_block, it_new};
+                (*it_block).erase(it);
+                where_is[1].erase(a);
     
-                it = (*it_block).erase(it);
-            }else{
-                it++;
-            }
-        }
-        
-        // Updating UBs   
-        // O(lg(Block Numbers))
-        uniqueDistT UB1 = {get<0>(med),get<1>(med),get<2>(med),get<3>(med)-1};
-        auto it_lb = UBs.upper_bound({UB1,it_min});
-        auto [UB2,aux] = (*it_lb);
-        
-        
-        
-        UBs.insert({UB1,it_block});
-        UBs.insert({UB2,new_block});
-        
-        UBs.erase({it_lb});
-
-        // cout << "M " << M << "\n";
-        // print();
-        
-        // cout << "UBs\n";
-        // for(auto[ubs,its]: UBs){
-        //     cout << std::addressof(*its) << " ";
-        //     print(ubs);
-        // }
-
-
-    }
- 
-    void batchPrepend(list<elementT> &l) { // O(|l| log(|l|/M) ) 
-        int sz = l.size();
-        //cout << sz << " " << M << "\n";
-        
-        if(sz == 0) return;
-        if(sz <= M){
- 
-            D0.push_front(list<elementT>());
-            auto new_block = D0.begin();
-            
-            for(auto x : l){
-                int exist = actual_value.contains(x.first); 
- 
-                if(exist && actual_value[x.first] > x.second){
-                    delete_(x.second);
-                }else if(exist){
-                    continue;
+                if((*it_block).size() == 0){
+                    auto it_UB_block = UBs.upper_bound({b,it_block});  
+                    
+                    if((*it_UB_block).first != B){
+                        UBs.erase(it_UB_block);
+                        D1.erase(it_block);
+                    }
                 }
- 
-                (*new_block).push_back(x);
-                auto it_new = (*new_block).end(); it_new--;
-                where_is[0][x.first] = {new_block, it_new};
-                actual_value[x.first] = x.second;
-                size_++;
+            }else{
+                auto [it_block,it] = where_is[0][a];
+                (*it_block).erase(it);
+                where_is[0].erase(a);
+                if((*it_block).size() == 0) D0.erase(it_block); 
             }
- 
-           // print();
- 
-            return;
+    
+            actual_value.erase(a);
+            size_--;
         }
- 
-        uniqueDistT med = selectMedian(l, sz/2);
- 
-      //  print(med);
- 
-        list<elementT> less,great;
-        for(auto [a,b]: l){
-            if(b < med){
-                less.push_back({a,b});
-            }else if(b >= med){
-                great.push_back({a,b});
-            }
-        }
- 
-        // cout << "LESS\n";
-        // for(auto [a,b]: less){
-        //     print(b);
-        // }
- 
- 
-        // cout << "GREAT\n";
-        // for(auto [a,b]: great){
-        //     print(b);
-        // }
- 
- 
-        batchPrepend(great);
-        batchPrepend(less);
-    }
- 
-    void batchPrepend(const vector<uniqueDistT> &v){
-        //cout << "batchPrepend\n";
-        list<elementT> l;
-        int sz = v.size();
-        for(auto x: v){
-           // print(x);
-            l.push_back({get<2>(x),x});
-        }
-        batchPrepend(l);
-        //cout << "batchPrepend2\n";
-    }
- 
-    pair<uniqueDistT, vector<int>> pull(){ // O(M)
-        //cout << "PULL\n";
-        list<elementT> s0,s1;
- 
-        auto it_block = D0.begin();
-        while(it_block != D0.end() && s0.size() <= M){ // O(M)   
-            for(auto x: (*it_block) ) s0.push_back(x);
-            it_block++;
-        }
- 
-        it_block = D1.begin();
-        while(it_block != D1.end() && s1.size() <= M){   //O(M)
-            for(auto x: (*it_block) ) s1.push_back(x);
-            it_block++;
-        }
- 
-        if(s1.size() + s0.size() <= M){
-            vector<int> ret;
-            ret.reserve(s1.size()+s0.size());
-            for(auto [a,b] : s0) {
-                ret.push_back(get<2>(b));
-                //print(b);
-                delete_({b});
-            }
-            for(auto [a,b] : s1){
-                ret.push_back(get<2>(b));
-                //print(b);
-                delete_({b});
-            } 
- 
-            return {B, ret};
-        }else{  
-            list<elementT> l;
-            for(auto x : s0) l.push_back(x);
-            for(auto x : s1) l.push_back(x);
+    
+        void insert(uniqueDistT x){ // O(lg(Block Numbers))
+    
+            // cout << "Insert "; print(x);
+            // print();
+            // cout << "UBs\n";
+            // for(auto[ubs,its]: UBs){
+            //     cout << std::addressof(*its) << " ";
+            //     print(ubs);
+            // }
+
             
-            uniqueDistT med = selectMedian(l, M);
-            vector<int> ret;
-            ret.reserve(M);
+            uniqueDistT b = x;
+            int a = get<2>(b);
+    
+            // checking if exists
+            int exist = actual_value.contains(a); 
+    
+            if(exist && actual_value[a] > b){
+                delete_(x);
+            }else if(exist){
+                return;
+            }
+
+            // print();
+            // cout << "UBs\n";
+            // for(auto[ubs,its]: UBs){
+            //     cout << std::addressof(*its) << " ";
+            //     print(ubs);
+            // }
+
+            
+            // Searching for the first block with UB which is > 
+            auto it_UB_block = UBs.upper_bound({b,it_min});
+            auto [ub,it_block] = (*it_UB_block);
+            
+            // print(ub);
+            // cout << std::addressof(*it_block) << "\n";
+    
+            // Inserting key/value (a,b)
+            (*it_block).push_back({a,b});
+            auto it = (*it_block).end(); it--;
+    
+            where_is[1][a] = {it_block, it};
+            actual_value[a] = b;
+    
+            size_++;
+    
+            // Checking if exceeds the sixe limit M
+            if((*it_block).size() > M){
+                split(it_block);
+            }
+        }   
+    
+        uniqueDistT medianOfMedians(list<elementT> l){
+            int n = l.size();
+            vector<elementT> v;
+            v.reserve(5);
+            
+            auto it = l.begin();
+            list<elementT> medians;
+    
+            while(it != l.end()){
+                for(int j=0;j<5;j++){
+                    v.push_back(*it);
+                    it++;
+    
+                    if(it == l.end()) break;
+                }
+    
+                sort(v.begin(), v.end(), [](const auto& x, const auto& y) {
+                    return x.second < y.second;
+                });
+    
+                medians.push_back(v[(v.size()/2)]);
+                v.clear();
+            }
+    
+            if(medians.size() == 1){
+                return medians.front().second;
+            }else{
+                return medianOfMedians(medians);
+            }
+        }
+    
+        uniqueDistT selectMedian(list<elementT> &l, int k){
+    
+            uniqueDistT p = medianOfMedians(l);
+            list<elementT> less,great;
+    
             for(auto [a,b]: l){
-                if(b < med) {
-                    ret.push_back(a);
+                if(b < p){
+                    less.push_back({a,b});
+                }else if(b > p){
+                    great.push_back({a,b});
+                }
+            }
+    
+            if(less.size() > k){
+                return selectMedian(less,k);
+            }else if(less.size() < k){
+                return selectMedian(great, k - less.size() - 1);
+            }else{
+                return p;
+            }
+        }
+    
+        void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
+            
+            // cout << "M " << M << "\n";
+            // print();
+
+            // cout << "UBs\n";
+            // for(auto[ubs,its]: UBs){
+            //     print(ubs);
+            // }
+
+            int sz = (*it_block).size();
+            uniqueDistT med = selectMedian((*it_block),(sz/2)); // O(M)
+            
+            // cout << "\n";
+            // print(med);
+            
+            auto pos = it_block;
+            pos++;
+            
+            auto new_block = D1.insert(pos,list<elementT>());
+            auto it = (*it_block).begin();
+    
+            while(it != (*it_block).end()){ // O(M)
+                if((*it).second >= med){
+                    (*new_block).push_back((*it));
+                    auto it_new = (*new_block).end(); it_new--;
+                    where_is[1][(*it).first] = {new_block, it_new};
+        
+                    it = (*it_block).erase(it);
+                }else{
+                    it++;
+                }
+            }
+            
+            // Updating UBs   
+            // O(lg(Block Numbers))
+            uniqueDistT UB1 = {get<0>(med),get<1>(med),get<2>(med),get<3>(med)-1};
+            auto it_lb = UBs.upper_bound({UB1,it_min});
+            auto [UB2,aux] = (*it_lb);
+            
+            
+            
+            UBs.insert({UB1,it_block});
+            UBs.insert({UB2,new_block});
+            
+            UBs.erase({it_lb});
+
+            // cout << "M " << M << "\n";
+            // print();
+            
+            // cout << "UBs\n";
+            // for(auto[ubs,its]: UBs){
+            //     cout << std::addressof(*its) << " ";
+            //     print(ubs);
+            // }
+
+
+        }
+    
+        void batchPrepend(list<elementT> &l) { // O(|l| log(|l|/M) ) 
+            int sz = l.size();
+            //cout << sz << " " << M << "\n";
+            
+            if(sz == 0) return;
+            if(sz <= M){
+    
+                D0.push_front(list<elementT>());
+                auto new_block = D0.begin();
+                
+                for(auto x : l){
+                    int exist = actual_value.contains(x.first); 
+    
+                    if(exist && actual_value[x.first] > x.second){
+                        delete_(x.second);
+                    }else if(exist){
+                        continue;
+                    }
+    
+                    (*new_block).push_back(x);
+                    auto it_new = (*new_block).end(); it_new--;
+                    where_is[0][x.first] = {new_block, it_new};
+                    actual_value[x.first] = x.second;
+                    size_++;
+                }
+    
+            // print();
+    
+                return;
+            }
+    
+            uniqueDistT med = selectMedian(l, sz/2);
+    
+        //  print(med);
+    
+            list<elementT> less,great;
+            for(auto [a,b]: l){
+                if(b < med){
+                    less.push_back({a,b});
+                }else if(b >= med){
+                    great.push_back({a,b});
+                }
+            }
+    
+            // cout << "LESS\n";
+            // for(auto [a,b]: less){
+            //     print(b);
+            // }
+    
+    
+            // cout << "GREAT\n";
+            // for(auto [a,b]: great){
+            //     print(b);
+            // }
+    
+    
+            batchPrepend(great);
+            batchPrepend(less);
+        }
+    
+        void batchPrepend(const vector<uniqueDistT> &v){
+            //cout << "batchPrepend\n";
+            list<elementT> l;
+            int sz = v.size();
+            for(auto x: v){
+            // print(x);
+                l.push_back({get<2>(x),x});
+            }
+            batchPrepend(l);
+            //cout << "batchPrepend2\n";
+        }
+    
+        pair<uniqueDistT, vector<int>> pull(){ // O(M)
+            //cout << "PULL\n";
+            list<elementT> s0,s1;
+    
+            auto it_block = D0.begin();
+            while(it_block != D0.end() && s0.size() <= M){ // O(M)   
+                for(auto x: (*it_block) ) s0.push_back(x);
+                it_block++;
+            }
+    
+            it_block = D1.begin();
+            while(it_block != D1.end() && s1.size() <= M){   //O(M)
+                for(auto x: (*it_block) ) s1.push_back(x);
+                it_block++;
+            }
+    
+            if(s1.size() + s0.size() <= M){
+                vector<int> ret;
+                ret.reserve(s1.size()+s0.size());
+                for(auto [a,b] : s0) {
+                    ret.push_back(get<2>(b));
+                    //print(b);
                     delete_({b});
                 }
+                for(auto [a,b] : s1){
+                    ret.push_back(get<2>(b));
+                    //print(b);
+                    delete_({b});
+                } 
+    
+                return {B, ret};
+            }else{  
+                list<elementT> l;
+                for(auto x : s0) l.push_back(x);
+                for(auto x : s1) l.push_back(x);
+                
+                uniqueDistT med = selectMedian(l, M);
+                vector<int> ret;
+                ret.reserve(M);
+                for(auto [a,b]: l){
+                    if(b < med) {
+                        ret.push_back(a);
+                        delete_({b});
+                    }
+                }
+                
+                return {med,ret};
             }
-            
-            return {med,ret};
         }
-    }
- 
-    void print(uniqueDistT x){
-        cout <<  get<0>(x) << " " << get<1>(x) << " " << get<2>(x) << " " << get<3>(x) << "\n";
-    }
- 
-    void print(){
-        cout <<  D1.size() << "\n";
-        cout << UBs.size() << "\n";
- 
-        cout << "Sequence D1\n";
-        int i = 0;
-        for(auto &block : D1){   
-            cout << "Block " << i++ << " UB: " << std::addressof(block) << "\n";
-            for(auto [a,b]: block){
-                cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
+    
+        void print(uniqueDistT x){
+            cout <<  get<0>(x) << " " << get<1>(x) << " " << get<2>(x) << " " << get<3>(x) << "\n";
+        }
+    
+        void print(){
+            cout <<  D1.size() << "\n";
+            cout << UBs.size() << "\n";
+    
+            cout << "Sequence D1\n";
+            int i = 0;
+            for(auto &block : D1){   
+                cout << "Block " << i++ << " UB: " << std::addressof(block) << "\n";
+                for(auto [a,b]: block){
+                    cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
+                }
+                cout << "\n";
             }
-            cout << "\n";
-        }
- 
- 
-        cout << "Sequence D0\n";
-        i = 0;
-        for(auto block : D0){   
-            cout << "Block " << i++ << " UB: " << "\n";
-            for(auto [a,b]: block){
-                cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
+    
+    
+            cout << "Sequence D0\n";
+            i = 0;
+            for(auto block : D0){   
+                cout << "Block " << i++ << " UB: " << "\n";
+                for(auto [a,b]: block){
+                    cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
+                }
+                cout << "\n";
             }
-            cout << "\n";
+    
         }
- 
-    }
- 
-};
+    
+    };
  
     // set stuff
     template<typename T>
@@ -537,13 +538,13 @@ struct newspp {
         // sort(v.begin(), v.end());
         // v.erase(unique(v.begin(), v.end()), v.end());
     }
-    // template<typename T>
-    // bool isUnique(const vector<T> &v) {
-    //     auto v2 = v;
-    //     sort(v.begin(), v.end());
-    //     v.erase(unique(v.begin(), v.end()), v.end());
-    //     return v2.size() == v.size();
-    // }
+    template<typename T>
+    bool isUnique(const vector<T> &v) {
+        auto v2 = v;
+        sort(v2.begin(), v2.end());
+        v2.erase(unique(v2.begin(), v2.end()), v2.end());
+        return v2.size() == v.size();
+    }
     inline uniqueDistT getDist(int u, int v, int w) { // for unique paths assumption
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -558,7 +559,7 @@ struct newspp {
     // ===================================================================
     vector<int> root;
     pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) {
-        hash_set<int> w(S.begin(), S.end());
+        hash_set<int> vis(S.begin(), S.end());
         vector<int> active = S;
         for(int x: S) root[x] = x;
         for(int i = 1; i <= k; i++) {
@@ -574,32 +575,32 @@ struct newspp {
                     }
                 }
             }
-            for(const auto &x: nw_active) w.insert(x);
-            if(w.size() > k * S.size()) {
-                return {S, w};
+            for(const auto &x: nw_active) vis.insert(x);
+            // vis.insert(nw_active.begin(), nw_active.end());
+            if(vis.size() > k * S.size()) {
+                return {S, vis};
             }
-            swap(active, nw_active);
+            active = move(nw_active);
         }
         hash_map<int, int> sz;
-        for(int u: w) sz[root[u]]++;
+        for(int u: vis) sz[root[u]]++;
  
         vector<int> P;
         for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
- 
-        return {P, w};
+        
+        // assert(P.size() <= vis.size() / k);
+        return {P, vis};
     }
  
-    pair<uniqueDistT, hash_set<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
-        hash_set<int> complete;
+    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B
+        vector<int> complete;
  
-        int last = -1;
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
         while(heap.size() && complete.size() < k + 1) {
             int u = get<2>(*heap.begin());
             heap.erase(heap.begin());
-            complete.insert(u);
-            last = u;
+            complete.push_back(u);
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
@@ -612,111 +613,99 @@ struct newspp {
         }
         if(complete.size() <= k) return {B, complete};
  
-        uniqueDistT nB = getDist(last);
-        complete.erase(last);
+        uniqueDistT nB = getDist(complete.back());
+        // {   // sanity check
+        //     int cntbig = 0;
+        //     for(int u: complete) if(getDist(u) >= nB) cntbig++;
+        //     assert(cntbig == 1);
+        //     for(int u: complete) assert(getDist(u) < B);
+        //     assert(complete.size() == k + 1);
+        // }
+        complete.pop_back();
         return {nB, complete};
     }
- 
-    pair<uniqueDistT, hash_set<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
-        // debug(l, B);
-        // for(int u: S) assert(getDist(u) < B);
-        // assert(S.size() <= (1 << (l * t)));
+
+    pair<uniqueDistT, vector<int>> bmssp(int l, uniqueDistT B, const vector<int> &S) {
         if(l == 0) {
-            // assert(S.size() == 1);
             return baseCase(B, S[0]);
         }
  
         auto [P, W] = findPivots(B, S);
  
-        const int M = (1 << ((l - 1) * t));
-        batchPQ D(M, B);
+        const int batch_size = (1 << ((l - 1) * t));
+        batchPQ D(batch_size, B);
         for(int p: P) D.insert(getDist(p));
-       // for(int p: P) cout << p << "\n";
+
+        // All in D visit all v | d(v) < B, sp(v) goes through S
+        // for all d(v) < B, always go through S? Req 2 Alg 3 says yes
+        // So always in the beggining of the iteration, all in D visit all in d(v) < B
  
-        //D.print();
+        uniqueDistT last_complete_B = B;
+        for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
-        uniqueDistT complete_B = B;
-        for(int p: P) complete_B = min(complete_B, getDist(p));
- 
-        //cout << "\nComplete B\n";
-        //D.print(complete_B);
- 
-        // int its = 0;
-        hash_set<int> complete;
-        const int cota = k * (1ll << (l * t));
-        //cout << cota << "\n";
+        vector<int> complete;
+        const int cota = k * (1 << (l * t));
         while(complete.size() < cota && D.size()) {
-            // its++;
-//            cout << D.size() << "\n";
-            auto [trying_B, S] = D.pull();
-                // for(int it: S){
-            //     cout << it << " ";
-            // }
-            // cout << "\n";
+            auto [trying_B, smallestFew] = D.pull();
+            vector<int> miniS;
+            {   // just like in dijkstra without decrease key
+                miniS.reserve(smallestFew.size());
+                for(auto &dist: smallestFew) if(dist <= getDist(get<2>(dist))) miniS.push_back(get<2>(dist));
+                if(miniS.size() == 0) continue;
+            }
+            // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
+
+            auto [complete_B, nw_complete] = bmssp(l - 1, trying_B, miniS);
             
-            // cout << D.size() << "\n";
+            // all new complete_B are greater than the old ones <= point 6, page 10
+            // assert(last_complete_B < complete_B);
+
+            append(complete, nw_complete);
+            // point 6, page 10 => complete does not intersect with nw_complete
+            // assert(isUnique(complete));
  
-            auto ret = bmssp(l - 1, trying_B, S);
-            
-            // debug("ON", l, B);
-            // if(complete_B > ret.first) {
-                //     debug("wtf?");
-                //     debug(complete_B, ret.first, l, B);
-                //     debug(trying_B, S.size());
-                // }
-                // assert(complete_B <= ret.first);
-                complete_B = ret.first;
-                auto &nw_complete = ret.second;
-                int old_sz = complete.size();
-                for(int x: nw_complete) complete.insert(x);
-                // append(complete, nw_complete);
-                
-                // if(!isUnique(complete)) {
-                    //     debug(l, B);
-                    //     debug(trying_B, S.size());
-                    //     debug(complete_B, nw_complete.size(), complete.size());
-                    //     removeDuplicates(complete);
-                    //     debug(old_sz, complete.size());
-                    //     debug(its);
-                    // }
-                    // assert(isUnique(complete)); // point 6, page 10
-                    // assert(complete_B <= trying_B);
-                    // assert(trying_B <= B);
-                    
-                    vector<uniqueDistT> new_frontier;
-                    for(int u: nw_complete) {
-                        // assert(getDist(u) < complete_B);
-                        for(auto [v, w]: adj[u]) {
-                            auto new_dist = getDist(u, v, w);
-                            if(new_dist <= getDist(v)) {
-                                updateDist(u, v, w);
-                                if(trying_B <= new_dist && new_dist < B) {
-                                    D.insert(new_dist); // d[v] can be greater equal than min(D)
-                                } else if(complete_B <= new_dist && new_dist < trying_B) {
-                                    new_frontier.emplace_back(new_dist); // d[v] is less than all in D
-                                }
-                            }
+            vector<uniqueDistT> can_prepend;
+            for(int u: nw_complete) {
+                for(auto [v, w]: adj[u]) {
+                    auto new_dist = getDist(u, v, w);
+                    if(new_dist <= getDist(v)) {
+                        updateDist(u, v, w);
+                        if(trying_B <= new_dist && new_dist < B) {
+                            D.insert(new_dist); // d[v] can be greater equal than min(D), occur 1x per vertex
+                        } else if(complete_B <= new_dist && new_dist < trying_B) {
+                            can_prepend.emplace_back(new_dist); // d[v] is less than all in D, can occur 1x at each level per vertex
                         }
+                        // else if(new_dist <= complete_B) {
+                        //     assert(find(nw_complete.begin(), nw_complete.end(), v) != nw_complete.end());
+                        // }
                     }
                     for(int x: S) {
-                        if(complete_B <= getDist(x) && getDist(x) < trying_B) new_frontier.emplace_back(getDist(x));
+                        if(complete_B <= getDist(x) && getDist(x) < trying_B) can_prepend.emplace_back(getDist(x));
                     }
                     // new_frontier is not necessarily all unique
-                    D.batchPrepend(new_frontier);
+                    D.batchPrepend(can_prepend);
                 }
-                uniqueDistT retB;
-                if(D.size() == 0) retB = B; // successful
-                else retB = complete_B;     // partial
-                
-                for(int x: W) if(getDist(x) < retB) complete.insert(x); // this get the completed vertices from 
-        // for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
-        // removeDuplicates(complete);
+            }
+            for(int x: miniS) {
+                if(complete_B <= getDist(x) && getDist(x) < trying_B) can_prepend.emplace_back(getDist(x));
+                // second condition is probably not necessary
+            }
+            // can_prepend is not necessarily all unique
+            D.batchPrepend(can_prepend);
+
+            last_complete_B = complete_B;
+        }
+        uniqueDistT retB;
+        if(D.size() == 0) retB = B;     // successful
+        else retB = last_complete_B;    // partial
  
-        // assert(P.size() <= complete.size() / k); // point 4, page 10
+        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
+        removeDuplicates(complete);
+ 
         return {retB, complete};
     }
 };
- 
+
 void solve() {
     int n, m; cin >> n >> m;
     newspp<long long> spp(n);
@@ -730,7 +719,7 @@ void solve() {
     for(auto x: d) cout << x << " ";
     cout << endl;
 }
- 
+
 signed main() {
     fastio;
 
