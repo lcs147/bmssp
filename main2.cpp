@@ -358,15 +358,18 @@ struct newspp {
 
             vector<elementT> v(l.begin(), l.end());
             uniqueDistT med = selectMedian( v, sz/2);
-
-            auto mid = std::partition(l.begin(), l.end(), [&](auto& x) {
-                return x.second < med;
-            });
-            
-            list<elementT> less, great;
-            less.splice(less.end(), l, l.begin(), mid);
-            great.splice(great.end(), l, mid, l.end());
      
+            list<elementT> less,great;
+            for(auto [a,b]: l){
+                if(b < med){
+                    less.push_back({a,b});
+                }else if(b > med){
+                    great.push_back({a,b});
+                }
+            }
+            
+            great.push_back({get<2>(med),med});
+
             batchPrepend(great);
             batchPrepend(less);
         }
