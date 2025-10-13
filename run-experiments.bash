@@ -6,6 +6,8 @@ FILES=(
     "USA-road-t.NY.gr"
     "USA-road-t.CAL.gr"
     "USA-road-t.USA.gr"
+    "random4x.gr"
+    "random4x2.gr"
 )
 TYPES=(
     "bmssp"
