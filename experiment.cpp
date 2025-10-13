@@ -28,7 +28,7 @@ signed main(int argc, char **argv) {
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
             bmssp<distT> spp(adj);
-            // spp.prepare_graph();
+            spp.prepare_graph();
             timer.start();
             d = spp.execute(s);
             timer.stop();
@@ -40,6 +40,7 @@ signed main(int argc, char **argv) {
         }
         tot_time += timer.elapsed();
     }
+
     cout << algorithm << " on " << graph_path << " source: " << s << " reps: " << reps << endl;
     cout << "time: " << tot_time / reps << " ms" << endl;
     cout << "checksum: " << check_sum(d) << endl;

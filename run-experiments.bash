@@ -4,14 +4,23 @@ FILES_DIR="./graphs"
 
 FILES=(
     "USA-road-t.NY.gr"
+    "USA-road-t.BAY.gr"
+    "USA-road-t.COL.gr"
+    "USA-road-t.FLA.gr"
+    "USA-road-t.NW.gr"
+    "USA-road-t.NE.gr"
     "USA-road-t.CAL.gr"
+    "USA-road-t.LKS.gr"
+    "USA-road-t.E.gr"
+    "USA-road-t.W.gr"
+    "USA-road-t.CTR.gr"
     "USA-road-t.USA.gr"
     "random4x.gr"
     "random4x2.gr"
 )
 TYPES=(
-    "bmssp"
     "dijkstra"
+    "bmssp"
 )
 
 echo "Compiling experiment.cpp..."

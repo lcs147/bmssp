@@ -32,7 +32,7 @@ signed main(signed argc, char **argv){
 
     m -= n - 1;
     while(m--) {
-        while(add(rand(1, n), rand(1, n), rand(1, 5)) == false);
+        while(add(rand(1, n), rand(1, n), rand(1, 50)) == false);
     }
     return 0;
 }

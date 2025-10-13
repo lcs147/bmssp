@@ -1,3 +1,5 @@
+#include<bits/stdc++.h>
+
 template<typename wT>
 struct set_pq {
     set<pair<wT, int>> s;
@@ -5,7 +7,7 @@ struct set_pq {
     void clear() {
         s.clear();
     }
-    void insert(int u, int du) {
+    void insert(int u, wT du) {
         s.insert({du, u});
     }
     pair<wT, int> extract_min() {
@@ -37,6 +39,7 @@ struct dijkstra {
             auto [du, u] = q.extract_min();
             for(auto [v, w] : adj[u]) {
                 if(d[u] + w < d[v]) {
+                    q.s.erase({d[v], v});
                     p[v] = u;
                     d[v] = d[u] + w;
                     q.insert(v, d[v]);
