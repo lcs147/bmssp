@@ -36,6 +36,15 @@ struct bmssp {
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
     }
+    void prepare_graph2() {
+        adj.assign(cnt, {});
+        root.resize(cnt);
+        
+        rev_map.resize(cnt);
+        d.resize(cnt);
+        path_sz.resize(cnt, 0);
+        pred.resize(cnt);
+    }
  
     void prepare_graph() {
         vector<pair<int, int>> tmp_edges(n, {-1, -1});
