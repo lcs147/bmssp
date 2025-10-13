@@ -50,7 +50,7 @@ struct batchPQ {
             where_is[1].erase(a);
     
             if((*it_block).size() == 0){
-                auto it_UB_block = UBs.upper_bound({b,it_block});  
+                auto it_UB_block = UBs.lower_bound({b,it_block});  
                 
                 if((*it_UB_block).first != B){
                     UBs.erase(it_UB_block);
@@ -83,7 +83,7 @@ struct batchPQ {
         }
         
         // Searching for the first block with UB which is > 
-        auto it_UB_block = UBs.upper_bound({b,it_min});
+        auto it_UB_block = UBs.lower_bound({b,it_min});
         auto [ub,it_block] = (*it_UB_block);
                 
         // Inserting key/value (a,b)
@@ -182,7 +182,7 @@ struct batchPQ {
         // Updating UBs   
         // O(lg(Block Numbers))
         uniqueDistT UB1 = {get<0>(med),get<1>(med),get<2>(med),get<3>(med)-1};
-        auto it_lb = UBs.upper_bound({UB1,it_min});
+        auto it_lb = UBs.lower_bound({UB1,it_min});
         auto [UB2,aux] = (*it_lb);
         
         UBs.insert({UB1,it_block});

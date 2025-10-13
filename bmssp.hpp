@@ -36,15 +36,6 @@ struct bmssp {
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
     }
-    void prepare_graph2() {
-        adj.assign(cnt, {});
-        root.resize(cnt);
-        
-        rev_map.resize(cnt);
-        d.resize(cnt);
-        path_sz.resize(cnt, 0);
-        pred.resize(cnt);
-    }
  
     void prepare_graph() {
         vector<pair<int, int>> tmp_edges(n, {-1, -1});
@@ -243,7 +234,7 @@ struct bmssp {
  
         auto [P, W] = findPivots(B, S);
  
-        const int batch_size = (1 << ((l - 1) * t));
+        const long long batch_size = (1ll << ((l - 1) * t));
         batchPQ<uniqueDistT> D(batch_size, B);
         for(int p: P) D.insert(getDist(p));
  
@@ -255,7 +246,7 @@ struct bmssp {
         for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
         vector<int> complete;
-        const int cota = k * (1 << (l * t));
+        const long long cota = k * (1ll << (l * t));
         while(complete.size() < cota && D.size()) {
             auto [trying_B, smallestFew] = D.pull();
             vector<int> miniS;
