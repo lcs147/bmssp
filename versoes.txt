@@ -1,4 +1,0 @@
-com tupla infinita: https://cses.fi/paste/dfc2affdfe9b70abe2d85e/
-    ainda dá o bug do unique
-com set e sort: https://cses.fi/paste/379ebfa6b7491fd8e2cffb/
-    mais rapido
