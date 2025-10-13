@@ -1,0 +1,3 @@
+dijkstra on ./graphs/USA-road-t.NY.gr source: 1 reps: 5
+time: 44 ms
+checksum: 922337437497951537
