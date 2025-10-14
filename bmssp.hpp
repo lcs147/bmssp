@@ -6,11 +6,24 @@
 #include<limits>
 #include<set>
 #include<iostream>
+#include<unordered_map>
+#include<unordered_set>
 #include<ext/pb_ds/assoc_container.hpp>
 
 namespace spp {
+
 using namespace std;
 using namespace __gnu_pbds;
+
+// template<typename K, typename V>
+// using hash_map = gp_hash_table<K, V>;
+// template<typename K>
+// using hash_set = hash_map<K, null_type>;
+
+template<typename K, typename V>
+using hash_map = unordered_map<K, V>;
+template<typename K>
+using hash_set = unordered_set<K>;
 
 template<typename uniqueDistT>
 struct batchPQ { // Implemented as in Lemma 3.3
@@ -24,7 +37,7 @@ struct batchPQ { // Implemented as in Lemma 3.3
         }
     };
     
-    typename std::list<std::list<elementT>>::iterator it_min;
+    typename list<list<elementT>>::iterator it_min;
     
     list<list<elementT>> D0,D1;
     set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
@@ -32,8 +45,8 @@ struct batchPQ { // Implemented as in Lemma 3.3
     int M,size_;
     uniqueDistT B;
     
-    unordered_map<int, uniqueDistT> actual_value;
-    unordered_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
+    hash_map<int, uniqueDistT> actual_value;
+    hash_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
     
     // Initialize
     batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
@@ -134,12 +147,14 @@ struct batchPQ { // Implemented as in Lemma 3.3
                 medians.push_back(group[group.size() / 2]);
             }
 
-            l = std::move(medians);
+            l = move(medians);
         }
     }
-    uniqueDistT selectMedian(vector<elementT> l, int k){
+    uniqueDistT selectMedian(const vector<elementT> &l, int k){
         uniqueDistT p = medianOfMedians(l);
         vector<elementT> less,great;
+        less.reserve(l.size() / 2 + 1);
+        great.reserve(l.size() / 2 + 1);
 
         for (auto& e : l) {
             if (e.second < p) {
@@ -176,7 +191,7 @@ struct batchPQ { // Implemented as in Lemma 3.3
         while(it != (*it_block).end()){ // O(M)
             if((*it).second >= med){
                 // (*new_block).push_back((*it));
-                (*new_block).push_back(std::move(*it));
+                (*new_block).push_back(move(*it));
                 auto it_new = (*new_block).end(); it_new--;
                 where_is[1][(*it).first] = {new_block, it_new};
     
@@ -199,7 +214,7 @@ struct batchPQ { // Implemented as in Lemma 3.3
         UBs.erase(it_lb);
     }
     
-    void batchPrepend(list<elementT> l) { // O(|l| log(|l|/M) ) 
+    void batchPrepend(const list<elementT> &l) { // O(|l| log(|l|/M) ) 
         int sz = l.size();
         
         if(sz == 0) return;
@@ -229,7 +244,7 @@ struct batchPQ { // Implemented as in Lemma 3.3
         }
 
         vector<elementT> v(l.begin(), l.end());
-        uniqueDistT med = selectMedian( v, sz/2);
+        uniqueDistT med = selectMedian(v, sz/2);
     
         list<elementT> less,great;
         for(auto [a,b]: l){
@@ -248,7 +263,6 @@ struct batchPQ { // Implemented as in Lemma 3.3
     
     void batchPrepend(const vector<uniqueDistT> &v){
         list<elementT> l;
-        int sz = v.size();
         for(auto x: v){
             l.push_back({get<2>(x),x});
         }
@@ -285,6 +299,7 @@ struct batchPQ { // Implemented as in Lemma 3.3
             return {B, ret};
         }else{  
             vector<elementT> l;
+            l.reserve(s0.size() + s1.size());
             for(auto x : s0) l.push_back(x);
             for(auto x : s1) l.push_back(x);
             uniqueDistT med = selectMedian(l, M);
@@ -300,47 +315,10 @@ struct batchPQ { // Implemented as in Lemma 3.3
             return {med,ret};
         }
     }
-    
-    void print(uniqueDistT x){
-        cout <<  get<0>(x) << " " << get<1>(x) << " " << get<2>(x) << " " << get<3>(x) << "\n";
-    }
-    
-    void print(){
-        cout <<  D1.size() << "\n";
-        cout << UBs.size() << "\n";
-    
-        cout << "Sequence D1\n";
-        int i = 0;
-        for(auto &block : D1){   
-            cout << "Block " << i++ << " UB: " << std::addressof(block) << "\n";
-            for(auto [a,b]: block){
-                cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
-            }
-            cout << "\n";
-        }
-    
-    
-        cout << "Sequence D0\n";
-        i = 0;
-        for(auto block : D0){   
-            cout << "Block " << i++ << " UB: " << "\n";
-            for(auto [a,b]: block){
-                cout << a << " " << get<0>(b) << " " << get<1>(b) << " " << get<2>(b) << " " << get<3>(b) << "\n";
-            }
-            cout << "\n";
-        }
-    
-    }
-    
 };
 
 template<typename wT>
 struct bmssp { // bmssp class
-    template<typename K, typename V>
-    using hash_map = gp_hash_table<K, V>;
-    template<typename K>
-    using hash_set = hash_map<K, null_type>;
-    
     int n, k, t;
     const wT oo = numeric_limits<wT>::max() / 10;
  
@@ -364,7 +342,7 @@ struct bmssp { // bmssp class
         ori_adj[a].emplace_back(b, w);
     }
  
-    void prepare_graph() {
+    void prepare_graph(bool has_constant_degree = false) {
         // erase duplicated edges
         vector<pair<int, int>> tmp_edges(n, {-1, -1});
         for(int i = 0; i < n; i++) {
@@ -380,48 +358,67 @@ struct bmssp { // bmssp class
                 }
             }
             ori_adj[i] = move(nw_adj);
-            ori_adj[i].shrink_to_fit();
         }
         tmp_edges.clear();
-        tmp_edges.shrink_to_fit();
 
-        // Make the graph become constant degree
-        int cnt = 0;
-        for(int i = 0; i < n; i++) {
-            for(auto [j, w]: ori_adj[i]) {
-                if(neig[i].find(j) == neig[i].end()) {
-                    neig[i][j] = cnt++;
-                    neig[j][i] = cnt++;
+        if(has_constant_degree) {
+            adj = move(ori_adj);
+            ori_adj.clear();
+            d.resize(n);
+            // root.resize(cnt);
+            pred.resize(n);
+            rev_map.resize(n);
+            path_sz.resize(n, 0);
+            
+            for(int i = 0; i < n; i++) {
+                neig[i][i] = i;
+                rev_map[i] = i;
+            }
+
+            k = floor(pow(log2(n), 1.0 / 3.0));
+            t = floor(pow(log2(n), 2.0 / 3.0));
+        } else {
+            // Make the graph become constant degree
+            int cnt = 0;
+            for(int i = 0; i < n; i++) {
+                for(auto [j, w]: ori_adj[i]) {
+                    if(neig[i].find(j) == neig[i].end()) {
+                        neig[i][j] = cnt++;
+                        neig[j][i] = cnt++;
+                    }
                 }
             }
-        }
-        cnt++;
-        adj.assign(cnt, {});
-        root.resize(cnt);
-        
-        rev_map.resize(cnt);
-        d.resize(cnt);
-        path_sz.resize(cnt, 0);
-        pred.resize(cnt);
- 
-        for(int i = 0; i < n; i++) { // create 0-weight cycles
-            for(auto cur = neig[i].begin(); cur != neig[i].end(); cur++) {
-                auto nxt = next(cur);
-                if(nxt == neig[i].end()) nxt = neig[i].begin();
-                adj[cur->second].emplace_back(nxt->second, wT());
-                rev_map[cur->second] = i;
+
+            cnt++;
+            adj.assign(cnt, {});
+            
+            d.resize(cnt);
+            // root.resize(cnt);
+            pred.resize(cnt);
+            rev_map.resize(cnt);
+            path_sz.resize(cnt, 0);
+    
+            for(int i = 0; i < n; i++) { // create 0-weight cycles
+                for(auto cur = neig[i].begin(); cur != neig[i].end(); cur++) {
+                    auto nxt = next(cur);
+                    if(nxt == neig[i].end()) nxt = neig[i].begin();
+                    adj[cur->second].emplace_back(nxt->second, wT());
+                    rev_map[cur->second] = i;
+                }
             }
-        }
-        for(int i = 0; i < n; i++) { // add edges
-            for(auto [j, w]: ori_adj[i]) {
-                adj[neig[i][j]].emplace_back(neig[j][i], w);
+            for(int i = 0; i < n; i++) { // add edges
+                for(auto [j, w]: ori_adj[i]) {
+                    adj[neig[i][j]].emplace_back(neig[j][i], w);
+                }
+                if(neig[i].size() == 0) { // for vertices without edges
+                    neig[i][n] = cnt - 1;
+                }
             }
-            if(neig[i].size() == 0) { // for vertices without edges
-                neig[i][n] = cnt - 1;
-            }
+            k = floor(pow(log2(cnt), 1.0 / 3.0));
+            t = floor(pow(log2(cnt), 2.0 / 3.0));
+            
+            ori_adj.clear();
         }
-        k = floor(pow(log2(cnt), 1.0 / 3.0));
-        t = floor(pow(log2(cnt), 2.0 / 3.0));
     }
     
     int toAnyCustomNode(int real_id) {
@@ -434,14 +431,15 @@ struct bmssp { // bmssp class
     vector<wT> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
-        for(int i = 0; i < (int) pred.size(); i++) pred[i] = i;
+        for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
         d[s] = 0;
         path_sz[s] = 0;
         
         const int l = ceil(log2(adj.size()) / t);
-        bmsspRec(l, make_tuple(oo, 0, 0, 0), {s});
+        const uniqueDistT inf_dist = make_tuple(oo, 0, 0, 0);
+        bmsspRec(l, inf_dist, {s});
  
         vector<wT> res(n);
         for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
@@ -453,25 +451,19 @@ struct bmssp { // bmssp class
  
     // set stuff
     template<typename T>
-    void append(vector<T> &a, auto &b) {
-        a.insert(a.end(), b.begin(), b.end());
-    }
- 
-    template<typename T>
     void removeDuplicates(vector<T> &v) { // sort is faster
         hash_set<T> s(v.begin(), v.end());
-        v.clear();
-        append(v, s);
+        v = vector<T>(s.begin(), s.end());
         // sort(v.begin(), v.end());
         // v.erase(unique(v.begin(), v.end()), v.end());
     }
-    template<typename T>
-    bool isUnique(const vector<T> &v) {
-        auto v2 = v;
-        sort(v2.begin(), v2.end());
-        v2.erase(unique(v2.begin(), v2.end()), v2.end());
-        return v2.size() == v.size();
-    }
+    // template<typename T>
+    // bool isUnique(const vector<T> &v) {
+    //     auto v2 = v;
+    //     sort(v2.begin(), v2.end());
+    //     v2.erase(unique(v2.begin(), v2.end()), v2.end());
+    //     return v2.size() == v.size();
+    // }
     inline uniqueDistT getDist(int u, int v, int w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -484,10 +476,12 @@ struct bmssp { // bmssp class
         path_sz[v] = path_sz[u] + 1;
     }
     // ===================================================================
-    vector<int> root;
     pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
         hash_set<int> vis(S.begin(), S.end());
         vector<int> active = S;
+
+        hash_map<int, int> root;
+        root.reserve(S.size() * k);
         for(int x: S) root[x] = x;
         for(int i = 1; i <= k; i++) {
             vector<int> nw_active;
@@ -510,18 +504,20 @@ struct bmssp { // bmssp class
         }
 
         hash_map<int, int> sz;
+        sz.reserve(root.size());
         for(int u: vis) sz[root[u]]++;
  
         vector<int> P;
+        P.reserve(vis.size() / k);
         for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
         
         // assert(P.size() <= vis.size() / k);
         return {P, vis};
     }
  
-    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // find k closest to x | d[x] < B // Algorithm 2
-        if(getDist(x) >= B) return {B, {}};
+    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // Algorithm 2
         vector<int> complete;
+        complete.reserve(k + 1);
  
         set<uniqueDistT> heap;
         heap.insert(getDist(x));
@@ -571,6 +567,7 @@ struct bmssp { // bmssp class
  
         vector<int> complete;
         const long long cota = k * (1ll << (l * t));
+        complete.reserve(cota + W.size());
         while(complete.size() < cota && D.size()) {
             auto [trying_B, smallestFew] = D.pull();
             vector<int> miniS;
@@ -586,11 +583,12 @@ struct bmssp { // bmssp class
             // all new complete_B are greater than the old ones <= point 6, page 10
             // assert(last_complete_B < complete_B);
  
-            append(complete, nw_complete);
+            complete.insert(complete.end(), nw_complete.begin(), nw_complete.end());
             // point 6, page 10 => complete does not intersect with nw_complete
             // assert(isUnique(complete));
  
             vector<uniqueDistT> can_prepend;
+            can_prepend.reserve(nw_complete.size() * 2 + miniS.size());
             for(int u: nw_complete) {
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);

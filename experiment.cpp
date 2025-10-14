@@ -69,7 +69,7 @@ signed main(int argc, char **argv) {
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
             spp::bmssp<distT> spp(adj);
-            spp.prepare_graph();
+            spp.prepare_graph(true);
             timer.start();
             d = spp.execute(s);
             timer.stop();
