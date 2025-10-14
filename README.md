@@ -61,7 +61,7 @@ int main() {
     int source_node = 0;
 
     // 2. Initialize and build the graph
-    bmssp<T> solver(n);
+    spp::bmssp<T> solver(n);
     for (const auto& [u, v, weight] : edges) {
         solver.addEdge(u, v, weight);
     }

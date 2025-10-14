@@ -1,9 +1,15 @@
 #pragma once
 
-#include <bits/stdc++.h>
+#include<vector>
+#include<list>
+#include<utility>
+#include<limits>
+#include<set>
+#include<iostream>
+#include<ext/pb_ds/assoc_container.hpp>
+
+namespace spp {
 using namespace std;
- 
-#include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 
 template<typename uniqueDistT>
@@ -12,9 +18,9 @@ struct batchPQ { // Implemented as in Lemma 3.3
     
     struct CompareUB {
         template <typename It>
-        bool operator()(const std::pair<uniqueDistT, It>& a, const std::pair<uniqueDistT, It>& b) const {
+        bool operator()(const pair<uniqueDistT, It>& a, const pair<uniqueDistT, It>& b) const {
             if (a.first != b.first) return a.first < b.first;
-            return  std::addressof(*a.second) < std::addressof(*b.second);
+            return  addressof(*a.second) < addressof(*b.second);
         }
     };
     
@@ -327,14 +333,14 @@ struct batchPQ { // Implemented as in Lemma 3.3
     }
     
 };
- 
-template<typename K, typename V>
-using hash_map = gp_hash_table<K, V>;
-template<typename K>
-using hash_set = hash_map<K, null_type>;
- 
+
 template<typename wT>
 struct bmssp { // bmssp class
+    template<typename K, typename V>
+    using hash_map = gp_hash_table<K, V>;
+    template<typename K>
+    using hash_set = hash_map<K, null_type>;
+    
     int n, k, t;
     const wT oo = numeric_limits<wT>::max() / 10;
  
@@ -617,3 +623,4 @@ struct bmssp { // bmssp class
         return {retB, complete};
     }
 };
+}

@@ -1,14 +1,14 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include "bmssp.hpp"
+#include "dijkstra.hpp"
 
 #ifdef LOCAL
-#include "cp-lib/helpers/debug.cpp"
+#include "debug.cpp"
 #else
 #define debug(...) 0
 #endif
 
-#include "bmssp.hpp"
-#include "dijkstra.hpp"
+#include <bits/stdc++.h>
+using namespace std;
 
 struct timerT {
     chrono::_V2::system_clock::time_point begin, end;
@@ -64,17 +64,17 @@ signed main(int argc, char **argv) {
     vector<distT> d;
     auto adj = readGraph(graph_path);
 
-    const int reps = 5;
+    const int reps = 1;
     long long tot_time = 0;
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
-            bmssp<distT> spp(adj);
+            spp::bmssp<distT> spp(adj);
             spp.prepare_graph();
             timer.start();
             d = spp.execute(s);
             timer.stop();
         } else {
-            dijkstra<distT> spp(adj);
+            spp::dijkstra<distT> spp(adj);
             timer.start();
             d = spp.execute(s);
             timer.stop();
