@@ -1,17 +1,22 @@
-#include<bits/stdc++.h>
+#include<vector>
+#include<utility>
+#include<limits>
+#include<set>
+
+namespace spp {
 template<typename wT>
 struct dijkstra {
     int n;
-    vector<wT> d, p;
-    vector<vector<pair<int, wT>>> adj;
-    const wT oo = numeric_limits<wT>::max() / 10;
+    std::vector<wT> d, p;
+    std::vector<std::vector<pair<int, wT>>> adj;
+    const wT oo = std::numeric_limits<wT>::max() / 10;
 
     dijkstra(const auto &adj): adj(adj), n(adj.size()), p(n, -1) {
-        d = vector<wT>(n, oo);
+        d = std::vector<wT>(n, oo);
     }
 
-    vector<wT> execute(int s) {
-        set<pair<wT, int>> q;
+    std::vector<wT> execute(int s) {
+        std::set<pair<wT, int>> q;
         d[s] = 0;
         q.insert({0, s});
         while(!q.empty()) {
@@ -19,13 +24,14 @@ struct dijkstra {
             q.erase(q.begin());
             for(auto [v, w] : adj[u]) {
                 if(d[u] + w < d[v]) {
-                    q.s.erase({d[v], v});
+                    q.erase({d[v], v});
                     p[v] = u;
                     d[v] = d[u] + w;
-                    q.insert(v, d[v]);
+                    q.insert({d[v], v});
                 }
             }
         }
         return d;
     };
 };
+}
