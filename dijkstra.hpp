@@ -1,25 +1,4 @@
 #include<bits/stdc++.h>
-
-template<typename wT>
-struct set_pq {
-    set<pair<wT, int>> s;
-    set_pq(){};
-    void clear() {
-        s.clear();
-    }
-    void insert(int u, wT du) {
-        s.insert({du, u});
-    }
-    pair<wT, int> extract_min() {
-        auto ret = *s.begin();
-        s.erase(s.begin());
-        return ret; // d, v
-    }
-    bool empty() {
-        return s.size() == 0;
-    }
-};
-
 template<typename wT>
 struct dijkstra {
     int n;
@@ -32,11 +11,12 @@ struct dijkstra {
     }
 
     vector<wT> execute(int s) {
-        set_pq<wT> q;
+        set<pair<wT, int>> q;
         d[s] = 0;
-        q.insert(s, 0);
+        q.insert({0, s});
         while(!q.empty()) {
-            auto [du, u] = q.extract_min();
+            auto [du, u] = *q.begin();
+            q.erase(q.begin());
             for(auto [v, w] : adj[u]) {
                 if(d[u] + w < d[v]) {
                     q.s.erase({d[v], v});

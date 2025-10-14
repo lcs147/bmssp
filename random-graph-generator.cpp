@@ -1,3 +1,5 @@
+// Generate a random sparse graph in DIMACS format
+
 #include<bits/stdc++.h>
 #include <random>
 #define int long long
@@ -34,5 +36,6 @@ signed main(signed argc, char **argv){
     while(m--) {
         while(add(rand(1, n), rand(1, n), rand(1, 50)) == false);
     }
+    
     return 0;
 }
