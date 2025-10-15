@@ -328,6 +328,7 @@ struct bmssp { // bmssp class
     vector<wT> d;
     vector<int> pred, path_sz;
     vector<int> rev_map;
+    vector<short int> last_complete_lvl;
  
     vector<hash_map<int, int>> neig;
     bmssp(int n_): n(n_) {
@@ -368,9 +369,12 @@ struct bmssp { // bmssp class
             adj = move(ori_adj);
             ori_adj.clear();
             d.resize(n);
+            root.resize(n);
             pred.resize(n);
+            treesz.resize(n);
             rev_map.resize(n);
             path_sz.resize(n, 0);
+            last_complete_lvl.resize(n);
             
             for(int i = 0; i < n; i++) {
                 neig[i][i] = i;
@@ -395,10 +399,12 @@ struct bmssp { // bmssp class
             adj.assign(cnt, {});
             
             d.resize(cnt);
-            // root.resize(cnt);
+            root.resize(cnt);
             pred.resize(cnt);
+            treesz.resize(cnt);
             rev_map.resize(cnt);
             path_sz.resize(cnt, 0);
+            last_complete_lvl.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
                 for(auto cur = neig[i].begin(); cur != neig[i].end(); cur++) {
@@ -433,6 +439,7 @@ struct bmssp { // bmssp class
     vector<wT> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
+        fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
@@ -452,13 +459,13 @@ struct bmssp { // bmssp class
     using uniqueDistT = tuple<wT, int, int, int>;
  
     // set stuff
-    template<typename T>
-    void removeDuplicates(vector<T> &v) { // sort is faster
-        hash_set<T> s(v.begin(), v.end());
-        v = vector<T>(s.begin(), s.end());
-        // sort(v.begin(), v.end());
-        // v.erase(unique(v.begin(), v.end()), v.end());
-    }
+    // template<typename T>
+    // void removeDuplicates(vector<T> &v) { // sort is faster
+    //     hash_set<T> s(v.begin(), v.end());
+    //     v = vector<T>(s.begin(), s.end());
+    //     // sort(v.begin(), v.end());
+    //     // v.erase(unique(v.begin(), v.end()), v.end());
+    // }
     // template<typename T>
     // bool isUnique(const vector<T> &v) {
     //     auto v2 = v;
@@ -478,13 +485,13 @@ struct bmssp { // bmssp class
         path_sz[v] = path_sz[u] + 1;
     }
     // ===================================================================
+    vector<int> root;
+    vector<short int> treesz;
     pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
         hash_set<int> vis(S.begin(), S.end());
         vector<int> active = S;
 
-        hash_map<int, int> root;
-        root.reserve(S.size() * k);
-        for(int x: S) root[x] = x;
+        for(int x: S) root[x] = x, treesz[x] = 0;
         for(int i = 1; i <= k; i++) {
             vector<int> nw_active;
             for(int u: active) {
@@ -505,13 +512,10 @@ struct bmssp { // bmssp class
             active = move(nw_active);
         }
 
-        hash_map<int, int> sz;
-        sz.reserve(root.size());
-        for(int u: vis) sz[root[u]]++;
- 
         vector<int> P;
         P.reserve(vis.size() / k);
-        for(auto [u, trsize]: sz) if(trsize >= k) P.push_back(u);
+        for(int u: vis) treesz[root[u]]++;
+        for(int u: S) if(treesz[u] >= k) P.push_back(u);
         
         // assert(P.size() <= vis.size() / k);
         return {P, vis};
@@ -592,7 +596,7 @@ struct bmssp { // bmssp class
             // assert(isUnique(complete));
  
             vector<uniqueDistT> can_prepend;
-            can_prepend.reserve(nw_complete.size() * 2 + miniS.size());
+            can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
@@ -607,8 +611,8 @@ struct bmssp { // bmssp class
                 }
             }
             for(int x: miniS) {
-                if(complete_B <= getDist(x) && getDist(x) < trying_B) can_prepend.emplace_back(getDist(x));
-                // second condition is probably not necessary
+                if(complete_B <= getDist(x)) can_prepend.emplace_back(getDist(x));
+                // second condition is not necessary
             }
             // can_prepend is not necessarily all unique
             D.batchPrepend(can_prepend);
@@ -619,8 +623,8 @@ struct bmssp { // bmssp class
         if(D.size() == 0) retB = B;     // successful
         else retB = last_complete_B;    // partial
  
-        for(int x: W) if(getDist(x) < retB) complete.push_back(x); // this get the completed vertices from belman-ford, it has P in it as well
-        removeDuplicates(complete);
+        for(int x: W) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
+        // get only the ones not in complete already, for it to become disjoint
  
         return {retB, complete};
     }
