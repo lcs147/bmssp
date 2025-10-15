@@ -8,14 +8,24 @@ FILES_DIR="$ROOT_DIR/graphs"
 EXECUTABLE="${SCRIPT_DIR}/a"
 GENERATOR_SOURCE="${ROOT_DIR}/experiments/random-graph-generator.cpp"
 
-N_VALUES=(  
-            # 10
-            # 100 1000 10000 
-            # 100000 1000000 10000000
-            20000000 30000000
-        )
+# --- Dynamic N Generation ---
+# Generates N values starting at 10, multiplying by 2, up to 30,000,000.
+N_VALUES=()
+N=2
+MAX_N=30000000
 
-echo "--- 1. Compiling generator ---"
+echo "--- 1. Generating N values: Starting at 2, multiplying by 2 up to ${MAX_N} ---"
+
+while (( N <= MAX_N )); do
+    N_VALUES+=("$N")
+    # Using arithmetic expansion to multiply N by 2
+    N=$(( N * 2 ))
+done
+
+echo "Generated Ns: ${N_VALUES[*]}"
+# -----------------------------
+
+echo "--- 2. Compiling generator ---"
 g++ -std=c++20 -O3 "${GENERATOR_SOURCE}" -o "${EXECUTABLE}"
 
 if [ $? -ne 0 ]; then
@@ -30,15 +40,16 @@ if [ ! -d "$FILES_DIR" ]; then
 fi
 
 # 3. Execution Loop
-echo -e "\n--- 3. Running generator for N = ${N_VALUES[*]} ---"
+echo -e "\n--- 3. Running generator for ${#N_VALUES[@]} graph sizes ---"
 
 for N in "${N_VALUES[@]}"; do
     # Define the output file path using the required format: random${N}D5
-    OUTPUT_FILE="${FILES_DIR}/random${N}D5.gr"
+    OUTPUT_FILE="${FILES_DIR}/random${N}D3.gr"
     
     echo "Generating graph for N=${N} (Vertices). Output: ${OUTPUT_FILE}"
 
-    "${EXECUTABLE}" "${N}" 5 100000 1 > "${OUTPUT_FILE}"
+    # Arguments: N (Vertices), 3 (Edges per vertex, or density), 100000 (Max weight), 1 (Seed)
+    "${EXECUTABLE}" "${N}" 3 100000 1 > "${OUTPUT_FILE}"
     
     if [ $? -eq 0 ]; then
         echo "  [SUCCESS] Generated file size: $(du -h "${OUTPUT_FILE}" | cut -f1)"

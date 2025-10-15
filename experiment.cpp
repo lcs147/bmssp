@@ -42,7 +42,7 @@ struct timerT {
         end = chrono::high_resolution_clock::now();
     }
     int elapsed() {
-        return chrono::duration_cast<chrono::milliseconds>(end - begin).count();
+        return chrono::duration_cast<chrono::microseconds>(end - begin).count();
     }
 };
 
@@ -84,7 +84,7 @@ signed main(int argc, char **argv) {
     vector<distT> d;
     auto adj = readGraph(graph_path);
 
-    const int reps = 3;
+    const int reps = 5;
     vector<int> times;
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
@@ -103,8 +103,8 @@ signed main(int argc, char **argv) {
     }
 
     cout << algorithm << " on " << graph_path << " source: " << s << " reps: " << reps << endl;
-    cout << "time: " << calculateMean(times) << " ms" << endl;
-    cout << "std: " << calculatePopulationSD(times) << " ms" << endl;
+    cout << "time: " << ceil(calculateMean(times)) << " us" << endl;
+    cout << "std: " << ceil(calculatePopulationSD(times)) << " us" << endl;
     cout << "checksum: " << check_sum(d) << endl;
     return 0;
 }
