@@ -6,6 +6,7 @@
 #include<limits>
 #include<set>
 #include<iostream>
+#include<queue>
 #include<unordered_map>
 #include<unordered_set>
 #include<ext/pb_ds/assoc_container.hpp>
@@ -520,19 +521,21 @@ struct bmssp { // bmssp class
         vector<int> complete;
         complete.reserve(k + 1);
  
-        set<uniqueDistT> heap;
-        heap.insert(getDist(x));
-        while(heap.size() && complete.size() < k + 1) {
-            int u = get<2>(*heap.begin());
-            heap.erase(heap.begin());
+        priority_queue<uniqueDistT, vector<uniqueDistT>, greater<uniqueDistT>> heap;
+        heap.push(getDist(x));
+        while(heap.empty() == false && complete.size() < k + 1) {
+            int u = get<2>(heap.top());
+            int du = get<0>(heap.top());
+            heap.pop();
+            if(du > d[u]) continue;
+
             complete.push_back(u);
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
                 if(new_dist <= old_dist && new_dist < B) {
-                    heap.erase(old_dist);
                     updateDist(u, v, w);
-                    heap.insert(new_dist);
+                    heap.push(new_dist);
                 }
             }
         }
