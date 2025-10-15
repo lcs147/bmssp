@@ -5,7 +5,7 @@ ROOT_DIR="$SCRIPT_DIR/.."
 DOWNLOAD_DIR="$ROOT_DIR/graphs"
 
 URLS=(
-    "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.NY.gr.gz"
+    # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.NY.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.BAY.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.COL.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.FLA.gr.gz"
@@ -14,7 +14,7 @@ URLS=(
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.CAL.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.LKS.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.E.gr.gz"
-    # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.W.gr.gz"
+    "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.W.gr.gz"
     # "https://www.diag.uniroma1.it/~challenge9/data/USA-road-t/USA-road-t.CTR.gr.gz"
 )
 
