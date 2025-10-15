@@ -1,24 +1,11 @@
-#include<bits/stdc++.h>
+#include<vector>
+#include<utility>
+#include<limits>
+#include<set>
+#include<queue>
 
-template<typename wT>
-struct set_pq {
-    set<pair<wT, int>> s;
-    set_pq(){};
-    void clear() {
-        s.clear();
-    }
-    void insert(int u, wT du) {
-        s.insert({du, u});
-    }
-    pair<wT, int> extract_min() {
-        auto ret = *s.begin();
-        s.erase(s.begin());
-        return ret; // d, v
-    }
-    bool empty() {
-        return s.size() == 0;
-    }
-};
+namespace spp {
+using namespace std;
 
 template<typename wT>
 struct dijkstra {
@@ -32,20 +19,24 @@ struct dijkstra {
     }
 
     vector<wT> execute(int s) {
-        set_pq<wT> q;
+        priority_queue<pair<wT, int>, vector<pair<wT, int>>, greater<pair<wT, int>>> heap;
+
         d[s] = 0;
-        q.insert(s, 0);
-        while(!q.empty()) {
-            auto [du, u] = q.extract_min();
+        heap.push({0, s});
+        while(!heap.empty()) {
+            auto [du, u] = heap.top();
+            heap.pop();
+            if(du > d[u]) continue;
+
             for(auto [v, w] : adj[u]) {
                 if(d[u] + w < d[v]) {
-                    q.s.erase({d[v], v});
                     p[v] = u;
                     d[v] = d[u] + w;
-                    q.insert(v, d[v]);
+                    heap.push({d[v], v});
                 }
             }
         }
         return d;
     };
 };
+}
