@@ -35,12 +35,13 @@ signed main(signed argc, char **argv) {
     const int oo = 1e18;
     int m = n * average_outdegree;
     cout << "p " <<  n << " " << m << endl;
-    for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
-        add(random_integer(1, i - 1), i, random_integer(oo / 10, oo));
-    }
+    // for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
+    //     add(random_integer(1, i - 1), i, random_integer(oo / 10, oo));
+    // }
 
-    m -= n - 1;
-    while(m--) {
+    // m -= n - 1;
+    while(m > 0) {
+        m--;
         while(add(random_integer(1, n), random_integer(1, n), random_integer(1, max_weight)) == false);
     }
     
