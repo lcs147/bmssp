@@ -84,7 +84,7 @@ signed main(int argc, char **argv) {
     vector<distT> d;
     auto adj = readGraph(graph_path);
 
-    const int reps = 2;
+    const int reps = 3;
     vector<int> times;
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
