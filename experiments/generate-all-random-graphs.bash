@@ -11,10 +11,10 @@ GENERATOR_SOURCE="${ROOT_DIR}/experiments/random-graph-generator.cpp"
 # --- Dynamic N Generation ---
 # Generates N values starting at 10, multiplying by 2, up to 30,000,000.
 N_VALUES=()
-N=2
-MAX_N=30000000
+N=8
+MAX_N=50000000
 
-echo "--- 1. Generating N values: Starting at 2, multiplying by 2 up to ${MAX_N} ---"
+echo "--- 1. Generating N values: Starting at 8, multiplying by 2 up to ${MAX_N} ---"
 
 while (( N <= MAX_N )); do
     N_VALUES+=("$N")

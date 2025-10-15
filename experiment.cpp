@@ -102,6 +102,7 @@ signed main(int argc, char **argv) {
         times.push_back(timer.elapsed());
     }
 
+    cout << fixed << setprecision(0);
     cout << algorithm << " on " << graph_path << " source: " << s << " reps: " << reps << endl;
     cout << "time: " << ceil(calculateMean(times)) << " us" << endl;
     cout << "std: " << ceil(calculatePopulationSD(times)) << " us" << endl;
