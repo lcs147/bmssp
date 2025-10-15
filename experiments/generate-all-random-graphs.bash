@@ -8,9 +8,11 @@ FILES_DIR="$ROOT_DIR/graphs"
 EXECUTABLE="${SCRIPT_DIR}/a"
 GENERATOR_SOURCE="${ROOT_DIR}/experiments/random-graph-generator.cpp"
 
-N_VALUES=(  10
-            100 1000 10000 
+N_VALUES=(  
+            # 10
+            # 100 1000 10000 
             # 100000 1000000 10000000
+            20000000 30000000
         )
 
 echo "--- 1. Compiling generator ---"

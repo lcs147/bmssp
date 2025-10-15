@@ -10,6 +10,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+double calculateMean(auto data) {
+    if (data.empty()) {
+        return 0.0;
+    }
+    double sum = accumulate(data.begin(), data.end(), 0.0);
+    return sum / data.size();
+}
+double calculatePopulationSD(auto data) {
+    if (data.size() <= 1) {
+        return 0.0;
+    }
+    double mean = calculateMean(data);
+    double squaredDifferenceSum = 0.0;
+    for (double value : data) {
+        squaredDifferenceSum += pow(value - mean, 2);
+    }
+    double variance = squaredDifferenceSum / data.size();
+    return sqrt(variance);
+}
+
 struct timerT {
     chrono::_V2::system_clock::time_point begin, end;
     timerT() {
@@ -64,8 +84,8 @@ signed main(int argc, char **argv) {
     vector<distT> d;
     auto adj = readGraph(graph_path);
 
-    const int reps = 1;
-    long long tot_time = 0;
+    const int reps = 2;
+    vector<int> times;
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
             spp::bmssp<distT> spp(adj);
@@ -79,11 +99,12 @@ signed main(int argc, char **argv) {
             d = spp.execute(s);
             timer.stop();
         }
-        tot_time += timer.elapsed();
+        times.push_back(timer.elapsed());
     }
 
     cout << algorithm << " on " << graph_path << " source: " << s << " reps: " << reps << endl;
-    cout << "time: " << tot_time / reps << " ms" << endl;
+    cout << "time: " << calculateMean(times) << " ms" << endl;
+    cout << "std: " << calculatePopulationSD(times) << " ms" << endl;
     cout << "checksum: " << check_sum(d) << endl;
     return 0;
 }

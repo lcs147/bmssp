@@ -5,20 +5,28 @@ ROOT_DIR="$SCRIPT_DIR/.."
 FILES_DIR="$ROOT_DIR/graphs"
 
 FILES=(
-    "USA-road-t.NY.gr"
-    "USA-road-t.BAY.gr"
-    "USA-road-t.COL.gr"
-    "USA-road-t.FLA.gr"
-    "USA-road-t.NW.gr"
-    "USA-road-t.NE.gr"
-    "USA-road-t.CAL.gr"
-    "USA-road-t.LKS.gr"
-    "USA-road-t.E.gr"
-    "USA-road-t.W.gr"
-    "USA-road-t.CTR.gr"
-    "USA-road-t.USA.gr"
-    "random4x.gr"
-    "random4x2.gr"
+    # "USA-road-t.NY.gr"
+    # "USA-road-t.BAY.gr"
+    # "USA-road-t.COL.gr"
+    # "USA-road-t.FLA.gr"
+    # "USA-road-t.NW.gr"
+    # "USA-road-t.NE.gr"
+    # "USA-road-t.CAL.gr"
+    # "USA-road-t.LKS.gr"
+    # "USA-road-t.E.gr"
+    # "USA-road-t.W.gr"
+    # "USA-road-t.CTR.gr"
+    # "USA-road-t.USA.gr"
+    # "random4x.gr"
+    # "random4x2.gr"
+    "random100D5.gr"
+    "random1000D5.gr"
+    "random10000D5.gr"
+    "random100000D5.gr"
+    "random1000000D5.gr"
+    "random10000000D5.gr"
+    "random20000000D5.gr"
+    "random30000000D5.gr"
 )
 TYPES=(
     "dijkstra"
@@ -37,8 +45,8 @@ echo "Compilation successful."
 OUTPUT_FILE="${SCRIPT_DIR}/results.txt"
 rm -f $OUTPUT_FILE
 
-for TYPE in "${TYPES[@]}"; do
-    for FILE in "${FILES[@]}"; do
+for FILE in "${FILES[@]}"; do
+    for TYPE in "${TYPES[@]}"; do
         FILE_PATH="${FILES_DIR}/${FILE}"
         echo "Running experiment on ${FILE} with ${TYPE}"
         ${SCRIPT_DIR}/a "${FILE_PATH}" "${TYPE}" >> $OUTPUT_FILE

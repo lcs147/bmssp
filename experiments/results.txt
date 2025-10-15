@@ -1,84 +1,44 @@
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NY.gr source: 1 reps: 5
-time: 56 ms
-checksum: 922337437497951537
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.BAY.gr source: 1 reps: 5
-time: 64 ms
-checksum: 922337602519030739
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.COL.gr source: 1 reps: 5
-time: 86 ms
-checksum: 922338847308873040
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.FLA.gr source: 1 reps: 5
-time: 207 ms
-checksum: 922345231080531188
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NW.gr source: 1 reps: 5
-time: 247 ms
-checksum: 922346671386483764
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NE.gr source: 1 reps: 5
-time: 394 ms
-checksum: 922340331507132567
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.CAL.gr source: 1 reps: 5
-time: 436 ms
-checksum: 922353516017042648
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.LKS.gr source: 1 reps: 5
-time: 631 ms
-checksum: 922362218676412793
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.E.gr source: 1 reps: 5
-time: 948 ms
-checksum: 922352948308500119
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.W.gr source: 1 reps: 5
-time: 1812 ms
-checksum: 922423137607569019
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.CTR.gr source: 1 reps: 5
-time: 5266 ms
-checksum: 922488782754297931
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.USA.gr source: 1 reps: 5
-time: 7970 ms
-checksum: 922751485995017018
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4x.gr source: 1 reps: 5
-time: 83 ms
-checksum: 922337203687375645
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4x2.gr source: 1 reps: 5
-time: 87 ms
-checksum: 922337203687314443
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NY.gr source: 1 reps: 5
-time: 418 ms
-checksum: 922337437497951537
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.BAY.gr source: 1 reps: 5
-time: 483 ms
-checksum: 922337602519030739
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.COL.gr source: 1 reps: 5
-time: 667 ms
-checksum: 922338847308873040
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.FLA.gr source: 1 reps: 5
-time: 1578 ms
-checksum: 922345231080531188
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NW.gr source: 1 reps: 5
-time: 1782 ms
-checksum: 922346671386483764
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.NE.gr source: 1 reps: 5
-time: 2405 ms
-checksum: 922340331507132567
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.CAL.gr source: 1 reps: 5
-time: 2920 ms
-checksum: 922353516017042648
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.LKS.gr source: 1 reps: 5
-time: 4854 ms
-checksum: 922362218676412793
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.E.gr source: 1 reps: 5
-time: 6899 ms
-checksum: 922352948308500119
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.W.gr source: 1 reps: 5
-time: 13154 ms
-checksum: 922423137607569019
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.CTR.gr source: 1 reps: 5
-time: 28553 ms
-checksum: 922488782754297931
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/USA-road-t.USA.gr source: 1 reps: 5
-time: 52777 ms
-checksum: 922751485995017018
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4x.gr source: 1 reps: 5
-time: 292 ms
-checksum: 922337203687375645
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4x2.gr source: 1 reps: 5
-time: 285 ms
-checksum: 922337203687314443
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random100D5.gr source: 1 reps: 5
+time: 0 ms
+std: 0 ms
+checksum: 922337207998282941
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random100D5.gr source: 1 reps: 5
+time: 0 ms
+std: 0 ms
+checksum: 922337207998282941
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1000D5.gr source: 1 reps: 5
+time: 0 ms
+std: 0 ms
+checksum: 922337229675622406
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1000D5.gr source: 1 reps: 5
+time: 1 ms
+std: 0 ms
+checksum: 922337229675622406
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random10000D5.gr source: 1 reps: 5
+time: 1.4 ms
+std: 0.489898 ms
+checksum: 922337634357326494
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random10000D5.gr source: 1 reps: 5
+time: 13.2 ms
+std: 0.4 ms
+checksum: 922337634357326494
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random100000D5.gr source: 1 reps: 5
+time: 31.6 ms
+std: 0.8 ms
+checksum: 922341670265042300
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random100000D5.gr source: 1 reps: 5
+time: 215.2 ms
+std: 4.30813 ms
+checksum: 922341670265042300
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1000000D5.gr source: 1 reps: 5
+time: 535.4 ms
+std: 13.8651 ms
+checksum: 922381009653380493
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1000000D5.gr source: 1 reps: 5
+time: 4078.8 ms
+std: 66.3277 ms
+checksum: 922381009653380493
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random10000000D5.gr source: 1 reps: 5
+time: 7452.6 ms
+std: 31.9349 ms
+checksum: 922774531521826376
