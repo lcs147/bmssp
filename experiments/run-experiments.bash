@@ -26,7 +26,7 @@ TYPES=(
 )
 
 echo "Compiling experiment.cpp..."
-g++ -std=c++20 -O3 ${ROOT_DIR}/experiment.cpp -o ${SCRIPT_DIR}/experiment_runner
+g++ -std=c++20 -O3 ${ROOT_DIR}/experiment.cpp -o ${SCRIPT_DIR}/a
 
 if [ $? -ne 0 ]; then
     echo "Compilation failed. Exiting."
@@ -41,7 +41,7 @@ for TYPE in "${TYPES[@]}"; do
     for FILE in "${FILES[@]}"; do
         FILE_PATH="${FILES_DIR}/${FILE}"
         echo "Running experiment on ${FILE} with ${TYPE}"
-        ${SCRIPT_DIR}/experiment_runner "${FILE_PATH}" "${TYPE}" >> $OUTPUT_FILE
+        ${SCRIPT_DIR}/a "${FILE_PATH}" "${TYPE}" >> $OUTPUT_FILE
     done
 done
 

@@ -69,7 +69,7 @@ signed main(int argc, char **argv) {
     for(int i = 0; i < reps; i++) {
         if(algorithm == "bmssp") {
             spp::bmssp<distT> spp(adj);
-            spp.prepare_graph(true); //false = transforma os graus em 2.
+            spp.prepare_graph(false); //true = tranform graph to have out-degree <= 2.
             timer.start();
             d = spp.execute(s);
             timer.stop();
