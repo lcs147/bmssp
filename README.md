@@ -16,14 +16,14 @@ A header-only C++ implementation of the single-source shortest path (SSSP) algor
 
 This implementation is a proof of concept for a theoretical algorithm. While BMSSP offers a superior asymptotic complexity, this is outweighed in practice by high constant factors and the overhead of its more complex data structures.
 
-As a result, a standard implementation of Dijkstra's algorithm remains significantly faster for typical real-world scenarios, as shown in the benchmarks below.
+As a result, a standard implementation of Dijkstra's algorithm remains significantly faster for typical real-world scenarios, as shown in the benchmarks with random graphs below.
 
-| Graph         | Number of Vertices    | Number of Edges   | Dijkstra Time (ms)    | BMSSP Time (ms)|
-| :---          | :---                  | :---              | :---                  | :---            |
-| **NY**        |264,346|733,846|56|418|
-| **CAL**       |1,890,815|4,657,742|436|2,920|
-| **USA**       | 23,947,347|58,333,344|7,970|52,777|
-| **Random (4x)**  |100,000|400,000|83|292|
+| Number of Vertices    | Number of Edges   | Dijkstra Time (ms)    | BMSSP Time (ms)| Time Ratio BMSSP / Dijkstra
+| :---                  | :---              | :---                  | :---            | :---            |
+|131,072|393,216|30|204|6.733|
+|524,288|1,572,864|181|1,247|6.862|
+|1,048,576|3,145,728|400|3,137|7.827|
+|16,777,216|50,331,648|9,376|73,936|7.885|
 
 
 ## Requirements
