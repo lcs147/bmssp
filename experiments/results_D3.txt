@@ -106,14 +106,6 @@ bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random512D3.gr so
 time: 568 us
 std: 70 us
 checksum: -1844674407263606497
-dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2D3.gr source: 1 reps: 5
-time: 0 us
-std: 0 us
-checksum: 4611686020574871547
-bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2D3.gr source: 1 reps: 5
-time: 4 us
-std: 4 us
-checksum: 4611686020574871547
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8D3.gr source: 1 reps: 5
 time: 0 us
 std: 0 us
