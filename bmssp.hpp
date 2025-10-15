@@ -26,7 +26,7 @@ template<typename K>
 using hash_set = unordered_set<K>;
 
 template<typename uniqueDistT>
-struct batchPQ { // Implemented as in Lemma 3.3
+struct batchPQ { // Priority queue, implemented as in Lemma 3.3
     using elementT = pair<int,uniqueDistT>;
     
     struct CompareUB {
@@ -341,8 +341,10 @@ struct bmssp { // bmssp class
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
     }
- 
-    void prepare_graph(bool has_constant_degree = false) {
+
+    // if the graph already has constant degree, prepage_graph(false)
+    // else, prepage_graph(true)
+    void prepare_graph(bool exec_constant_degree_trasnformation = false) {
         // erase duplicated edges
         vector<pair<int, int>> tmp_edges(n, {-1, -1});
         for(int i = 0; i < n; i++) {
@@ -361,11 +363,10 @@ struct bmssp { // bmssp class
         }
         tmp_edges.clear();
 
-        if(has_constant_degree) {
+        if(exec_constant_degree_trasnformation == false) {
             adj = move(ori_adj);
             ori_adj.clear();
             d.resize(n);
-            // root.resize(cnt);
             pred.resize(n);
             rev_map.resize(n);
             path_sz.resize(n, 0);

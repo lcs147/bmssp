@@ -5,36 +5,43 @@
 #define int long long
 using namespace std;
 
-signed main(signed argc, char **argv){
+signed main(signed argc, char **argv) {
+    if(argc < 3) {
+        cout << "must have 4 arguments: number_of_vertices average_outdegree max_weight seed" << endl;
+        return 1;
+    }
 
-    std::mt19937_64 gen(atoi(argv[1]));
-    auto rand = [&](int l, int r) {
-        std::uniform_int_distribution<uint64_t> dis(l, r);
+    int n = atoi(argv[1]);
+    int average_outdegree = atoi(argv[2]);
+    int max_weight = atoi(argv[3]);
+    int seed = atoi(argv[4]);
+    
+    mt19937_64 gen(seed);
+    auto random_integer = [&](int l, int r) {
+        uniform_int_distribution<uint64_t> dis(l, r);
         return dis(gen);
     };
 
-    set<pair<int, int>> s;
+    set<pair<int, int>> edges;
     auto add = [&](int i, int j, int w) {
-        if(s.count({i, j}) || i == j) return false;
+        if(edges.count({i, j}) || i == j) return false; // no duplicated edges and no self-loops
 
-        s.insert({i, j});
-        s.insert({j, i});
-
+        edges.insert({i, j});
         cout << "a "<< i << " " << j << " " << w << endl;
-        cout << "a "<< j << " " << i << " " << w << endl;
 
         return true;
     };
 
-    int n = 100000, m = n * 4;
+    const int oo = 1e18;
+    int m = n * average_outdegree;
     cout << "p " <<  n << " " << m << endl;
-    for(int i = 2; i <= n; i++) {
-        add(rand(1, i - 1), i, rand(1, 5));
+    for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
+        add(random_integer(1, i - 1), i, random_integer(oo / 10, oo));
     }
 
     m -= n - 1;
     while(m--) {
-        while(add(rand(1, n), rand(1, n), rand(1, 50)) == false);
+        while(add(random_integer(1, n), random_integer(1, n), random_integer(1, max_weight)) == false);
     }
     
     return 0;
