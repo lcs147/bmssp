@@ -1,110 +1,110 @@
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random262144D3.gr source: 1 reps: 5
-time: 92126 us
-std: 1323 us
+time: 95772 us
+std: 3340 us
 checksum: 8302759168199149123
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random262144D3.gr source: 1 reps: 5
-time: 677031 us
-std: 20881 us
+time: 620935 us
+std: 24113 us
 checksum: 8302759168199149123
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1048576D3.gr source: 1 reps: 5
-time: 504390 us
-std: 5330 us
+time: 511760 us
+std: 7235 us
 checksum: -6449462870799718753
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1048576D3.gr source: 1 reps: 5
-time: 4094346 us
-std: 87120 us
+time: 3537654 us
+std: 70136 us
 checksum: -6449462870799718753
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random32768D3.gr source: 1 reps: 5
-time: 6490 us
-std: 103 us
+time: 6620 us
+std: 125 us
 checksum: -2766866317997822426
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random32768D3.gr source: 1 reps: 5
-time: 50634 us
-std: 424 us
+time: 45890 us
+std: 1131 us
 checksum: -2766866317997822426
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random524288D3.gr source: 1 reps: 5
-time: 225467 us
-std: 8680 us
+time: 229382 us
+std: 11143 us
 checksum: -2763563153203008820
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random524288D3.gr source: 1 reps: 5
-time: 1639859 us
-std: 32519 us
+time: 1452069 us
+std: 24143 us
 checksum: -2763563153203008820
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4096D3.gr source: 1 reps: 5
-time: 595 us
-std: 39 us
+time: 591 us
+std: 69 us
 checksum: -6456342282856093397
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4096D3.gr source: 1 reps: 5
-time: 5963 us
-std: 261 us
+time: 5208 us
+std: 216 us
 checksum: -6456342282856093397
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1024D3.gr source: 1 reps: 5
-time: 121 us
-std: 7 us
+time: 128 us
+std: 14 us
 checksum: 8301039345197646210
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random1024D3.gr source: 1 reps: 5
-time: 1449 us
-std: 195 us
+time: 1210 us
+std: 32 us
 checksum: 8301039345197646210
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random131072D3.gr source: 1 reps: 5
-time: 39802 us
-std: 716 us
+time: 39903 us
+std: 1130 us
 checksum: 4612547877744522073
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random131072D3.gr source: 1 reps: 5
-time: 283682 us
-std: 12322 us
+time: 259523 us
+std: 11752 us
 checksum: 4612547877744522073
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random33554432D3.gr source: 1 reps: 5
-time: 26424024 us
-std: 51733 us
+time: 26855368 us
+std: 54008 us
 checksum: 4832402153862642881
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16384D3.gr source: 1 reps: 5
-time: 2773 us
-std: 120 us
+time: 2719 us
+std: 148 us
 checksum: 8301107380214675256
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16384D3.gr source: 1 reps: 5
-time: 23433 us
-std: 460 us
+time: 20831 us
+std: 164 us
 checksum: 8301107380214675256
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8192D3.gr source: 1 reps: 5
-time: 1243 us
-std: 27 us
+time: 1326 us
+std: 46 us
 checksum: 4611722349464590623
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8192D3.gr source: 1 reps: 5
-time: 12400 us
-std: 255 us
+time: 10745 us
+std: 213 us
 checksum: 4611722349464590623
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random32D3.gr source: 1 reps: 5
 time: 2 us
 std: 1 us
 checksum: 4611686085001134528
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random32D3.gr source: 1 reps: 5
-time: 79 us
-std: 10 us
+time: 68 us
+std: 9 us
 checksum: 4611686085001134528
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random65536D3.gr source: 1 reps: 5
-time: 19176 us
-std: 441 us
+time: 18654 us
+std: 982 us
 checksum: -6456069972189081960
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random65536D3.gr source: 1 reps: 5
-time: 112312 us
-std: 3836 us
+time: 99611 us
+std: 8841 us
 checksum: -6456069972189081960
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8388608D3.gr source: 1 reps: 5
-time: 5486127 us
-std: 9502 us
+time: 5406881 us
+std: 13973 us
 checksum: -2711836461364713124
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8388608D3.gr source: 1 reps: 5
-time: 43205760 us
-std: 1025180 us
+time: 36235575 us
+std: 578551 us
 checksum: -2711836461364713124
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random512D3.gr source: 1 reps: 5
-time: 51 us
+time: 53 us
 std: 5 us
 checksum: 4611687195343464840
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random512D3.gr source: 1 reps: 5
-time: 700 us
-std: 55 us
+time: 691 us
+std: 29 us
 checksum: 4611687195343464840
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2D3.gr source: 1 reps: 5
 time: 0 us
@@ -112,49 +112,77 @@ std: 0 us
 checksum: 4611686020574871547
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2D3.gr source: 1 reps: 5
 time: 4 us
-std: 3 us
+std: 2 us
 checksum: 4611686020574871547
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8D3.gr source: 1 reps: 5
 time: 1 us
 std: 1 us
 checksum: -2767011611055646511
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random8D3.gr source: 1 reps: 5
-time: 16 us
-std: 5 us
+time: 14 us
+std: 4 us
 checksum: -2767011611055646511
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random64D3.gr source: 1 reps: 5
-time: 4 us
+time: 5 us
 std: 3 us
 checksum: 8301034972763662026
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random64D3.gr source: 1 reps: 5
-time: 145 us
+time: 142 us
 std: 10 us
 checksum: 8301034972763662026
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16D3.gr source: 1 reps: 5
 time: 1 us
-std: 1 us
+std: 2 us
 checksum: -6456360425796591031
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16D3.gr source: 1 reps: 5
-time: 26 us
+time: 28 us
 std: 6 us
 checksum: -6456360425796591031
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2048D3.gr source: 1 reps: 5
-time: 261 us
-std: 31 us
+time: 274 us
+std: 13 us
 checksum: -2767002586918244266
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2048D3.gr source: 1 reps: 5
-time: 2749 us
-std: 134 us
+time: 2559 us
+std: 162 us
 checksum: -2767002586918244266
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2097152D3.gr source: 1 reps: 5
-time: 1103814 us
-std: 4318 us
+time: 1120627 us
+std: 5064 us
 checksum: 4625479058300358983
 bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random2097152D3.gr source: 1 reps: 5
-time: 9081378 us
-std: 172870 us
+time: 7708194 us
+std: 123539 us
 checksum: 4625479058300358983
 dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16777216D3.gr source: 1 reps: 5
-time: 11999307 us
-std: 42551 us
+time: 12229612 us
+std: 42670 us
 checksum: -6346001331260264865
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random16777216D3.gr source: 1 reps: 5
+time: 78328174 us
+std: 1517322 us
+checksum: -6346001331260264865
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random128D3.gr source: 1 reps: 5
+time: 10 us
+std: 3 us
+checksum: -2767011329713196733
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random128D3.gr source: 1 reps: 5
+time: 184 us
+std: 11 us
+checksum: -2767011329713196733
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random256D3.gr source: 1 reps: 5
+time: 27 us
+std: 9 us
+checksum: -6456359841630502225
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random256D3.gr source: 1 reps: 5
+time: 369 us
+std: 33 us
+checksum: -6456359841630502225
+dijkstra on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4194304D3.gr source: 1 reps: 5
+time: 2428962 us
+std: 10498 us
+checksum: 8328624751034640954
+bmssp on /home/clement1n0t/workdir/bmssp/experiments/../graphs/random4194304D3.gr source: 1 reps: 5
+time: 16164329 us
+std: 283581 us
+checksum: 8328624751034640954
