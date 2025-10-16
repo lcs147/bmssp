@@ -374,6 +374,7 @@ struct bmssp { // bmssp class
             treesz.resize(n);
             rev_map.resize(n);
             path_sz.resize(n, 0);
+            last_bellman_lvl.resize(n);
             last_complete_lvl.resize(n);
             
             for(int i = 0; i < n; i++) {
@@ -404,6 +405,7 @@ struct bmssp { // bmssp class
             treesz.resize(cnt);
             rev_map.resize(cnt);
             path_sz.resize(cnt, 0);
+            last_bellman_lvl.resize(cnt);
             last_complete_lvl.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
@@ -440,6 +442,7 @@ struct bmssp { // bmssp class
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
+        fill(last_bellman_lvl.begin(), last_bellman_lvl.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
@@ -487,14 +490,17 @@ struct bmssp { // bmssp class
     }
     // ===================================================================
     vector<int> root;
-    vector<short int> treesz;
-    pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
-        hash_set<int> vis(S.begin(), S.end());
-        vector<int> active = S;
+    vector<short int> treesz, last_bellman_lvl;
+    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, const vector<int> &S, short int l) { // Algorithm 1
+        vector<int> vis;
+        vis.reserve(S.size() * k);
+        vis.insert(vis.end(), S.begin(), S.end());
 
+        vector<int> active = S;
         for(int x: S) root[x] = x, treesz[x] = 0;
         for(int i = 1; i <= k; i++) {
             vector<int> nw_active;
+            nw_active.reserve(active.size() * 4);
             for(int u: active) {
                 for(auto [v, w]: adj[u]) {
                     if(getDist(u, v, w) <= getDist(v)) {
@@ -506,7 +512,10 @@ struct bmssp { // bmssp class
                     }
                 }
             }
-            for(const auto &x: nw_active) vis.insert(x);
+            for(const auto &x: nw_active) if(last_bellman_lvl[x] != l) {
+                vis.push_back(x);
+                last_bellman_lvl[x] = l;
+            }
             if(vis.size() > k * S.size()) {
                 return {S, vis};
             }
@@ -558,10 +567,10 @@ struct bmssp { // bmssp class
         return {nB, complete};
     }
  
-    pair<uniqueDistT, vector<int>> bmsspRec(int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
+    pair<uniqueDistT, vector<int>> bmsspRec(short int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
  
-        auto [P, W] = findPivots(B, S);
+        auto [P, bellman_vis] = findPivots(B, S, l);
  
         const long long batch_size = (1ll << ((l - 1) * t));
         batchPQ<uniqueDistT> D(batch_size, B);
@@ -575,9 +584,9 @@ struct bmssp { // bmssp class
         for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
         vector<int> complete;
-        const long long cota = k * (1ll << (l * t));
-        complete.reserve(cota + W.size());
-        while(complete.size() < cota && D.size()) {
+        const long long quota = k * (1ll << (l * t));
+        complete.reserve(quota + bellman_vis.size());
+        while(complete.size() < quota && D.size()) {
             auto [trying_B, smallestFew] = D.pull();
             vector<int> miniS;
             {   // just like in dijkstra without decrease key
@@ -625,7 +634,7 @@ struct bmssp { // bmssp class
         if(D.size() == 0) retB = B;     // successful
         else retB = last_complete_B;    // partial
  
-        for(int x: W) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
+        for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
         // get only the ones not in complete already, for it to become disjoint
  
         return {retB, complete};
