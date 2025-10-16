@@ -14,11 +14,10 @@ struct dijkstra {
     vector<vector<pair<int, wT>>> adj;
     const wT oo = numeric_limits<wT>::max() / 10;
 
-    dijkstra(const auto &adj): adj(adj), n(adj.size()), p(n, -1) {
-        d = vector<wT>(n, oo);
-    }
+    dijkstra(const auto &adj): adj(adj), n(adj.size()), p(n, -1), d(n) {}
 
     vector<wT> execute(int s) {
+        fill(d.begin(), d.end(), oo);
         priority_queue<pair<wT, int>, vector<pair<wT, int>>, greater<pair<wT, int>>> heap;
 
         d[s] = 0;
