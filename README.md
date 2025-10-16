@@ -20,11 +20,10 @@ As a result, a standard implementation of Dijkstra's algorithm remains significa
 
 | Number of Vertices    | Number of Edges   | Dijkstra Time (ms)    | BMSSP Time (ms)| Time Ratio BMSSP / Dijkstra
 | :---                  | :---              | :---                  | :---            | :---            |
-|131,072|393,216|30|204|6.733|
-|524,288|1,572,864|181|1,247|6.862|
-|1,048,576|3,145,728|400|3,137|7.827|
-|16,777,216|50,331,648|9,376|73,936|7.885|
-
+|131,072|393,216|39|259|6.504|
+|524,288|1,572,864|229|1,452|6.330|
+|1,048,576|3,145,728|511|3,537|6.913|
+|16,777,216|50,331,648|12,229|78,328|6.405|
 
 ## Requirements
 
