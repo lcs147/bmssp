@@ -24,7 +24,7 @@ signed main(signed argc, char **argv) {
 
     vector<vector<int>> adj(n + 1);
     auto add = [&](int i, int j, int w) {
-        if(adj.size() >= average_outdegree + 1 && find(adj[i].begin(), adj[i].end(), j) != adj[i].end() || i == j) return false; // no duplicated edges, no self-loops, and not too big of a degree
+        if(adj[i].size() >= average_outdegree + 1 || find(adj[i].begin(), adj[i].end(), j) != adj[i].end() || i == j) return false; // no duplicated edges, no self-loops, and not too big of a degree
         adj[i].push_back(j);
         cout << "a "<< i << " " << j << " " << w << endl;
 
@@ -44,5 +44,22 @@ signed main(signed argc, char **argv) {
         while(add(random_integer(1, n), random_integer(1, n), random_integer(1, max_weight)) == false);
     }
     
+    vector<bool> vis(n + 1); // check reachability from 1
+    int s = 1;
+    queue<int> q;
+    q.push(s);
+    vis[s] = true;
+    while(q.size()) {
+        int u = q.front();
+        q.pop();
+        assert(adj[u].size() <= average_outdegree + 1); // check degree
+        for(int v: adj[u]) {
+            if(!vis[v]){
+                vis[v] = true;
+                q.push(v);
+            }
+        }
+    }
+    assert(accumulate(vis.begin(), vis.end(), 0ll) == n);
     return 0;
 }
