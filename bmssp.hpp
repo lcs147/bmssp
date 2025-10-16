@@ -9,6 +9,7 @@
 #include<queue>
 #include<unordered_map>
 #include<unordered_set>
+#include<random>
 #include<ext/pb_ds/assoc_container.hpp>
 
 namespace spp {
@@ -60,6 +61,10 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         return size_;
     }
     
+    inline void erase(int key) {
+        if(actual_value.find(key) != actual_value.end())
+            delete_({-1, -1, key, -1});
+    }
     void delete_(uniqueDistT x){    
         int a = get<2>(x);
         uniqueDistT b = actual_value[a];
@@ -151,29 +156,36 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             l = move(medians);
         }
     }
-    uniqueDistT selectMedian(const vector<elementT> &l, int k){
+    uniqueDistT selectMedian(const vector<elementT> &l, int k) {
+        // nth_element(l.begin(), l.begin() + k, l.end(), [](const auto &a, const auto &b) {
+        //     return a.second < b.second;
+        // });
+        // return l[k].second;
+        // uniqueDistT p = l[rand() % l.size()].second;
         uniqueDistT p = medianOfMedians(l);
-        vector<elementT> less,great;
+        vector<elementT> less, equal, great;
         less.reserve(l.size() / 2 + 1);
         great.reserve(l.size() / 2 + 1);
-
-        for (auto& e : l) {
+        // equal.reserve(l.size() / 2 + 1);
+        for (const auto& e : l) {
             if (e.second < p) {
-                less.push_back(e);   // adiciona a cópia
-            } else if (e.second >= p) {
+                less.push_back(e);
+            } else if (e.second > p) {
                 great.push_back(e);
+            } else {
+                equal.push_back(e);
             }
         }
 
         int sz_less = less.size();
-
-        if (sz_less > k){ 
+        int sz_equal = equal.size();
+        if (k < sz_less) {
             return selectMedian(less, k);
-        }else if (sz_less < k){
-            return selectMedian(great, k - sz_less - 1);
-        }else{
+        } else if (k < sz_less + sz_equal) {
             return p;
-        }    
+        } else {
+            return selectMedian(great, k - sz_less - sz_equal);
+        }
     }
         
     void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
@@ -270,7 +282,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         batchPrepend(l);
     }
     
-    pair<uniqueDistT, vector<uniqueDistT>> pull(){ // O(M)
+    pair<uniqueDistT, vector<int>> pull(){ // O(M)
         list<elementT> s0,s1;
     
         auto it_block = D0.begin();
@@ -286,14 +298,14 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         }
     
         if(s1.size() + s0.size() <= M){
-            vector<uniqueDistT> ret;
+            vector<int> ret;
             ret.reserve(s1.size()+s0.size());
             for(auto [a,b] : s0) {
-                ret.push_back(b);
+                ret.push_back(a);
                 delete_({b});
             }
             for(auto [a,b] : s1){
-                ret.push_back(b);
+                ret.push_back(a);
                 delete_({b});
             } 
     
@@ -304,11 +316,11 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             for(auto x : s0) l.push_back(x);
             for(auto x : s1) l.push_back(x);
             uniqueDistT med = selectMedian(l, M);
-            vector<uniqueDistT> ret;
+            vector<int> ret;
             ret.reserve(M);
             for(auto [a,b]: l){
                 if(b < med) {
-                    ret.push_back(b);
+                    ret.push_back(a);
                     delete_({b});
                 }
             }
@@ -576,10 +588,6 @@ struct bmssp { // bmssp class
         batchPQ<uniqueDistT> D(batch_size, B);
         for(int p: P) D.insert(getDist(p));
  
-        // All in D visit all v | d(v) < B, sp(v) goes through S
-        // for all d(v) < B, always go through S? Req 2 Alg 3 says yes
-        // So always in the beggining of the iteration, all in D visit all in d(v) < B
- 
         uniqueDistT last_complete_B = B;
         for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
@@ -587,13 +595,7 @@ struct bmssp { // bmssp class
         const long long quota = k * (1ll << (l * t));
         complete.reserve(quota + bellman_vis.size());
         while(complete.size() < quota && D.size()) {
-            auto [trying_B, smallestFew] = D.pull();
-            vector<int> miniS;
-            {   // just like in dijkstra without decrease key
-                miniS.reserve(smallestFew.size());
-                for(auto &dist: smallestFew) if(dist <= getDist(get<2>(dist))) miniS.push_back(get<2>(dist));
-                if(miniS.size() == 0) continue;
-            }
+            auto [trying_B, miniS] = D.pull();
             // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
  
             auto [complete_B, nw_complete] = bmsspRec(l - 1, trying_B, miniS);
@@ -608,6 +610,7 @@ struct bmssp { // bmssp class
             vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
+                D.erase(u); // priority queue fix
                 last_complete_lvl[u] = l;
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
