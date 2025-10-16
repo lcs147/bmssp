@@ -456,7 +456,6 @@ struct bmssp { // bmssp class
     }
     
     // ===================================================================
-    using uniqueDistT = tuple<wT, int, int, int>;
  
     // set stuff
     // template<typename T>
@@ -466,13 +465,15 @@ struct bmssp { // bmssp class
     //     // sort(v.begin(), v.end());
     //     // v.erase(unique(v.begin(), v.end()), v.end());
     // }
-    // template<typename T>
-    // bool isUnique(const vector<T> &v) {
-    //     auto v2 = v;
-    //     sort(v2.begin(), v2.end());
-    //     v2.erase(unique(v2.begin(), v2.end()), v2.end());
-    //     return v2.size() == v.size();
-    // }
+    template<typename T>
+    bool isUnique(const vector<T> &v) {
+        auto v2 = v;
+        sort(v2.begin(), v2.end());
+        v2.erase(unique(v2.begin(), v2.end()), v2.end());
+        return v2.size() == v.size();
+    }
+
+    using uniqueDistT = tuple<wT, int, int, int>;
     inline uniqueDistT getDist(int u, int v, int w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -598,6 +599,7 @@ struct bmssp { // bmssp class
             vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
+                last_complete_lvl[u] = l;
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
