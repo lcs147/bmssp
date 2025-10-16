@@ -77,6 +77,7 @@ signed main(int argc, char **argv) {
     if(argc < 1) return 1;
     string graph_path = argv[1];
     string algorithm = argv[2];
+    // srand(time(NULL));
     
     int s = 1;
     timerT timer;
