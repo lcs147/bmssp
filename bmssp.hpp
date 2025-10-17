@@ -157,7 +157,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         }
     }
     
-    uniqueDistT selectMedian(vector<elementT> &v, int k) { 
+    uniqueDistT selectKth(vector<elementT> &v, int k) { 
         using std::swap;
         int l=0, r=v.size()-1;
         
@@ -189,7 +189,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         int sz = (*it_block).size();
         
         vector<elementT> v((*it_block).begin() , (*it_block).end());
-        uniqueDistT med = selectMedian(v,(sz/2)); // O(M)
+        uniqueDistT med = selectKth(v,(sz/2)); // O(M)
         
         auto pos = it_block;
         pos++;
@@ -254,7 +254,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         }
 
         vector<elementT> v(l.begin(), l.end());
-        uniqueDistT med = selectMedian(v, sz/2);
+        uniqueDistT med = selectKth(v, sz/2);
     
         list<elementT> less,great;
         for(auto [a,b]: l){
@@ -312,7 +312,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             l.reserve(s0.size() + s1.size());
             for(auto x : s0) l.push_back(x);
             for(auto x : s1) l.push_back(x);
-            uniqueDistT med = selectMedian(l, M);
+            uniqueDistT med = selectKth(l, M);
             vector<int> ret;
             ret.reserve(M);
             for(auto [a,b]: l){
