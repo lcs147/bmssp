@@ -119,8 +119,10 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
         if((*it_block).size() > M){
             split(it_block);
         }
-    }   
-    uniqueDistT medianOfMedians(vector<elementT> l) {
+    }
+
+    uniqueDistT medianOfMedians(vector<elementT>::iterator bg, vector<elementT>::iterator en) {
+        vector<elementT> l(bg, en);
         while (true) {
             int n = l.size();
 
@@ -157,14 +159,14 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
         int l=0, r=v.size()-1;
         
         for(;l<=r;){
-            elementT p = v[l];
+            uniqueDistT p = medianOfMedians(v.begin() + l, v.begin() + r + 1);
             
             int i = l, j = r, m = l;
             
             while(m <= j){
-                if(v[m].second < p.second){
+                if(v[m].second < p) {
                     swap(v[m++],v[i++]);
-                }else if(v[m].second > p.second){
+                }else if(v[m].second > p){
                     swap(v[m],v[j--]);
                 }else{
                     m++;
