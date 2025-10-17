@@ -1,6 +1,7 @@
 debug.cpp
 a
 experiment_runner
-graphs/*
+graphs/
 cses.cpp
-test/*
+test/
+.venv
