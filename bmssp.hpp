@@ -17,18 +17,13 @@ namespace spp {
 using namespace std;
 using namespace __gnu_pbds;
 
-// template<typename K, typename V>
-// using hash_map = gp_hash_table<K, V>;
-// template<typename K>
-// using hash_set = hash_map<K, null_type>;
-
 template<typename K, typename V>
 using hash_map = unordered_map<K, V>;
 template<typename K>
 using hash_set = unordered_set<K>;
 
 template<typename uniqueDistT>
-struct batchPQ { // Priority queue, implemented as in Lemma 3.3
+struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
     using elementT = pair<int,uniqueDistT>;
     
     struct CompareUB {
