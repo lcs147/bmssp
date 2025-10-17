@@ -9,6 +9,7 @@
 #include<queue>
 #include<unordered_map>
 #include<unordered_set>
+#include<random>
 #include<ext/pb_ds/assoc_container.hpp>
 
 namespace spp {
@@ -60,6 +61,10 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         return size_;
     }
     
+    inline void erase(int key) {
+        if(actual_value.find(key) != actual_value.end())
+            delete_({-1, -1, key, -1});
+    }
     void delete_(uniqueDistT x){    
         int a = get<2>(x);
         uniqueDistT b = actual_value[a];
@@ -151,29 +156,36 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             l = move(medians);
         }
     }
-    uniqueDistT selectMedian(const vector<elementT> &l, int k){
+    uniqueDistT selectMedian(const vector<elementT> &l, int k) {
+        // nth_element(l.begin(), l.begin() + k, l.end(), [](const auto &a, const auto &b) {
+        //     return a.second < b.second;
+        // });
+        // return l[k].second;
+        // uniqueDistT p = l[rand() % l.size()].second;
         uniqueDistT p = medianOfMedians(l);
-        vector<elementT> less,great;
+        vector<elementT> less, equal, great;
         less.reserve(l.size() / 2 + 1);
         great.reserve(l.size() / 2 + 1);
-
-        for (auto& e : l) {
+        // equal.reserve(l.size() / 2 + 1);
+        for (const auto& e : l) {
             if (e.second < p) {
-                less.push_back(e);   // adiciona a cópia
-            } else if (e.second >= p) {
+                less.push_back(e);
+            } else if (e.second > p) {
                 great.push_back(e);
+            } else {
+                equal.push_back(e);
             }
         }
 
         int sz_less = less.size();
-
-        if (sz_less > k){ 
+        int sz_equal = equal.size();
+        if (k < sz_less) {
             return selectMedian(less, k);
-        }else if (sz_less < k){
-            return selectMedian(great, k - sz_less - 1);
-        }else{
+        } else if (k < sz_less + sz_equal) {
             return p;
-        }    
+        } else {
+            return selectMedian(great, k - sz_less - sz_equal);
+        }
     }
         
     void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
@@ -270,7 +282,7 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         batchPrepend(l);
     }
     
-    pair<uniqueDistT, vector<uniqueDistT>> pull(){ // O(M)
+    pair<uniqueDistT, vector<int>> pull(){ // O(M)
         list<elementT> s0,s1;
     
         auto it_block = D0.begin();
@@ -286,14 +298,14 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
         }
     
         if(s1.size() + s0.size() <= M){
-            vector<uniqueDistT> ret;
+            vector<int> ret;
             ret.reserve(s1.size()+s0.size());
             for(auto [a,b] : s0) {
-                ret.push_back(b);
+                ret.push_back(a);
                 delete_({b});
             }
             for(auto [a,b] : s1){
-                ret.push_back(b);
+                ret.push_back(a);
                 delete_({b});
             } 
     
@@ -304,11 +316,11 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             for(auto x : s0) l.push_back(x);
             for(auto x : s1) l.push_back(x);
             uniqueDistT med = selectMedian(l, M);
-            vector<uniqueDistT> ret;
+            vector<int> ret;
             ret.reserve(M);
             for(auto [a,b]: l){
                 if(b < med) {
-                    ret.push_back(b);
+                    ret.push_back(a);
                     delete_({b});
                 }
             }
@@ -374,6 +386,7 @@ struct bmssp { // bmssp class
             treesz.resize(n);
             rev_map.resize(n);
             path_sz.resize(n, 0);
+            last_bellman_lvl.resize(n);
             last_complete_lvl.resize(n);
             
             for(int i = 0; i < n; i++) {
@@ -404,6 +417,7 @@ struct bmssp { // bmssp class
             treesz.resize(cnt);
             rev_map.resize(cnt);
             path_sz.resize(cnt, 0);
+            last_bellman_lvl.resize(cnt);
             last_complete_lvl.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
@@ -440,6 +454,7 @@ struct bmssp { // bmssp class
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
+        fill(last_bellman_lvl.begin(), last_bellman_lvl.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
@@ -456,7 +471,6 @@ struct bmssp { // bmssp class
     }
     
     // ===================================================================
-    using uniqueDistT = tuple<wT, int, int, int>;
  
     // set stuff
     // template<typename T>
@@ -466,13 +480,15 @@ struct bmssp { // bmssp class
     //     // sort(v.begin(), v.end());
     //     // v.erase(unique(v.begin(), v.end()), v.end());
     // }
-    // template<typename T>
-    // bool isUnique(const vector<T> &v) {
-    //     auto v2 = v;
-    //     sort(v2.begin(), v2.end());
-    //     v2.erase(unique(v2.begin(), v2.end()), v2.end());
-    //     return v2.size() == v.size();
-    // }
+    template<typename T>
+    bool isUnique(const vector<T> &v) {
+        auto v2 = v;
+        sort(v2.begin(), v2.end());
+        v2.erase(unique(v2.begin(), v2.end()), v2.end());
+        return v2.size() == v.size();
+    }
+
+    using uniqueDistT = tuple<wT, int, int, int>;
     inline uniqueDistT getDist(int u, int v, int w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -486,14 +502,17 @@ struct bmssp { // bmssp class
     }
     // ===================================================================
     vector<int> root;
-    vector<short int> treesz;
-    pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
-        hash_set<int> vis(S.begin(), S.end());
-        vector<int> active = S;
+    vector<short int> treesz, last_bellman_lvl;
+    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, const vector<int> &S, short int l) { // Algorithm 1
+        vector<int> vis;
+        vis.reserve(S.size() * k);
+        vis.insert(vis.end(), S.begin(), S.end());
 
+        vector<int> active = S;
         for(int x: S) root[x] = x, treesz[x] = 0;
         for(int i = 1; i <= k; i++) {
             vector<int> nw_active;
+            nw_active.reserve(active.size() * 4);
             for(int u: active) {
                 for(auto [v, w]: adj[u]) {
                     if(getDist(u, v, w) <= getDist(v)) {
@@ -505,7 +524,10 @@ struct bmssp { // bmssp class
                     }
                 }
             }
-            for(const auto &x: nw_active) vis.insert(x);
+            for(const auto &x: nw_active) if(last_bellman_lvl[x] != l) {
+                vis.push_back(x);
+                last_bellman_lvl[x] = l;
+            }
             if(vis.size() > k * S.size()) {
                 return {S, vis};
             }
@@ -557,33 +579,23 @@ struct bmssp { // bmssp class
         return {nB, complete};
     }
  
-    pair<uniqueDistT, vector<int>> bmsspRec(int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
+    pair<uniqueDistT, vector<int>> bmsspRec(short int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
  
-        auto [P, W] = findPivots(B, S);
+        auto [P, bellman_vis] = findPivots(B, S, l);
  
         const long long batch_size = (1ll << ((l - 1) * t));
         batchPQ<uniqueDistT> D(batch_size, B);
         for(int p: P) D.insert(getDist(p));
  
-        // All in D visit all v | d(v) < B, sp(v) goes through S
-        // for all d(v) < B, always go through S? Req 2 Alg 3 says yes
-        // So always in the beggining of the iteration, all in D visit all in d(v) < B
- 
         uniqueDistT last_complete_B = B;
         for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
  
         vector<int> complete;
-        const long long cota = k * (1ll << (l * t));
-        complete.reserve(cota + W.size());
-        while(complete.size() < cota && D.size()) {
-            auto [trying_B, smallestFew] = D.pull();
-            vector<int> miniS;
-            {   // just like in dijkstra without decrease key
-                miniS.reserve(smallestFew.size());
-                for(auto &dist: smallestFew) if(dist <= getDist(get<2>(dist))) miniS.push_back(get<2>(dist));
-                if(miniS.size() == 0) continue;
-            }
+        const long long quota = k * (1ll << (l * t));
+        complete.reserve(quota + bellman_vis.size());
+        while(complete.size() < quota && D.size()) {
+            auto [trying_B, miniS] = D.pull();
             // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
  
             auto [complete_B, nw_complete] = bmsspRec(l - 1, trying_B, miniS);
@@ -598,6 +610,8 @@ struct bmssp { // bmssp class
             vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
+                D.erase(u); // priority queue fix
+                last_complete_lvl[u] = l;
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
@@ -623,7 +637,7 @@ struct bmssp { // bmssp class
         if(D.size() == 0) retB = B;     // successful
         else retB = last_complete_B;    // partial
  
-        for(int x: W) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
+        for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
         // get only the ones not in complete already, for it to become disjoint
  
         return {retB, complete};

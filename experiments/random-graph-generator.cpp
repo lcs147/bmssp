@@ -22,11 +22,10 @@ signed main(signed argc, char **argv) {
         return dis(gen);
     };
 
-    set<pair<int, int>> edges;
+    vector<vector<int>> adj(n + 1);
     auto add = [&](int i, int j, int w) {
-        if(edges.count({i, j}) || i == j) return false; // no duplicated edges and no self-loops
-
-        edges.insert({i, j});
+        if(adj[i].size() >= average_outdegree + 1 || find(adj[i].begin(), adj[i].end(), j) != adj[i].end() || i == j) return false; // no duplicated edges, no self-loops, and not too big of a degree
+        adj[i].push_back(j);
         cout << "a "<< i << " " << j << " " << w << endl;
 
         return true;
@@ -35,9 +34,9 @@ signed main(signed argc, char **argv) {
     const int oo = 1e18;
     int m = n * average_outdegree;
     cout << "p " <<  n << " " << m << endl;
-    // for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
-    //     add(random_integer(1, i - 1), i, random_integer(oo / 10, oo));
-    // }
+    for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
+        while(add(random_integer(1, i - 1), i, random_integer(oo / 10, oo)) == false);
+    }
 
     // m -= n - 1;
     while(m > 0) {
@@ -45,5 +44,22 @@ signed main(signed argc, char **argv) {
         while(add(random_integer(1, n), random_integer(1, n), random_integer(1, max_weight)) == false);
     }
     
+    vector<bool> vis(n + 1); // check reachability from 1
+    int s = 1;
+    queue<int> q;
+    q.push(s);
+    vis[s] = true;
+    while(q.size()) {
+        int u = q.front();
+        q.pop();
+        assert(adj[u].size() <= average_outdegree + 1); // check degree
+        for(int v: adj[u]) {
+            if(!vis[v]){
+                vis[v] = true;
+                q.push(v);
+            }
+        }
+    }
+    assert(accumulate(vis.begin(), vis.end(), 0ll) == n);
     return 0;
 }
