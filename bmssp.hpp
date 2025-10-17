@@ -277,7 +277,8 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
     }
     
     pair<uniqueDistT, vector<int>> pull(){ // O(M)
-        list<elementT> s0,s1;
+        vector<elementT> s0,s1;
+        s0.reserve(2 * M); s1.reserve(M);
     
         auto it_block = D0.begin();
         while(it_block != D0.end() && s0.size() <= M){ // O(M)   
@@ -305,10 +306,9 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
     
             return {B, ret};
         }else{  
-            vector<elementT> l;
-            l.reserve(s0.size() + s1.size());
-            for(auto x : s0) l.push_back(x);
-            for(auto x : s1) l.push_back(x);
+            vector<elementT> &l = s0;
+            l.insert(l.end(), s1.begin(), s1.end());
+
             uniqueDistT med = selectKth(l, M);
             vector<int> ret;
             ret.reserve(M);
