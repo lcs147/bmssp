@@ -386,7 +386,6 @@ struct bmssp { // bmssp class
             treesz.resize(n);
             rev_map.resize(n);
             path_sz.resize(n, 0);
-            last_bellman_lvl.resize(n);
             last_complete_lvl.resize(n);
             
             for(int i = 0; i < n; i++) {
@@ -417,7 +416,6 @@ struct bmssp { // bmssp class
             treesz.resize(cnt);
             rev_map.resize(cnt);
             path_sz.resize(cnt, 0);
-            last_bellman_lvl.resize(cnt);
             last_complete_lvl.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
@@ -454,7 +452,6 @@ struct bmssp { // bmssp class
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
-        fill(last_bellman_lvl.begin(), last_bellman_lvl.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
@@ -502,11 +499,11 @@ struct bmssp { // bmssp class
     }
     // ===================================================================
     vector<int> root;
-    vector<short int> treesz, last_bellman_lvl;
-    pair<vector<int>, vector<int>> findPivots(uniqueDistT B, const vector<int> &S, short int l) { // Algorithm 1
-        vector<int> vis;
+    vector<short int> treesz;
+    pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
+        hash_set<int> vis;
         vis.reserve(S.size() * k);
-        vis.insert(vis.end(), S.begin(), S.end());
+        vis.insert(S.begin(), S.end());
 
         vector<int> active = S;
         for(int x: S) root[x] = x, treesz[x] = 0;
@@ -524,9 +521,8 @@ struct bmssp { // bmssp class
                     }
                 }
             }
-            for(const auto &x: nw_active) if(last_bellman_lvl[x] != l) {
-                vis.push_back(x);
-                last_bellman_lvl[x] = l;
+            for(const auto &x: nw_active) {
+                vis.insert(x);
             }
             if(vis.size() > k * S.size()) {
                 return {S, vis};
@@ -582,7 +578,7 @@ struct bmssp { // bmssp class
     pair<uniqueDistT, vector<int>> bmsspRec(short int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
  
-        auto [P, bellman_vis] = findPivots(B, S, l);
+        auto [P, bellman_vis] = findPivots(B, S);
  
         const long long batch_size = (1ll << ((l - 1) * t));
         batchPQ<uniqueDistT> D(batch_size, B);
