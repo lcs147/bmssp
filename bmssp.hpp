@@ -156,37 +156,34 @@ struct batchPQ { // Priority queue, implemented as in Lemma 3.3
             l = move(medians);
         }
     }
-    uniqueDistT selectMedian(const vector<elementT> &l, int k) {
-        // nth_element(l.begin(), l.begin() + k, l.end(), [](const auto &a, const auto &b) {
-        //     return a.second < b.second;
-        // });
-        // return l[k].second;
-        // uniqueDistT p = l[rand() % l.size()].second;
-        uniqueDistT p = medianOfMedians(l);
-        vector<elementT> less, equal, great;
-        less.reserve(l.size() / 2 + 1);
-        great.reserve(l.size() / 2 + 1);
-        // equal.reserve(l.size() / 2 + 1);
-        for (const auto& e : l) {
-            if (e.second < p) {
-                less.push_back(e);
-            } else if (e.second > p) {
-                great.push_back(e);
-            } else {
-                equal.push_back(e);
+    
+    uniqueDistT selectMedian(vector<elementT> &v, int k) { 
+        using std::swap;
+        int l=0, r=v.size()-1;
+        
+        for(;l<=r;){
+            elementT p = v[l];
+            
+            int i = l, j = r, m = l;
+            
+            while(m <= j){
+                if(v[m].second < p.second){
+                    swap(v[m++],v[i++]);
+                }else if(v[m].second > p.second){
+                    swap(v[m],v[j--]);
+                }else{
+                    m++;
+                }
             }
-        }
-
-        int sz_less = less.size();
-        int sz_equal = equal.size();
-        if (k < sz_less) {
-            return selectMedian(less, k);
-        } else if (k < sz_less + sz_equal) {
-            return p;
-        } else {
-            return selectMedian(great, k - sz_less - sz_equal);
-        }
+        
+            if (k < i) r = i - 1;     // k está na parte menor
+            else if (k > j) l = j + 1;     // k está na parte maior
+            else return v[k].second; // k está entre os iguais ao pivot
+        } 
+        
+        return v[k].second;
     }
+
         
     void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
         int sz = (*it_block).size();
