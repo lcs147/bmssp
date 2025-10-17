@@ -246,7 +246,7 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
                 actual_value[x.first] = x.second;
                 size_++;
             }
-    
+            if(new_block->size() == 0) D0.erase(new_block);
             return;
         }
 
