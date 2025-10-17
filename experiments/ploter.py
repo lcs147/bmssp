@@ -19,6 +19,7 @@ def parse_results_file(filename):
     parsed_data = []
     checksums = defaultdict(set)
     current_entry = {}
+    bad_size = 2
     try:
         id = 0
         parsed_data = []
@@ -34,6 +35,9 @@ def parse_results_file(filename):
                     graph_file = words[2]
                     graph_size_match = re.search(r'random(\d+)', graph_file)
                     graph_size = int(graph_size_match.group(1)) if graph_size_match else -1
+                    if graph_size == -1:
+                        graph_size = bad_size * 2
+                        bad_size *= 2
                     entry = {
                         "algorithm": algorithm,
                         "graph_file": graph_file,
@@ -207,6 +211,7 @@ if __name__ == "__main__":
         sys.exit(1)
         
     INPUT_FILENAME = sys.argv[1]
+    OUTPUT_DIR += INPUT_FILENAME.split('.')[0].split('results')[1]
     
     # 1. Ensure the output directory exists
     try:
