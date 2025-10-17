@@ -74,10 +74,12 @@ auto readGraph(string path) {
 }
 
 signed main(int argc, char **argv) {
-    if(argc < 1) return 1;
+    if(argc < 3) return 1;
+
     string graph_path = argv[1];
     string algorithm = argv[2];
-    // srand(time(NULL));
+    int reps = 1;
+    if(argc >= 4) reps = atoi(argv[3]);
     
     int s = 1;
     timerT timer;
@@ -85,26 +87,30 @@ signed main(int argc, char **argv) {
     vector<distT> d;
     auto adj = readGraph(graph_path);
 
-    const int reps = 5;
     vector<int> times;
-    for(int i = 0; i < reps; i++) {
-        if(algorithm == "bmssp") {
-            spp::bmssp<distT> spp(adj);
-            spp.prepare_graph(false); //true = tranform graph to have out-degree <= 2.
+    if(algorithm == "bmssp") {
+        spp::bmssp<distT> spp(adj);
+        spp.prepare_graph(false); //true = tranform graph to have out-degree <= 2.
+        
+        for(int i = 0; i < reps; i++) {
             timer.start();
             d = spp.execute(s);
             timer.stop();
-        } else {
-            spp::dijkstra<distT> spp(adj);
-            timer.start();
-            d = spp.execute(s);
-            timer.stop();
+            times.push_back(timer.elapsed());
         }
-        times.push_back(timer.elapsed());
+    } else {
+        spp::dijkstra<distT> spp(adj);
+        for(int i = 0; i < reps; i++) {
+            timer.start();
+            d = spp.execute(s);
+            timer.stop();
+            times.push_back(timer.elapsed());
+        }
     }
 
+    string graph_name = graph_path.substr(graph_path.find("graphs/") + 7);
     cout << fixed << setprecision(0);
-    cout << algorithm << " on " << graph_path << " source: " << s << " reps: " << reps << endl;
+    cout << algorithm << " on " << graph_name << " source: " << s << " reps: " << reps << endl;
     cout << "time: " << ceil(calculateMean(times)) << " us" << endl;
     cout << "std: " << ceil(calculatePopulationSD(times)) << " us" << endl;
     cout << "checksum: " << check_sum(d) << endl;
