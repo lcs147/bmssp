@@ -229,6 +229,7 @@ if __name__ == "__main__":
         
         # 4. Data Preparation for Plotting
         df = pd.DataFrame(parsed_results)
+        df = df[df['graph_size'] >= 2**7]
         df = df.sort_values(by='graph_size').reset_index(drop=True)
         
         # 5. Create Time Plot
