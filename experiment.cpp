@@ -110,7 +110,7 @@ signed main(int argc, char **argv) {
 
     string graph_name = graph_path.substr(graph_path.find("graphs/") + 7);
     cout << fixed << setprecision(0);
-    cout << algorithm << " on " << graph_name << " source: " << s << " reps: " << reps << endl;
+    cout << algorithm << " on " << graph_name << " source: " << s << " reps: " << reps << " size: " << adj.size() << endl;
     cout << "time: " << ceil(calculateMean(times)) << " us" << endl;
     cout << "std: " << ceil(calculatePopulationSD(times)) << " us" << endl;
     cout << "checksum: " << check_sum(d) << endl;

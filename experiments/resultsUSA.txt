@@ -1,96 +1,96 @@
 dijkstra on USA-road-t.E.gr source: 1 reps: 5 size: 3,598,623
-time: 545761 us
-std: 4068 us
+time: 553878 us
+std: 5148 us
 checksum: 922352948308500119
 bmssp on USA-road-t.E.gr source: 1 reps: 5 size: 3,598,623
-time: 3838717 us
-std: 6027 us
+time: 3718830 us
+std: 9655 us
 checksum: 922352948308500119
 dijkstra on USA-road-t.USA.gr source: 1 reps: 5 size: 23,947,347
-time: 4594710 us
-std: 12516 us
+time: 4562473 us
+std: 2731 us
 checksum: 922751485995017018
 bmssp on USA-road-t.USA.gr source: 1 reps: 5 size: 23,947,347
-time: 30162818 us
-std: 12423 us
+time: 29345319 us
+std: 46069 us
 checksum: 922751485995017018
 dijkstra on USA-road-t.NW.gr source: 1 reps: 5 size: 1,207,945
-time: 156743 us
-std: 1125 us
+time: 155193 us
+std: 1049 us
 checksum: 922346671386483764
 bmssp on USA-road-t.NW.gr source: 1 reps: 5 size: 1,207,945
-time: 1175208 us
-std: 22248 us
+time: 1067577 us
+std: 1374 us
 checksum: 922346671386483764
 dijkstra on USA-road-t.W.gr source: 1 reps: 5 size: 6,262,104
-time: 1046168 us
-std: 19340 us
+time: 1013046 us
+std: 1932 us
 checksum: 922423137607569019
 bmssp on USA-road-t.W.gr source: 1 reps: 5 size: 6,262,104
-time: 7048288 us
-std: 13423 us
+time: 6903403 us
+std: 9732 us
 checksum: 922423137607569019
 dijkstra on USA-road-t.CTR.gr source: 1 reps: 5 size: 14,081,816
-time: 3334490 us
-std: 6836 us
+time: 3346156 us
+std: 2834 us
 checksum: 922488782754297931
 bmssp on USA-road-t.CTR.gr source: 1 reps: 5 size: 14,081,816
-time: 18604473 us
-std: 23190 us
+time: 18195013 us
+std: 9142 us
 checksum: 922488782754297931
 dijkstra on USA-road-t.BAY.gr source: 1 reps: 5 size: 321,270
-time: 40449 us
-std: 1003 us
+time: 38803 us
+std: 354 us
 checksum: 922337602519030739
 bmssp on USA-road-t.BAY.gr source: 1 reps: 5 size: 321,270
-time: 326210 us
-std: 7765 us
+time: 297297 us
+std: 845 us
 checksum: 922337602519030739
 dijkstra on USA-road-t.NY.gr source: 1 reps: 5 size: 264,346
-time: 33438 us
-std: 440 us
+time: 32490 us
+std: 468 us
 checksum: 922337437497951537
 bmssp on USA-road-t.NY.gr source: 1 reps: 5 size: 264,346
-time: 278585 us
-std: 5552 us
+time: 250030 us
+std: 563 us
 checksum: 922337437497951537
 dijkstra on USA-road-t.NE.gr source: 1 reps: 5 size: 1,524,453
-time: 230631 us
-std: 1912 us
+time: 228756 us
+std: 2033 us
 checksum: 922340331507132567
 bmssp on USA-road-t.NE.gr source: 1 reps: 5 size: 1,524,453
-time: 1521376 us
-std: 16339 us
+time: 1450339 us
+std: 4639 us
 checksum: 922340331507132567
 dijkstra on USA-road-t.COL.gr source: 1 reps: 5 size: 435,666
-time: 55360 us
-std: 624 us
+time: 52174 us
+std: 431 us
 checksum: 922338847308873040
 bmssp on USA-road-t.COL.gr source: 1 reps: 5 size: 435,666
-time: 444119 us
-std: 12591 us
+time: 416865 us
+std: 1093 us
 checksum: 922338847308873040
 dijkstra on USA-road-t.LKS.gr source: 1 reps: 5 size: 2,758,119
-time: 386893 us
-std: 9323 us
+time: 376873 us
+std: 2517 us
 checksum: 922362218676412793
 bmssp on USA-road-t.LKS.gr source: 1 reps: 5 size: 2,758,119
-time: 2755558 us
-std: 14963 us
+time: 2674383 us
+std: 6760 us
 checksum: 922362218676412793
 dijkstra on USA-road-t.FLA.gr source: 1 reps: 5 size: 1,070,376
-time: 132261 us
-std: 3066 us
+time: 127588 us
+std: 988 us
 checksum: 922345231080531188
 bmssp on USA-road-t.FLA.gr source: 1 reps: 5 size: 1,070,376
-time: 998083 us
-std: 11385 us
+time: 958971 us
+std: 4654 us
 checksum: 922345231080531188
 dijkstra on USA-road-t.CAL.gr source: 1 reps: 5 size: 1,890,815
-time: 265548 us
-std: 3866 us
+time: 257454 us
+std: 1088 us
 checksum: 922353516017042648
 bmssp on USA-road-t.CAL.gr source: 1 reps: 5 size: 1,890,815
-time: 1784438 us
-std: 16432 us
+time: 1719994 us
+std: 4186 us
 checksum: 922353516017042648
