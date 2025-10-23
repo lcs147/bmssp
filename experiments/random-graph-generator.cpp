@@ -22,30 +22,77 @@ signed main(signed argc, char **argv) {
         return dis(gen);
     };
 
+    int m = n * average_outdegree;
+    cout << "p " <<  n << " " << m << endl;
+
+    int s = 1;
     vector<vector<int>> adj(n + 1);
-    auto add = [&](int i, int j, int w) {
+    auto canAddEdge = [&](int i, int j) -> bool {
         if(adj[i].size() >= average_outdegree + 1 || find(adj[i].begin(), adj[i].end(), j) != adj[i].end() || i == j) return false; // no duplicated edges, no self-loops, and not too big of a degree
+        return true;
+    };
+
+    {   // prufer generator
+        
+        auto adj2 = adj;
+        for(int i = 2; i <= n; i++) {
+            int j;
+            do {
+                j = random_integer(1, i - 1);
+            } while(canAddEdge(i, j) == false);
+            adj[i].push_back(j);
+            adj[j].push_back(i);
+        }
+
+        auto dfs = [&](auto &self, int u, int dad) -> int {
+            int cnt = 1;
+            for(int v: adj[u]) {
+                if(v == dad) continue;
+                adj2[u].push_back(v);
+                cnt += self(self, v, u);
+            }
+            return cnt;
+        };
+        
+        int olds = random_integer(1, n);
+        int found = dfs(dfs, olds, -1);
+        assert(found == n);
+
+        adj = move(adj2);
+        for(int u = 1; u <= n; u++) {
+            for(int &v: adj[u]) {
+                if(v == olds) v = s;
+                else if(v == s) v = olds;
+            }
+        }
+        swap(adj[s], adj[olds]);
+
+        adj2.assign(n + 1, {});
+        assert(dfs(dfs, 1, -1) == n);
+    } // adj is a tree, and 1 reaches all vertices
+
+    for(int i = 1; i <= n; i++) {
+        for(int j: adj[i]) {
+            cout << "a "<< i << " " << j << " " << random_integer(0, max_weight) << endl;
+        }
+    }
+
+    auto add = [&](int i, int j, int w) {
+        if(canAddEdge(i, j) == false) return false;
+
         adj[i].push_back(j);
         cout << "a "<< i << " " << j << " " << w << endl;
 
         return true;
     };
 
-    const int oo = 1e18;
-    int m = n * average_outdegree;
-    cout << "p " <<  n << " " << m << endl;
-    for(int i = 2; i <= n; i++) { // make 1 reach all vertices, but with infinite cost
-        while(add(random_integer(1, i - 1), i, random_integer(oo / 10, oo)) == false);
-    }
-
-    // m -= n - 1;
+    m -= n - 1;
     while(m > 0) {
         m--;
-        while(add(random_integer(1, n), random_integer(1, n), random_integer(1, max_weight)) == false);
+        while(add(random_integer(1, n), random_integer(1, n), random_integer(0, max_weight)) == false);
     }
     
     vector<bool> vis(n + 1); // check reachability from 1
-    int s = 1;
     queue<int> q;
     q.push(s);
     vis[s] = true;
