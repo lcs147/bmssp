@@ -28,7 +28,9 @@ signed main(signed argc, char **argv) {
     int s = 1;
     vector<vector<int>> adj(n + 1);
     auto canAddEdge = [&](int i, int j) -> bool {
-        if(adj[i].size() >= average_outdegree + 1 || find(adj[i].begin(), adj[i].end(), j) != adj[i].end() || i == j) return false; // no duplicated edges, no self-loops, and not too big of a degree
+        if(adj[i].size() >= average_outdegree + 1 
+        || find(adj[i].begin(), adj[i].end(), j) != adj[i].end() 
+        || i == j) return false; 
         return true;
     };
 
@@ -39,7 +41,7 @@ signed main(signed argc, char **argv) {
             int j;
             do {
                 j = random_integer(1, i - 1);
-            } while(canAddEdge(i, j) == false);
+            } while(canAddEdge(i, j) == false || canAddEdge(j, i) == false);
             adj[i].push_back(j);
             adj[j].push_back(i);
         }
