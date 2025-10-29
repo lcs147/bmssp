@@ -119,10 +119,10 @@ def create_and_save_time_plot(df, filename, output_dir):
 
         # Set plot properties
         ax.set_xscale('log') 
-        ax.set_xlabel('Graph Size (Number of Vertices - Log Scale)')
+        ax.set_xlabel('Graph Size (Number of Vertices)')
         ax.set_yscale('log')
         ax.set_ylabel('Execution Time (ms)')
-        ax.set_title('Algorithm Performance vs. Graph Size')
+        # ax.set_title('Algorithm Performance vs. Graph Size')
         ax.legend(title='Algorithm')
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
@@ -168,7 +168,7 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
         ax.set_xscale('log')
         ax.set_xlabel('Graph Size (Number of Vertices - Log Scale)')
         ax.set_ylabel('Performance Ratio (BMSPP Time / Dijkstra Time)')
-        ax.set_title('BMSPP vs. Dijkstra Performance Ratio')
+        # ax.set_title('BMSPP vs. Dijkstra Performance Ratio')
         ax.legend()
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 

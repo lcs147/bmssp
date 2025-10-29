@@ -20,10 +20,10 @@ As a result, a standard implementation of Dijkstra's algorithm remains significa
 
 | Number of Vertices    | Number of Edges   | Dijkstra Time (ms)    | BMSSP Time (ms)| Time Ratio BMSSP / Dijkstra
 | :---                  | :---              | :---                  | :---            | :---            |
-|131,072|393,216|39|259|6.504|
-|524,288|1,572,864|229|1,452|6.330|
-|1,048,576|3,145,728|511|3,537|6.913|
-|16,777,216|50,331,648|12,229|78,328|6.405|
+|264,346|733,846|32|250|7.696|
+|1,207,945|2,840,208|155|1067|6.879|
+|3,598,623|8,778,114|553|3718|6.714|
+|23,947,347|58,333,344|4562|29345|6.432|
 
 ## Requirements
 
@@ -66,7 +66,8 @@ int main() {
     }
 
     // 3. Prepare the graph (must be called once)
-    solver.prepare_graph();
+    solver.prepare_graph(false);
+    // use solver.prepare_graph(true) if the graph does not have contant out-degree
 
     // 4. Compute shortest paths
     std::vector<T> distances = solver.execute(source_node);
@@ -100,5 +101,5 @@ Shortest paths from source 0:
 
 *   `bmssp<T>(int n)`: Constructor for a graph with `n` vertices.
 *   `void addEdge(int u, int v, T weight)`: Adds a directed edge.
-*   `void prepare_graph()`: Prepares the graph for computation. Must be called once after adding all edges.
+*   `void prepare_graph(bool exec_const_degree_transformation)`: Prepares the graph for computation. Must be called once after adding all edges.
 *   `std::vector<T> execute(int s)`: Computes shortest paths from a source node `s`.
