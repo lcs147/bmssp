@@ -66,7 +66,7 @@ auto readGraph(string path) {
         if(line[0] == 'p') {
             string tmp;
             ss >> tmp >> tmp >> n >> m;
-            adj.assign(n, {});
+            adj.assign(n + 1, {});
         } else if(line[0] == 'a') {
             int a, b;
             distT w;

@@ -57,7 +57,7 @@ def parse_results_file(filename):
             graph_file = item.get('graph_name', 'Unknown')
             
             # Use 'size' directly from JSON, fallback to 0 if missing
-            graph_size = item.get('size', 0)
+            n = item.get('size', 0)
             
             # Extract time and convert to ms (assuming input is in microseconds based on 'time_us')
             time_us = float(item.get('time_us', 0.0))
@@ -68,7 +68,7 @@ def parse_results_file(filename):
             entry = {
                 "algorithm": algorithm,
                 "graph_file": graph_file,
-                "graph_size": graph_size,
+                "n": n,
                 "time": time_us * US_TO_MS_FACTOR,
                 "std": std_us * US_TO_MS_FACTOR,
                 "checksum": checksum
@@ -121,7 +121,7 @@ def create_and_save_time_plot(df, filename, output_dir):
 
         for algo, group in df.groupby('algorithm'):
             ax.errorbar(
-                group['graph_size'], 
+                group['n'], 
                 group['time'], 
                 yerr=group['std'], 
                 fmt='-o', 
@@ -136,7 +136,7 @@ def create_and_save_time_plot(df, filename, output_dir):
         ax.legend(title='Algorithm')
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
-        ax.set_xticks(sorted(df['graph_size'].unique()))
+        ax.set_xticks(sorted(df['n'].unique()))
         
         def power_of_two_formatter(x, pos):
             # Safe log2 calculation
@@ -165,7 +165,7 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
         fig, ax = plt.subplots(figsize=(10, 6))
 
         ax.plot(
-            df_ratio['graph_size'],
+            df_ratio['n'],
             df_ratio['ratio'],
             marker='o',
             linestyle='-',
@@ -181,7 +181,7 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
         ax.legend()
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
-        ax.set_xticks(sorted(df_ratio['graph_size'].unique()))
+        ax.set_xticks(sorted(df_ratio['n'].unique()))
         
         def power_of_two_formatter(x, pos):
             if x <= 0: return ""
@@ -252,21 +252,21 @@ if __name__ == "__main__":
         df = pd.DataFrame(parsed_results)
         
         # Ensure we have numeric types
-        df['graph_size'] = pd.to_numeric(df['n'], errors='coerce')
+        df['n'] = pd.to_numeric(df['n'], errors='coerce')
         df['time'] = pd.to_numeric(df['time'], errors='coerce')
         
         # Filter small graphs if necessary (kept from original logic)
-        df = df[df['graph_size'] >= 2**7]
-        df = df.sort_values(by='graph_size').reset_index(drop=True)
+        # df = df[df['n'] >= 2**7]
+        df = df.sort_values(by='n').reset_index(drop=True)
         
         if df.empty:
-            print("Warning: No data remaining after filtering (graph_size >= 128).")
+            print("Warning: No data remaining after filtering (n >= 128).")
         else:
             # 4. Create Time Plot
             create_and_save_time_plot(df, OUTPUT_PLOT_FILENAME, OUTPUT_DIR)
 
             # 5. Create Ratio Plot
-            df_pivot = df.pivot_table(index='graph_size', columns='algorithm', values='time', aggfunc='mean').reset_index()
+            df_pivot = df.pivot_table(index='n', columns='algorithm', values='time', aggfunc='mean').reset_index()
             df_pivot.columns.name = None
 
             if 'bmssp' in df_pivot.columns and 'dijkstra' in df_pivot.columns:
@@ -281,7 +281,7 @@ if __name__ == "__main__":
                 print("\nSkipping Ratio Plot: 'bmssp' or 'dijkstra' data missing in results.")
 
             # 6. Data Preparation for Summary Table
-            df_summary = df.groupby(['graph_size', 'algorithm'])['time'].mean().unstack(level='algorithm')
+            df_summary = df.groupby(['n', 'algorithm'])['time'].mean().unstack(level='algorithm')
             df_summary.rename(columns={
                 'dijkstra': 'Tempo Dijkstra (ms)',
                 'bmssp': 'Tempo BMSPP (ms)'
