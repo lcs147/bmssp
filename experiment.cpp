@@ -9,6 +9,7 @@
 #include "dijkstra.hpp"
 
 #include <bits/stdc++.h>
+#include "helpers/external/json.hpp"
 using namespace std;
 
 double calculateMean(auto data) {
@@ -75,7 +76,7 @@ auto readGraph(string path) {
         }
     }
     
-    return adj;
+    return make_pair(adj, m);
 }
 
 signed main(int argc, char **argv) {
@@ -83,16 +84,16 @@ signed main(int argc, char **argv) {
 
     string graph_path = argv[1];
     string algorithm = argv[2];
+
     int reps = 1;
     if(argc >= 4) reps = atoi(argv[3]);
+    
+    int s = 1;
+    if(argc >= 5) s = atoi(argv[4]);
 
     timerT timer;
     vector<distT> d;
-    auto adj = readGraph(graph_path);
-
-    debug(adj.size());
-    int s = 130;
-    if(s >= adj.size()) s = 1;
+    auto [adj, m] = readGraph(graph_path);
 
     vector<int> times;
     if(algorithm == "bmssp") {
@@ -115,11 +116,17 @@ signed main(int argc, char **argv) {
         }
     }
 
-    string graph_name = graph_path.substr(graph_path.find("graphs/") + 7);
-    cout << fixed << setprecision(0);
-    cout << algorithm << " on " << graph_name << " source: " << s << " reps: " << reps << " size: " << adj.size() << endl;
-    cout << "time: " << ceil(calculateMean(times)) << " us" << endl;
-    cout << "std: " << ceil(calculatePopulationSD(times)) << " us" << endl;
-    cout << "checksum: " << check_sum(d) << endl;
+    nlohmann::json j;
+    j["algorithm"] = algorithm;
+    j["graph_name"] = graph_path.substr(graph_path.find("graphs/") + 7);
+    j["source"] = s;
+    j["reps"] = reps;
+    j["n"] = adj.size();
+    j["m"] = m;
+    j["time_us"] = ceil(calculateMean(times));
+    j["std_us"] = ceil(calculatePopulationSD(times));
+    j["checksum"] = check_sum(d);
+
+    std::cout << j.dump(4) << std::endl;
     return 0;
 }

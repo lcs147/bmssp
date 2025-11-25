@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import re
 import os
 import sys
+import json
+import re
 from collections import defaultdict
 
 # --- Configuration ---
@@ -11,56 +12,78 @@ OUTPUT_PLOT_FILENAME = "performance_plot.png"
 OUTPUT_TABLE_FILENAME = "performance_summary_table.csv"
 OUTPUT_DIR = "./outputs"
 US_TO_MS_FACTOR = 1e-3
+
 def parse_results_file(filename):
     """
-    Parses the experiment results file line by line to extract data.
-    Updated to handle 'us' time unit and negative checksums.
+    Parses the experiment results file from JSON format.
+    Supports standard JSON, JSON with trailing commas, and Line-Delimited JSON (NDJSON).
     """
     parsed_data = []
     checksums = defaultdict(set)
-    current_entry = {}
-    bad_size = 2
+    
     try:
-        id = 0
-        parsed_data = []
-        entry = {}
+        raw_data = []
         with open(filename, 'r') as f:
-            for line in f:
-                line = line.strip()
+            file_content = f.read()
 
-                words = line.split(' ')
+        try:
+            # Attempt to load as a single JSON array
+            raw_data = json.loads(file_content)
+        except json.JSONDecodeError:
+            try:
+                # Attempt to fix trailing commas (common in generated logs: ", ]" or ", }")
+                fixed_content = re.sub(r',\s*([\]}])', r'\1', file_content)
+                raw_data = json.loads(fixed_content)
+            except json.JSONDecodeError:
+                # Fallback: Attempt to read line-by-line (NDJSON)
+                # We iterate over the lines of the original content
+                for line in file_content.splitlines():
+                    line = line.strip()
+                    if line:
+                        try:
+                            raw_data.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            continue # Skip malformed lines
 
-                if(id == 0):
-                    algorithm = words[0]
-                    graph_file = words[2]
-                    graph_size_match = re.search(r'random(\d+)', graph_file)
-                    graph_size = int(graph_size_match.group(1)) if graph_size_match else -1
-                    if graph_size == -1:
-                        graph_size = bad_size * 2
-                        bad_size *= 2
-                    entry = {
-                        "algorithm": algorithm,
-                        "graph_file": graph_file,
-                        "graph_size": graph_size,
-                    }
-                elif id == 1:
-                    entry['time'] = (float(words[1]) + 1) * US_TO_MS_FACTOR
-                elif id == 2:
-                    entry['std'] = (float(words[1])) * US_TO_MS_FACTOR
-                elif id == 3:
-                    entry['checksum'] = words[1]
-                    checksums[entry["graph_file"]].add(words[1])
-                    parsed_data.append(entry)
-                    print(entry)
-                    entry = {}
+        # If it loaded a single dict (not a list), wrap it
+        if isinstance(raw_data, dict):
+            raw_data = [raw_data]
 
-                id += 1
-                if id == 4: id = 0
+        print(f"Successfully loaded {len(raw_data)} records.")
 
-                    
+        for item in raw_data:
+            # Extract fields based on the provided JSON schema
+            algorithm = item.get('algorithm', 'Unknown')
+            graph_file = item.get('graph_name', 'Unknown')
+            
+            # Use 'size' directly from JSON, fallback to 0 if missing
+            graph_size = item.get('size', 0)
+            
+            # Extract time and convert to ms (assuming input is in microseconds based on 'time_us')
+            time_us = float(item.get('time_us', 0.0))
+            std_us = float(item.get('std_us', 0.0))
+            
+            checksum = str(item.get('checksum', ''))
+
+            entry = {
+                "algorithm": algorithm,
+                "graph_file": graph_file,
+                "graph_size": graph_size,
+                "time": time_us * US_TO_MS_FACTOR,
+                "std": std_us * US_TO_MS_FACTOR,
+                "checksum": checksum
+            }
+            
+            parsed_data.append(entry)
+            checksums[graph_file].add(checksum)
+
     except FileNotFoundError:
         print(f"ERROR: Input file '{filename}' not found.")
         return None, None
+    except Exception as e:
+        print(f"ERROR: An unexpected error occurred while parsing: {e}")
+        return None, None
+        
     return parsed_data, checksums
 
 def validate_checksums(checksums):
@@ -76,10 +99,11 @@ def validate_checksums(checksums):
             is_valid = False
         else:
             checksum_val = next(iter(cs_set), 'N/A')
-            print(f"✅ OK: {graph_file} (Checksum: {checksum_val})")
+            # Only print verbose success for debugging, or keep it clean
+            # print(f"✅ OK: {graph_file} (Checksum: {checksum_val})")
     
     if is_valid:
-        print("\nAll runs for the same graph produced a matching checksum.")
+        print("✅ All runs for the same graph produced a matching checksum.")
     else:
         print("\nACTION REQUIRED: Checksum mismatch detected. Results may be inconsistent.")
         
@@ -87,7 +111,7 @@ def validate_checksums(checksums):
 
 def create_and_save_time_plot(df, filename, output_dir):
     """
-    Generates and saves the performance plot with error bars to the specified directory.
+    Generates and saves the performance plot with error bars.
     """
     print("\n--- Generating Execution Time Plot ---")
     try:
@@ -105,20 +129,18 @@ def create_and_save_time_plot(df, filename, output_dir):
                 label=algo
             )
 
-        # Set plot properties
         ax.set_xscale('log')
         ax.set_xlabel('Graph Size (Number of Vertices)')
         ax.set_yscale('log')
         ax.set_ylabel('Execution Time (ms)')
-        # ax.set_title('Algorithm Performance vs. Graph Size')
         ax.legend(title='Algorithm')
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
-        # Ensure x-axis labels are readable
-        ax.set_xticks(df['graph_size'].unique())
+        ax.set_xticks(sorted(df['graph_size'].unique()))
         
-        # Custom formatter for power of two
         def power_of_two_formatter(x, pos):
+            # Safe log2 calculation
+            if x <= 0: return ""
             exponent = np.log2(x)
             return f'$2^{{{int(exponent)}}}$'
         
@@ -133,7 +155,7 @@ def create_and_save_time_plot(df, filename, output_dir):
 
 def create_and_save_ratio_plot(df_ratio, filename, output_dir):
     """
-    Generates and saves a plot of the ratio of bmssp time to dijkstra time to the specified directory.
+    Generates and saves a plot of the ratio of bmssp time to dijkstra time.
     """
     print("\n--- Generating Ratio Plot ---")
     try:
@@ -153,19 +175,16 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
 
         ax.axhline(1.0, color='gray', linestyle='--', linewidth=0.8, label='Ratio = 1.0 (Break-Even)')
 
-        # Set plot properties
         ax.set_xscale('log')
         ax.set_xlabel('Graph Size (Number of Vertices - Log Scale)')
         ax.set_ylabel('Performance Ratio (BMSPP Time / Dijkstra Time)')
-        # ax.set_title('BMSPP vs. Dijkstra Performance Ratio')
         ax.legend()
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
-        # Ensure x-axis labels are readable
-        ax.set_xticks(df_ratio['graph_size'].unique())
+        ax.set_xticks(sorted(df_ratio['graph_size'].unique()))
         
-        # Custom formatter for power of two
         def power_of_two_formatter(x, pos):
+            if x <= 0: return ""
             exponent = np.log2(x)
             return f'$2^{{{int(exponent)}}}$'
         
@@ -180,7 +199,7 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
 
 def save_performance_table(df, filename, output_dir):
     """
-    Saves the performance summary table to a CSV file in the specified directory.
+    Saves the performance summary table to a CSV file.
     """
     full_filepath = os.path.join(output_dir, filename)
     
@@ -195,8 +214,8 @@ def save_performance_table(df, filename, output_dir):
         df_formatted.to_csv(full_filepath, index=False)
         print(f"Table saved successfully to: {full_filepath}")
 
-        print("\n--- Summary Table Preview (Markdown Format) ---")
-        print(df_formatted.to_markdown(index=False))
+        # Optional: Print simple preview
+        # print(df_formatted.head())
         
     except Exception as e:
         print(f"ERROR during table saving: {e}")
@@ -204,70 +223,87 @@ def save_performance_table(df, filename, output_dir):
 
 if __name__ == "__main__":
     
-    # Check if the filename argument was provided
     if len(sys.argv) < 2:
         print("ERROR: Please provide the path to the results file as a command-line argument.")
-        print("Usage: python script_name.py <path_to_results_file.txt>")
+        print("Usage: python performance_plotter.py <path_to_results.json>")
         sys.exit(1)
         
     INPUT_FILENAME = sys.argv[1]
-    OUTPUT_DIR += INPUT_FILENAME.split('.')[0].split('results')[1]
     
-    # 1. Ensure the output directory exists
+    # Improved output directory generation:
+    # Creates a subfolder in ./outputs based on the input filename (without extension)
+    base_name = os.path.splitext(os.path.basename(INPUT_FILENAME))[0]
+    OUTPUT_DIR = os.path.join(OUTPUT_DIR, base_name)
+    
     try:
         os.makedirs(OUTPUT_DIR, exist_ok=True)
     except Exception as e:
         print(f"ERROR creating output directory: {e}")
         sys.exit(1)
 
-    # 2. Parse the results
+    # 1. Parse the results
     parsed_results, checksum_map = parse_results_file(INPUT_FILENAME)
 
     if parsed_results:
-        # 3. Checksum Validation
+        # 2. Checksum Validation
         validate_checksums(checksum_map)
         
-        # 4. Data Preparation for Plotting
+        # 3. Data Preparation
         df = pd.DataFrame(parsed_results)
+        
+        # Ensure we have numeric types
+        df['graph_size'] = pd.to_numeric(df['n'], errors='coerce')
+        df['time'] = pd.to_numeric(df['time'], errors='coerce')
+        
+        # Filter small graphs if necessary (kept from original logic)
         df = df[df['graph_size'] >= 2**7]
         df = df.sort_values(by='graph_size').reset_index(drop=True)
         
-        # 5. Create Time Plot
-        create_and_save_time_plot(df, OUTPUT_PLOT_FILENAME, OUTPUT_DIR)
-
-        # 6. Create Ratio Plot
-        df_pivot = df.pivot(index='graph_size', columns='algorithm', values='time').reset_index()
-        df_pivot.columns.name = None
-
-        if 'bmssp' in df_pivot.columns and 'dijkstra' in df_pivot.columns:
-            df_pivot['ratio'] = df_pivot['bmssp'] / df_pivot['dijkstra']
-            df_ratio = df_pivot.dropna(subset=['ratio']) 
-
-            if not df_ratio.empty:
-                create_and_save_ratio_plot(df_ratio, OUTPUT_PLOT_FILENAME, OUTPUT_DIR)
-            else:
-                 print("\nSkipping Ratio Plot: Could not find matching 'bmssp' and 'dijkstra' data for ratio calculation.")
+        if df.empty:
+            print("Warning: No data remaining after filtering (graph_size >= 128).")
         else:
-            print("\nSkipping Ratio Plot: 'bmssp' or 'dijkstra' data missing in results.")
+            # 4. Create Time Plot
+            create_and_save_time_plot(df, OUTPUT_PLOT_FILENAME, OUTPUT_DIR)
 
-        # 7. Data Preparation for Summary Table
-        df_summary = df.groupby(['graph_size', 'algorithm'])['time'].mean().unstack(level='algorithm')
-        df_summary.rename(columns={
-            'dijkstra': 'Tempo Dijkstra (ms)',
-            'bmssp': 'Tempo BMSPP (ms)'
-        }, inplace=True)
+            # 5. Create Ratio Plot
+            df_pivot = df.pivot_table(index='graph_size', columns='algorithm', values='time', aggfunc='mean').reset_index()
+            df_pivot.columns.name = None
 
-        df_summary['Ratio BMSPP / Dijkstra'] = df_summary.get('Tempo BMSPP (ms)', np.nan) / df_summary.get('Tempo Dijkstra (ms)', np.nan)
-        df_summary['Número de Vértices'] = df_summary.index
-        df_summary['Número de Arestas'] = df_summary['Número de Vértices'] * 3
+            if 'bmssp' in df_pivot.columns and 'dijkstra' in df_pivot.columns:
+                df_pivot['ratio'] = df_pivot['bmssp'] / df_pivot['dijkstra']
+                df_ratio = df_pivot.dropna(subset=['ratio']) 
 
-        final_table = df_summary[[
-            'Número de Vértices',
-            'Número de Arestas',
-            'Tempo Dijkstra (ms)',
-            'Tempo BMSPP (ms)',
-            'Ratio BMSPP / Dijkstra'
-        ]].sort_values(by='Número de Vértices').copy()
-        
-        # 8. Save the Final Table
-        save_performance_table(final_table, OUTPUT_TABLE_FILENAME, OUTPUT_DIR)
+                if not df_ratio.empty:
+                    create_and_save_ratio_plot(df_ratio, OUTPUT_PLOT_FILENAME, OUTPUT_DIR)
+                else:
+                     print("\nSkipping Ratio Plot: Could not find matching data for ratio calculation.")
+            else:
+                print("\nSkipping Ratio Plot: 'bmssp' or 'dijkstra' data missing in results.")
+
+            # 6. Data Preparation for Summary Table
+            df_summary = df.groupby(['graph_size', 'algorithm'])['time'].mean().unstack(level='algorithm')
+            df_summary.rename(columns={
+                'dijkstra': 'Tempo Dijkstra (ms)',
+                'bmssp': 'Tempo BMSPP (ms)'
+            }, inplace=True)
+
+            df_summary['Ratio BMSPP / Dijkstra'] = df_summary.get('Tempo BMSPP (ms)', np.nan) / df_summary.get('Tempo Dijkstra (ms)', np.nan)
+            df_summary['Número de Vértices'] = df_summary.index
+            # Assuming average degree of ~3 or similar metric from original code
+            df_summary['Número de Arestas'] = df_summary['Número de Vértices'] * 3
+
+            cols_to_keep = [
+                'Número de Vértices',
+                'Número de Arestas',
+                'Tempo Dijkstra (ms)',
+                'Tempo BMSPP (ms)',
+                'Ratio BMSPP / Dijkstra'
+            ]
+            
+            # Filter valid columns only
+            valid_cols = [c for c in cols_to_keep if c in df_summary.columns]
+            
+            final_table = df_summary[valid_cols].sort_values(by='Número de Vértices').copy()
+            
+            # 7. Save the Final Table
+            save_performance_table(final_table, OUTPUT_TABLE_FILENAME, OUTPUT_DIR)

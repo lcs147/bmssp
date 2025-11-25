@@ -4,4 +4,4 @@ experiment_runner
 graphs/
 cses.cpp
 test/
-.venv
+*.venv
