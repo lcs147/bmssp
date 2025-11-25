@@ -13,8 +13,6 @@ GENERATOR_SOURCE="${ROOT_DIR}/experiments/random-graph-generator.cpp"
 N_VALUES=()
 N=8
 MAX_N=50000000
-# N=1048576
-# MAX_N=1048576
 
 echo "--- 1. Generating N values: Starting at 8, multiplying by 2 up to ${MAX_N} ---"
 
