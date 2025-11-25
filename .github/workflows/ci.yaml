@@ -1,0 +1,38 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (CMake, C++ Compiler)
+        run: |
+          sudo apt-get update
+          sudo apt-get install cmake build-essential -y
+          g++ --version
+
+      - name: Configure CMake
+        run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Project
+        run: cmake --build ${{ github.workspace }}/build
+
+      - name: Run Tests
+        run: ${{ github.workspace }}/build/my_tests -r junit -o test-results.xml
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Catch2 Tests Report
+          path: ${{ github.workspace }}/build/test-results.xml
+          reporter: junit
