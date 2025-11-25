@@ -1,11 +1,12 @@
-#include "bmssp.hpp"
-#include "dijkstra.hpp"
 
 #ifdef LOCAL
 #include "debug.cpp"
 #else
 #define debug(...) 0
 #endif
+
+#include "bmssp.hpp"
+#include "dijkstra.hpp"
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -50,10 +51,12 @@ long long check_sum(auto &v) {
     return accumulate(v.begin(), v.end(), 0ll);
 }
 
+using distT = double;
 auto readGraph(string path) {
-    vector<vector<pair<int, long long>>> adj;
+    vector<vector<pair<int, distT>>> adj;
 
-    int n = -1, m = 0, c = 0;
+    int n = -1, m = 0;
+    distT c = 0;
     string line, tmp;
     ifstream in(path);
 
@@ -62,9 +65,11 @@ auto readGraph(string path) {
         if(line[0] == 'p') {
             string tmp;
             ss >> tmp >> tmp >> n >> m;
-            adj.assign(n + 1, {});
+            adj.assign(n, {});
         } else if(line[0] == 'a') {
-            int a, b, w; ss >> tmp >> a >> b >> w;
+            int a, b;
+            distT w;
+            ss >> tmp >> a >> b >> w;
             adj[a].emplace_back(b, w);
             c = max(c, w);
         }
@@ -80,12 +85,14 @@ signed main(int argc, char **argv) {
     string algorithm = argv[2];
     int reps = 1;
     if(argc >= 4) reps = atoi(argv[3]);
-    
-    int s = 1;
+
     timerT timer;
-    using distT = long long;
     vector<distT> d;
     auto adj = readGraph(graph_path);
+
+    debug(adj.size());
+    int s = 130;
+    if(s >= adj.size()) s = 1;
 
     vector<int> times;
     if(algorithm == "bmssp") {
