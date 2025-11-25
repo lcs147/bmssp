@@ -10,12 +10,10 @@
 #include<unordered_map>
 #include<unordered_set>
 #include<random>
-#include<ext/pb_ds/assoc_container.hpp>
 
 namespace spp {
 
 using namespace std;
-using namespace __gnu_pbds;
 
 template<typename K, typename V>
 using hash_map = unordered_map<K, V>;
@@ -107,7 +105,7 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
         // Searching for the first block with UB which is > 
         auto it_UB_block = UBs.lower_bound({b,it_min});
         auto [ub,it_block] = (*it_UB_block);
-                
+        
         // Inserting key/value (a,b)
         auto it = it_block->insert(it_block->end(),{a,b});
         where_is[1][a] = {it_block, it};
@@ -303,7 +301,7 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
                 ret.push_back(a);
                 delete_({b});
             } 
-    
+            
             return {B, ret};
         }else{  
             vector<elementT> &l = s0;
@@ -318,7 +316,6 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
                     delete_({b});
                 }
             }
-            
             return {med,ret};
         }
     }
@@ -480,7 +477,7 @@ struct bmssp { // bmssp class
     }
 
     using uniqueDistT = tuple<wT, int, int, int>;
-    inline uniqueDistT getDist(int u, int v, int w) {
+    inline uniqueDistT getDist(int u, int v, wT w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
     inline uniqueDistT getDist(int u) {
@@ -496,7 +493,6 @@ struct bmssp { // bmssp class
     vector<short int> treesz;
     pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
         hash_set<int> vis;
-        vis.reserve(S.size() * k);
         vis.insert(S.begin(), S.end());
 
         vector<int> active = S;
@@ -558,20 +554,14 @@ struct bmssp { // bmssp class
         if(complete.size() <= k) return {B, complete};
  
         uniqueDistT nB = getDist(complete.back());
-        // {   // sanity check
-        //     int cntbig = 0;
-        //     for(int u: complete) if(getDist(u) >= nB) cntbig++;
-        //     assert(cntbig == 1);
-        //     for(int u: complete) assert(getDist(u) < B);
-        //     assert(complete.size() == k + 1);
-        // }
         complete.pop_back();
+
         return {nB, complete};
     }
  
     pair<uniqueDistT, vector<int>> bmsspRec(short int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
- 
+        
         auto [P, bellman_vis] = findPivots(B, S);
  
         const long long batch_size = (1ll << ((l - 1) * t));
@@ -587,7 +577,6 @@ struct bmssp { // bmssp class
         while(complete.size() < quota && D.size()) {
             auto [trying_B, miniS] = D.pull();
             // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
- 
             auto [complete_B, nw_complete] = bmsspRec(l - 1, trying_B, miniS);
             
             // all new complete_B are greater than the old ones <= point 6, page 10
@@ -629,7 +618,6 @@ struct bmssp { // bmssp class
  
         for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
         // get only the ones not in complete already, for it to become disjoint
- 
         return {retB, complete};
     }
 };

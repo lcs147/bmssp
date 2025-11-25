@@ -23,7 +23,7 @@ signed main(signed argc, char **argv) {
     };
 
     int m = n * average_outdegree;
-    cout << "p " <<  n << " " << m << endl;
+    cout << "p sp " << n << " " << m << endl;
 
     int s = 1;
     vector<vector<int>> adj(n + 1);
