@@ -26,7 +26,7 @@ struct dijkstra {
             auto [du, u] = heap.top();
             heap.pop();
             if(du > d[u]) continue;
-
+            
             for(auto [v, w] : adj[u]) {
                 if(d[u] + w < d[v]) {
                     p[v] = u;
