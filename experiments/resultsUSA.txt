@@ -1,96 +1,291 @@
-dijkstra on USA-road-t.E.gr source: 1 reps: 5 size: 3,598,623
-time: 553878 us
-std: 5148 us
-checksum: 922352948308500119
-bmssp on USA-road-t.E.gr source: 1 reps: 5 size: 3,598,623
-time: 3718830 us
-std: 9655 us
-checksum: 922352948308500119
-dijkstra on USA-road-t.USA.gr source: 1 reps: 5 size: 23,947,347
-time: 4562473 us
-std: 2731 us
-checksum: 922751485995017018
-bmssp on USA-road-t.USA.gr source: 1 reps: 5 size: 23,947,347
-time: 29345319 us
-std: 46069 us
-checksum: 922751485995017018
-dijkstra on USA-road-t.NW.gr source: 1 reps: 5 size: 1,207,945
-time: 155193 us
-std: 1049 us
-checksum: 922346671386483764
-bmssp on USA-road-t.NW.gr source: 1 reps: 5 size: 1,207,945
-time: 1067577 us
-std: 1374 us
-checksum: 922346671386483764
-dijkstra on USA-road-t.W.gr source: 1 reps: 5 size: 6,262,104
-time: 1013046 us
-std: 1932 us
-checksum: 922423137607569019
-bmssp on USA-road-t.W.gr source: 1 reps: 5 size: 6,262,104
-time: 6903403 us
-std: 9732 us
-checksum: 922423137607569019
-dijkstra on USA-road-t.CTR.gr source: 1 reps: 5 size: 14,081,816
-time: 3346156 us
-std: 2834 us
-checksum: 922488782754297931
-bmssp on USA-road-t.CTR.gr source: 1 reps: 5 size: 14,081,816
-time: 18195013 us
-std: 9142 us
-checksum: 922488782754297931
-dijkstra on USA-road-t.BAY.gr source: 1 reps: 5 size: 321,270
-time: 38803 us
-std: 354 us
-checksum: 922337602519030739
-bmssp on USA-road-t.BAY.gr source: 1 reps: 5 size: 321,270
-time: 297297 us
-std: 845 us
-checksum: 922337602519030739
-dijkstra on USA-road-t.NY.gr source: 1 reps: 5 size: 264,346
-time: 32490 us
-std: 468 us
-checksum: 922337437497951537
-bmssp on USA-road-t.NY.gr source: 1 reps: 5 size: 264,346
-time: 250030 us
-std: 563 us
-checksum: 922337437497951537
-dijkstra on USA-road-t.NE.gr source: 1 reps: 5 size: 1,524,453
-time: 228756 us
-std: 2033 us
-checksum: 922340331507132567
-bmssp on USA-road-t.NE.gr source: 1 reps: 5 size: 1,524,453
-time: 1450339 us
-std: 4639 us
-checksum: 922340331507132567
-dijkstra on USA-road-t.COL.gr source: 1 reps: 5 size: 435,666
-time: 52174 us
-std: 431 us
-checksum: 922338847308873040
-bmssp on USA-road-t.COL.gr source: 1 reps: 5 size: 435,666
-time: 416865 us
-std: 1093 us
-checksum: 922338847308873040
-dijkstra on USA-road-t.LKS.gr source: 1 reps: 5 size: 2,758,119
-time: 376873 us
-std: 2517 us
-checksum: 922362218676412793
-bmssp on USA-road-t.LKS.gr source: 1 reps: 5 size: 2,758,119
-time: 2674383 us
-std: 6760 us
-checksum: 922362218676412793
-dijkstra on USA-road-t.FLA.gr source: 1 reps: 5 size: 1,070,376
-time: 127588 us
-std: 988 us
-checksum: 922345231080531188
-bmssp on USA-road-t.FLA.gr source: 1 reps: 5 size: 1,070,376
-time: 958971 us
-std: 4654 us
-checksum: 922345231080531188
-dijkstra on USA-road-t.CAL.gr source: 1 reps: 5 size: 1,890,815
-time: 257454 us
-std: 1088 us
-checksum: 922353516017042648
-bmssp on USA-road-t.CAL.gr source: 1 reps: 5 size: 1,890,815
-time: 1719994 us
-std: 4186 us
-checksum: 922353516017042648
+[
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223356292232306688,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598624,
+    "reps": 5,
+    "source": 1,
+    "std_us": 4999.0,
+    "time_us": 584946.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223356292232306688,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598624,
+    "reps": 5,
+    "source": 1,
+    "std_us": 6955.0,
+    "time_us": 3935859.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9222957754545133568,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947348,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8023.0,
+    "time_us": 4903629.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9222957754545133568,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947348,
+    "reps": 5,
+    "source": 1,
+    "std_us": 12359.0,
+    "time_us": 30663852.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223362569153883136,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207946,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3351.0,
+    "time_us": 168606.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223362569153883136,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207946,
+    "reps": 5,
+    "source": 1,
+    "std_us": 10767.0,
+    "time_us": 1142465.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223286102933154816,
+    "graph_name": "USA-road-t.W.gr",
+    "m": 15248146,
+    "n": 6262105,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2425.0,
+    "time_us": 1087843.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223286102933154816,
+    "graph_name": "USA-road-t.W.gr",
+    "m": 15248146,
+    "n": 6262105,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8616.0,
+    "time_us": 7253043.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223220457786465280,
+    "graph_name": "USA-road-t.CTR.gr",
+    "m": 34292496,
+    "n": 14081817,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3585.0,
+    "time_us": 3530351.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223220457786465280,
+    "graph_name": "USA-road-t.CTR.gr",
+    "m": 34292496,
+    "n": 14081817,
+    "reps": 5,
+    "source": 1,
+    "std_us": 12858.0,
+    "time_us": 18610768.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371638021031936,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321271,
+    "reps": 5,
+    "source": 1,
+    "std_us": 870.0,
+    "time_us": 43090.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371638021031936,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321271,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8495.0,
+    "time_us": 328093.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371803042333696,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264347,
+    "reps": 5,
+    "source": 1,
+    "std_us": 894.0,
+    "time_us": 36266.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371803042333696,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264347,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5072.0,
+    "time_us": 282458.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223368909033157632,
+    "graph_name": "USA-road-t.NE.gr",
+    "m": 3897636,
+    "n": 1524454,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2747.0,
+    "time_us": 245362.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223368909033157632,
+    "graph_name": "USA-road-t.NE.gr",
+    "m": 3897636,
+    "n": 1524454,
+    "reps": 5,
+    "source": 1,
+    "std_us": 12320.0,
+    "time_us": 1508213.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223370393231257600,
+    "graph_name": "USA-road-t.COL.gr",
+    "m": 1057066,
+    "n": 435667,
+    "reps": 5,
+    "source": 1,
+    "std_us": 540.0,
+    "time_us": 59426.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223370393231257600,
+    "graph_name": "USA-road-t.COL.gr",
+    "m": 1057066,
+    "n": 435667,
+    "reps": 5,
+    "source": 1,
+    "std_us": 18230.0,
+    "time_us": 452907.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223347021864081408,
+    "graph_name": "USA-road-t.LKS.gr",
+    "m": 6885658,
+    "n": 2758120,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3381.0,
+    "time_us": 402030.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223347021864081408,
+    "graph_name": "USA-road-t.LKS.gr",
+    "m": 6885658,
+    "n": 2758120,
+    "reps": 5,
+    "source": 1,
+    "std_us": 7373.0,
+    "time_us": 2790439.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223364009459878912,
+    "graph_name": "USA-road-t.FLA.gr",
+    "m": 2712798,
+    "n": 1070377,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2204.0,
+    "time_us": 138550.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223364009459878912,
+    "graph_name": "USA-road-t.FLA.gr",
+    "m": 2712798,
+    "n": 1070377,
+    "reps": 5,
+    "source": 1,
+    "std_us": 13005.0,
+    "time_us": 1017360.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223355724522693632,
+    "graph_name": "USA-road-t.CAL.gr",
+    "m": 4657742,
+    "n": 1890816,
+    "reps": 5,
+    "source": 1,
+    "std_us": 4431.0,
+    "time_us": 277370.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223355724522693632,
+    "graph_name": "USA-road-t.CAL.gr",
+    "m": 4657742,
+    "n": 1890816,
+    "reps": 5,
+    "source": 1,
+    "std_us": 20673.0,
+    "time_us": 1818321.0
+}
+,
+
+]
