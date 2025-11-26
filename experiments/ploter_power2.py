@@ -107,6 +107,13 @@ def create_and_save_time_plot(df, filename, output_dir):
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
         ax.set_xticks(sorted(df['n'].unique()))
+        
+        def power_of_two_formatter(x, pos):
+            if x <= 0: return ""
+            exponent = np.log2(x)
+            return f'$2^{{{int(exponent)}}}$'
+        
+        ax.get_xaxis().set_major_formatter(plt.FuncFormatter(power_of_two_formatter))
 
         plt.tight_layout()
         plt.savefig(full_filepath)
@@ -144,6 +151,13 @@ def create_and_save_ratio_plot(df_ratio, filename, output_dir):
         ax.grid(True, which="both", ls="--", linewidth=0.5)
 
         ax.set_xticks(sorted(df_ratio['n'].unique()))
+        
+        def power_of_two_formatter(x, pos):
+            if x <= 0: return ""
+            exponent = np.log2(x)
+            return f'$2^{{{int(exponent)}}}$'
+        
+        ax.get_xaxis().set_major_formatter(plt.FuncFormatter(power_of_two_formatter))
 
         plt.tight_layout()
         plt.savefig(full_filepath)
