@@ -1,180 +1,555 @@
-dijkstra on random262144D3.gr source: 1 reps: 5 size: 786433
-time: 76458 us
-std: 1540 us
-checksum: 8301034953630716935
-bmssp on random262144D3.gr source: 1 reps: 5 size: 786433
-time: 484239 us
-std: 3138 us
-checksum: 8301034953630716935
-dijkstra on random1048576D3.gr source: 1 reps: 5 size: 3145729
-time: 429397 us
-std: 2998 us
-checksum: -6456359846599820111
-bmssp on random1048576D3.gr source: 1 reps: 5 size: 3145729
-time: 3144927 us
-std: 3188 us
-checksum: -6456359846599820111
-dijkstra on random32768D3.gr source: 1 reps: 5 size: 98305
-time: 4918 us
-std: 173 us
-checksum: -2767011599471384034
-bmssp on random32768D3.gr source: 1 reps: 5 size: 98305
-time: 36634 us
-std: 1149 us
-checksum: -2767011599471384034
-dijkstra on random524288D3.gr source: 1 reps: 5 size: 1572865
-time: 182095 us
-std: 2158 us
-checksum: -2767011397311432622
-bmssp on random524288D3.gr source: 1 reps: 5 size: 1572865
-time: 1218001 us
-std: 2538 us
-checksum: -2767011397311432622
-dijkstra on random4096D3.gr source: 1 reps: 5 size: 12289
-time: 436 us
-std: 20 us
-checksum: -6456360424753884149
-bmssp on random4096D3.gr source: 1 reps: 5 size: 12289
-time: 4298 us
-std: 124 us
-checksum: -6456360424753884149
-dijkstra on random1024D3.gr source: 1 reps: 5 size: 3073
-time: 91 us
-std: 9 us
-checksum: 8301034833407070192
-bmssp on random1024D3.gr source: 1 reps: 5 size: 3073
-time: 977 us
-std: 34 us
-checksum: 8301034833407070192
-dijkstra on random131072D3.gr source: 1 reps: 5 size: 393217
-time: 30923 us
-std: 530 us
-checksum: 4611686073806521763
-bmssp on random131072D3.gr source: 1 reps: 5 size: 393217
-time: 186498 us
-std: 2677 us
-checksum: 4611686073806521763
-dijkstra on random33554432D3.gr source: 1 reps: 5 size: 100663297
-time: 22357057 us
-std: 33102 us
-checksum: 4611706083512155256
-dijkstra on random16384D3.gr source: 1 reps: 5 size: 49153
-time: 2256 us
-std: 93 us
-checksum: 8301034838030042878
-bmssp on random16384D3.gr source: 1 reps: 5 size: 49153
-time: 17965 us
-std: 631 us
-checksum: 8301034838030042878
-dijkstra on random8192D3.gr source: 1 reps: 5 size: 24577
-time: 1038 us
-std: 52 us
-checksum: 4611686020764388066
-bmssp on random8192D3.gr source: 1 reps: 5 size: 24577
-time: 8764 us
-std: 131 us
-checksum: 4611686020764388066
-dijkstra on random32D3.gr source: 1 reps: 5 size: 97
-time: 1 us
-std: 2 us
-checksum: 4611686018430351355
-bmssp on random32D3.gr source: 1 reps: 5 size: 97
-time: 59 us
-std: 9 us
-checksum: 4611686018430351355
-dijkstra on random65536D3.gr source: 1 reps: 5 size: 196609
-time: 11586 us
-std: 817 us
-checksum: -6456360398420531764
-bmssp on random65536D3.gr source: 1 reps: 5 size: 196609
-time: 73374 us
-std: 1939 us
-checksum: -6456360398420531764
-dijkstra on random8388608D3.gr source: 1 reps: 5 size: 25165825
-time: 4526344 us
-std: 3991 us
-checksum: -2767007156237655355
-bmssp on random8388608D3.gr source: 1 reps: 5 size: 25165825
-time: 34308290 us
-std: 50031 us
-checksum: -2767007156237655355
-dijkstra on random512D3.gr source: 1 reps: 5 size: 1537
-time: 41 us
-std: 6 us
-checksum: 4611686018526879696
-bmssp on random512D3.gr source: 1 reps: 5 size: 1537
-time: 473 us
-std: 11 us
-checksum: 4611686018526879696
-dijkstra on random8D3.gr source: 1 reps: 5 size: 25
-time: 0 us
-std: 0 us
-checksum: -2767011611055984295
-bmssp on random8D3.gr source: 1 reps: 5 size: 25
-time: 12 us
-std: 5 us
-checksum: -2767011611055984295
-dijkstra on random64D3.gr source: 1 reps: 5 size: 193
-time: 3 us
-std: 2 us
-checksum: 8301034833177686828
-bmssp on random64D3.gr source: 1 reps: 5 size: 193
-time: 149 us
-std: 35 us
-checksum: 8301034833177686828
-dijkstra on random16D3.gr source: 1 reps: 5 size: 49
-time: 1 us
-std: 1 us
-checksum: -6456360425797527073
-bmssp on random16D3.gr source: 1 reps: 5 size: 49
-time: 24 us
-std: 6 us
-checksum: -6456360425797527073
-dijkstra on random2048D3.gr source: 1 reps: 5 size: 6145
-time: 216 us
-std: 11 us
-checksum: -2767011610541445113
-bmssp on random2048D3.gr source: 1 reps: 5 size: 6145
-time: 1911 us
-std: 40 us
-checksum: -2767011610541445113
-dijkstra on random2097152D3.gr source: 1 reps: 5 size: 6291457
-time: 957516 us
-std: 8216 us
-checksum: 4611687049063752191
-bmssp on random2097152D3.gr source: 1 reps: 5 size: 6291457
-time: 7091699 us
-std: 12849 us
-checksum: 4611687049063752191
-dijkstra on random16777216D3.gr source: 1 reps: 5 size: 50331649
-time: 10113697 us
-std: 5654 us
-checksum: -6456349898794449528
-bmssp on random16777216D3.gr source: 1 reps: 5 size: 50331649
-time: 73649295 us
-std: 126676 us
-checksum: -6456349898794449528
-dijkstra on random128D3.gr source: 1 reps: 5 size: 385
-time: 6 us
-std: 3 us
-checksum: -2767011611035668753
-bmssp on random128D3.gr source: 1 reps: 5 size: 385
-time: 156 us
-std: 11 us
-checksum: -2767011611035668753
-dijkstra on random256D3.gr source: 1 reps: 5 size: 769
-time: 14 us
-std: 4 us
-checksum: -6456360425749544337
-bmssp on random256D3.gr source: 1 reps: 5 size: 769
-time: 266 us
-std: 10 us
-checksum: -6456360425749544337
-dijkstra on random4194304D3.gr source: 1 reps: 5 size: 12582913
-time: 2040092 us
-std: 5887 us
-checksum: 8301037092925296344
-bmssp on random4194304D3.gr source: 1 reps: 5 size: 12582913
-time: 14929555 us
-std: 47577 us
-checksum: 8301037092925296344
+[
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371916393188352,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "n": 262145,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3376.0,
+    "time_us": 85699.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371916393188352,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "n": 262145,
+    "reps": 5,
+    "source": 1,
+    "std_us": 28524.0,
+    "time_us": 529068.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371457655251968,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "n": 1048577,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3448.0,
+    "time_us": 445013.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371457655251968,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "n": 1048577,
+    "reps": 5,
+    "source": 1,
+    "std_us": 15263.0,
+    "time_us": 2987941.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372025269701632,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "n": 32769,
+    "reps": 5,
+    "source": 1,
+    "std_us": 138.0,
+    "time_us": 5273.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372025269701632,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "n": 32769,
+    "reps": 5,
+    "source": 1,
+    "std_us": 1022.0,
+    "time_us": 39169.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371823109044224,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "n": 524289,
+    "reps": 5,
+    "source": 1,
+    "std_us": 9351.0,
+    "time_us": 200234.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371823109044224,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "n": 524289,
+    "reps": 5,
+    "source": 1,
+    "std_us": 15448.0,
+    "time_us": 1261886.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372035810314240,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "n": 4097,
+    "reps": 5,
+    "source": 1,
+    "std_us": 36.0,
+    "time_us": 506.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372035810314240,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "n": 4097,
+    "reps": 5,
+    "source": 1,
+    "std_us": 247.0,
+    "time_us": 4720.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036616992768,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "n": 1025,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5.0,
+    "time_us": 98.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036616992768,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "n": 1025,
+    "reps": 5,
+    "source": 1,
+    "std_us": 65.0,
+    "time_us": 1183.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371981475482624,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "n": 131073,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5144.0,
+    "time_us": 36557.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371981475482624,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "n": 131073,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5617.0,
+    "time_us": 200963.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223351971719977984,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "n": 33554433,
+    "reps": 5,
+    "source": 1,
+    "std_us": 46809.0,
+    "time_us": 22927354.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223351971719977984,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "n": 33554433,
+    "reps": 5,
+    "source": 1,
+    "std_us": 334195.0,
+    "time_us": 161972931.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372031993963520,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "n": 16385,
+    "reps": 5,
+    "source": 1,
+    "std_us": 587.0,
+    "time_us": 2935.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372031993963520,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "n": 16385,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3506.0,
+    "time_us": 21023.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372034517721088,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "n": 8193,
+    "reps": 5,
+    "source": 1,
+    "std_us": 18.0,
+    "time_us": 1104.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372034517721088,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "n": 8193,
+    "reps": 5,
+    "source": 1,
+    "std_us": 164.0,
+    "time_us": 9394.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036851814400,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "n": 33,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2.0,
+    "time_us": 2.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036851814400,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "n": 33,
+    "reps": 5,
+    "source": 1,
+    "std_us": 11.0,
+    "time_us": 72.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372009476970496,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65537,
+    "reps": 5,
+    "source": 1,
+    "std_us": 392.0,
+    "time_us": 12525.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372009476970496,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65537,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3907.0,
+    "time_us": 81969.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223367582023058432,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388609,
+    "reps": 5,
+    "source": 1,
+    "std_us": 7246.0,
+    "time_us": 4656707.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223367582023058432,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388609,
+    "reps": 5,
+    "source": 1,
+    "std_us": 70381.0,
+    "time_us": 32791000.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036755294208,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "n": 513,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5.0,
+    "time_us": 42.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036755294208,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "n": 513,
+    "reps": 5,
+    "source": 1,
+    "std_us": 17.0,
+    "time_us": 527.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036854327296,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "n": 9,
+    "reps": 5,
+    "source": 1,
+    "std_us": 1.0,
+    "time_us": 1.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036854327296,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "n": 9,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5.0,
+    "time_us": 12.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036846389248,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "n": 65,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2.0,
+    "time_us": 3.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036846389248,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "n": 65,
+    "reps": 5,
+    "source": 1,
+    "std_us": 32.0,
+    "time_us": 171.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036853958656,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "n": 17,
+    "reps": 5,
+    "source": 1,
+    "std_us": 1.0,
+    "time_us": 1.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036853958656,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "n": 17,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8.0,
+    "time_us": 30.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036339788800,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "n": 2049,
+    "reps": 5,
+    "source": 1,
+    "std_us": 7.0,
+    "time_us": 210.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036339788800,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "n": 2049,
+    "reps": 5,
+    "source": 1,
+    "std_us": 213.0,
+    "time_us": 2359.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223371006214533120,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "n": 2097153,
+    "reps": 5,
+    "source": 1,
+    "std_us": 5669.0,
+    "time_us": 962239.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223371006214533120,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "n": 2097153,
+    "reps": 5,
+    "source": 1,
+    "std_us": 15889.0,
+    "time_us": 7283092.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223361509824549888,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "n": 16777217,
+    "reps": 5,
+    "source": 1,
+    "std_us": 21266.0,
+    "time_us": 10334293.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223361509824549888,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "n": 16777217,
+    "reps": 5,
+    "source": 1,
+    "std_us": 106321.0,
+    "time_us": 75792926.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036834009088,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "n": 129,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3.0,
+    "time_us": 7.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036834009088,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "n": 129,
+    "reps": 5,
+    "source": 1,
+    "std_us": 13.0,
+    "time_us": 275.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223372036805966848,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "n": 257,
+    "reps": 5,
+    "source": 1,
+    "std_us": 4.0,
+    "time_us": 15.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223372036805966848,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "n": 257,
+    "reps": 5,
+    "source": 1,
+    "std_us": 18.0,
+    "time_us": 284.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -9223369777092914176,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "n": 4194305,
+    "reps": 5,
+    "source": 1,
+    "std_us": 3985.0,
+    "time_us": 2096764.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": -9223369777092914176,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "n": 4194305,
+    "reps": 5,
+    "source": 1,
+    "std_us": 41893.0,
+    "time_us": 15643449.0
+}
+,
+
+]

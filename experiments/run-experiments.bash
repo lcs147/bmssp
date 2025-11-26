@@ -49,14 +49,15 @@ echo "Compilation successful."
 echo "Clearing previous results and preparing output file: ${OUTPUT_FILE}"
 rm -f "$OUTPUT_FILE"
 
+printf "[\n" >> "$OUTPUT_FILE"
 for FILE in "${FILES[@]}"; do
     for TYPE in "${TYPES[@]}"; do
         FILE_PATH="${FILES_DIR}/${FILE}" 
-        echo "Running experiment on ${FILE} with ${TYPE}"
-        # Execute the compiled program, passing 5 as the fixed third argument, and append output to the file
-        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 5 >> "$OUTPUT_FILE"
+        printf "Running experiment on ${FILE} with ${TYPE}\n"
+        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 5 1 >> "$OUTPUT_FILE"
+        printf ",\n" >> "$OUTPUT_FILE"
     done
 done
-
+printf "\n]" >> "$OUTPUT_FILE"
 # --- Cleanup and Report ---
 echo "All experiments finished. Results are in $OUTPUT_FILE"
