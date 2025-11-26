@@ -9,6 +9,7 @@
 #include "dijkstra.hpp"
 
 #include <bits/stdc++.h>
+#include "helpers/common.hpp"
 #include "helpers/external/json.hpp"
 using namespace std;
 
@@ -53,31 +54,6 @@ long long check_sum(auto &v) {
 }
 
 using distT = double;
-auto readGraph(string path) {
-    vector<vector<pair<int, distT>>> adj;
-
-    int n = -1, m = 0;
-    distT c = 0;
-    string line, tmp;
-    ifstream in(path);
-
-    while(getline(in, line)) {
-        stringstream ss(line);
-        if(line[0] == 'p') {
-            string tmp;
-            ss >> tmp >> tmp >> n >> m;
-            adj.assign(n + 1, {});
-        } else if(line[0] == 'a') {
-            int a, b;
-            distT w;
-            ss >> tmp >> a >> b >> w;
-            adj[a].emplace_back(b, w);
-            c = max(c, w);
-        }
-    }
-    
-    return make_pair(adj, m);
-}
 
 signed main(int argc, char **argv) {
     if(argc < 3) return 1;
@@ -93,12 +69,12 @@ signed main(int argc, char **argv) {
 
     timerT timer;
     vector<distT> d;
-    auto [adj, m] = readGraph(graph_path);
+    auto [adj, m] = readGraph<distT>(graph_path);
 
     vector<int> times;
     if(algorithm == "bmssp") {
         spp::bmssp<distT> spp(adj);
-        spp.prepare_graph(false); //true = tranform graph to have out-degree <= 2.
+        spp.prepare_graph(false);
         
         for(int i = 0; i < reps; i++) {
             timer.start();
