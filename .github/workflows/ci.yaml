@@ -1,10 +1,6 @@
 name: CI Tests
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
   build_and_test:
@@ -24,15 +20,8 @@ jobs:
         run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Project
-        run: cmake --build ${{ github.workspace }}/build
+        run: cmake --build ${{ github.workspace }}/build --config Release
 
       - name: Run Tests
-        run: ${{ github.workspace }}/build/my_tests -r junit -o test-results.xml
-
-      - name: Publish Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()
-        with:
-          name: Catch2 Tests Report
-          path: ${{ github.workspace }}/build/test-results.xml
-          reporter: junit
+        run: ./my_tests
+        working-directory: ${{ github.workspace }}/build
