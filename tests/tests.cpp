@@ -1,5 +1,5 @@
 #include "../bmssp.hpp"
-#include "../dijkstra.hpp"
+#include "../helpers/dijkstra.hpp"
 #include "../helpers/common.hpp"
 
 #include <vector>
