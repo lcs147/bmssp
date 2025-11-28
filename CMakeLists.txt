@@ -19,5 +19,5 @@ add_executable(my_tests tests/tests.cpp)
 target_link_libraries(my_tests PRIVATE Catch2::Catch2WithMain)
 
 # for debugging
-# target_compile_options(my_tests PRIVATE -fsanitize=address -g)
-# target_link_options(my_tests PRIVATE -fsanitize=address)
+target_compile_options(my_tests PRIVATE  --max-errors=2)
+target_link_options(my_tests PRIVATE --max-errors=2)
