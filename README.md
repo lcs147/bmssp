@@ -25,6 +25,7 @@ As a result, a standard implementation of Dijkstra's algorithm remains significa
 |3,598,623|8,778,114|553|3718|6.714|
 |23,947,347|58,333,344|4562|29345|6.432|
 
+A more detailed performance benchmark can be found in [https://arxiv.org/abs/2511.03007](https://arxiv.org/abs/2511.03007)
 ## Requirements
 
 * C++20 or later.
@@ -103,3 +104,20 @@ Shortest paths from source 0:
 *   `void addEdge(int u, int v, T weight)`: Adds a directed edge.
 *   `void prepare_graph(bool exec_const_degree_transformation)`: Prepares the graph for computation. Must be called once after adding all edges.
 *   `std::vector<T> execute(int s)`: Computes shortest paths from a source node `s`.
+
+## How to Cite This Implementation in Your Research?
+
+Directly:
+> Lucas Castro, Thailsson Clementino, and Rosiane de Freitas. 2025. Implementation and brief experimental analysis of the Duan et al. (2025) algorithm for single-source shortest paths. [https://doi.org/10.48550/arXiv.2511.03007](https://doi.org/10.48550/arXiv.2511.03007)
+
+
+Bibtex:
+```bibtex
+@misc{castro_implementation_2025,
+  title = {Implementation and Brief Experimental Analysis of the {{Duan}} et al. (2025) Algorithm for Single-Source Shortest Paths},
+  author = {Castro, Lucas and Clementino, Thailsson and {de Freitas}, Rosiane},
+  year = 2025,
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2511.03007}
+}
+```

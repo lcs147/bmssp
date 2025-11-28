@@ -1,4 +1,8 @@
-#pragma once
+// Copyright (c) 2025 Lucas Castro and Thailsson Clementino
+// Licensed under the MIT License.
+
+#ifndef CASTRO_THAILSSON_BMSSP_DUAN25_H
+#define CASTRO_THAILSSON_BMSSP_DUAN25_H
 
 #include<set>
 #include<list>
@@ -12,79 +16,37 @@
 
 namespace spp {
 
-using namespace std;
-
-template<typename K, typename V>
-using hash_map = unordered_map<K, V>;
-template<typename K>
-using hash_set = unordered_set<K>;
-
 template<typename uniqueDistT>
-struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
-    using elementT = pair<int,uniqueDistT>;
+class batchPQ { // batch priority queue, implemented as in Lemma 3.3
+
+    template<typename K, typename V>
+    using hash_map = std::unordered_map<K, V>;
+
+    using elementT = std::pair<int,uniqueDistT>;
     
     struct CompareUB {
         template <typename It>
-        bool operator()(const pair<uniqueDistT, It>& a, const pair<uniqueDistT, It>& b) const {
+        bool operator()(const std::pair<uniqueDistT, It>& a, const std::pair<uniqueDistT, It>& b) const {
             if (a.first != b.first) return a.first < b.first;
             return  addressof(*a.second) < addressof(*b.second);
         }
     };
     
-    typename list<list<elementT>>::iterator it_min;
+    typename std::list<std::list<elementT>>::iterator it_min;
     
-    list<list<elementT>> D0,D1;
-    set<pair<uniqueDistT,typename list<list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
+    std::list<std::list<elementT>> D0,D1;
+    std::set<std::pair<uniqueDistT,typename std::list<std::list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
     
     int M,size_;
     uniqueDistT B;
     
     hash_map<int, uniqueDistT> actual_value;
-    hash_map<int, pair< typename list<list<elementT>>::iterator , typename list<elementT>::iterator> > where_is[2];
+    hash_map<int, std::pair< typename std::list<std::list<elementT>>::iterator , typename std::list<elementT>::iterator> > where_is[2];
     
-    // Initialize
-    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
-        D1.push_back(list<elementT>());
-        UBs.insert({B_,D1.begin()});
-        size_ = 0;
-    }
-    
+public:
+
     int size(){
         return size_;
-    }
-    
-    inline void erase(int key) {
-        if(actual_value.find(key) != actual_value.end())
-            delete_({-1, -1, key, -1});
-    }
-    void delete_(uniqueDistT x){    
-        int a = get<2>(x);
-        uniqueDistT b = actual_value[a];
-        
-        auto it_w = where_is[1].find(a);
-        if((it_w != where_is[1].end())){
-            auto [it_block,it] = it_w->second;
-            
-            (*it_block).erase(it);
-            where_is[1].erase(a);
-    
-            if((*it_block).size() == 0){
-                auto it_UB_block = UBs.lower_bound({b,it_block});  
-                
-                if((*it_UB_block).first != B){
-                    UBs.erase(it_UB_block);
-                    D1.erase(it_block);
-                }
-            }
-        }else{
-            auto [it_block,it] = where_is[0][a];
-            (*it_block).erase(it);
-            where_is[0].erase(a);
-            if((*it_block).size() == 0) D0.erase(it_block); 
-        }
-    
-        actual_value.erase(a);
-        size_--;
     }
     
     void insert(uniqueDistT x){ // O(lg(Block Numbers))         
@@ -117,9 +79,75 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
             split(it_block);
         }
     }
+    
+    void batchPrepend(const std::vector<uniqueDistT> &v){
+        std::list<elementT> l;
+        for(auto x: v){
+            l.push_back({get<2>(x),x});
+        }
+        batchPrepend(l);
+    }
 
-    uniqueDistT medianOfMedians(vector<elementT>::iterator bg, vector<elementT>::iterator en) {
-        vector<elementT> l(bg, en);
+    std::pair<uniqueDistT, std::vector<int>> pull(){ // O(M)
+        std::vector<elementT> s0,s1;
+        s0.reserve(2 * M); s1.reserve(M);
+    
+        auto it_block = D0.begin();
+        while(it_block != D0.end() && s0.size() <= M){ // O(M)   
+            for (const auto& x : *it_block) s0.push_back(x);
+            it_block++;
+        }
+    
+        it_block = D1.begin();
+        while(it_block != D1.end() && s1.size() <= M){   //O(M)
+            for (const auto& x : *it_block) s1.push_back(x);
+            it_block++;
+        }
+    
+        if(s1.size() + s0.size() <= M){
+            std::vector<int> ret;
+            ret.reserve(s1.size()+s0.size());
+            for(auto [a,b] : s0) {
+                ret.push_back(a);
+                delete_({b});
+            }
+            for(auto [a,b] : s1){
+                ret.push_back(a);
+                delete_({b});
+            } 
+            
+            return {B, ret};
+        }else{  
+            std::vector<elementT> &l = s0;
+            l.insert(l.end(), s1.begin(), s1.end());
+
+            uniqueDistT med = selectKth(l, M);
+            std::vector<int> ret;
+            ret.reserve(M);
+            for(auto [a,b]: l){
+                if(b < med) {
+                    ret.push_back(a);
+                    delete_({b});
+                }
+            }
+            return {med,ret};
+        }
+    }
+    inline void erase(int key) {
+        if(actual_value.find(key) != actual_value.end())
+            delete_({-1, -1, key, -1});
+    }
+
+    // Initialize
+    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
+        D1.push_back(std::list<elementT>());
+        UBs.insert({B_,D1.begin()});
+        size_ = 0;
+    }
+    
+private:
+    uniqueDistT medianOfMedians(std::vector<elementT>::iterator bg, std::vector<elementT>::iterator en) {
+        std::vector<elementT> l(bg, en);
         while (true) {
             int n = l.size();
 
@@ -130,12 +158,12 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
                 return l[l.size() / 2].second;
             }
 
-            vector<elementT> medians;
+            std::vector<elementT> medians;
             medians.reserve((n + 4) / 5);
 
             auto it = l.begin();
             while (it != l.end()) {
-                vector<elementT> group;
+                std::vector<elementT> group;
                 group.reserve(5);
                 for (int j = 0; j < 5 && it != l.end(); ++j, ++it)
                     group.push_back(*it);
@@ -150,9 +178,38 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
             l = move(medians);
         }
     }
+
+    void delete_(uniqueDistT x){    
+        int a = get<2>(x);
+        uniqueDistT b = actual_value[a];
+        
+        auto it_w = where_is[1].find(a);
+        if((it_w != where_is[1].end())){
+            auto [it_block,it] = it_w->second;
+            
+            (*it_block).erase(it);
+            where_is[1].erase(a);
     
-    uniqueDistT selectKth(vector<elementT> &v, int k) { 
-        using std::swap;
+            if((*it_block).size() == 0){
+                auto it_UB_block = UBs.lower_bound({b,it_block});  
+                
+                if((*it_UB_block).first != B){
+                    UBs.erase(it_UB_block);
+                    D1.erase(it_block);
+                }
+            }
+        }else{
+            auto [it_block,it] = where_is[0][a];
+            (*it_block).erase(it);
+            where_is[0].erase(a);
+            if((*it_block).size() == 0) D0.erase(it_block); 
+        }
+    
+        actual_value.erase(a);
+        size_--;
+    }
+    
+    uniqueDistT selectKth(std::vector<elementT> &v, int k) { 
         int l=0, r=v.size()-1;
         
         for(;l<=r;){
@@ -162,9 +219,9 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
             
             while(m <= j){
                 if(v[m].second < p) {
-                    swap(v[m++],v[i++]);
+                    std::swap(v[m++],v[i++]);
                 }else if(v[m].second > p){
-                    swap(v[m],v[j--]);
+                    std::swap(v[m],v[j--]);
                 }else{
                     m++;
                 }
@@ -179,22 +236,20 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
     }
 
         
-    void split(list<list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
+    void split(std::list<std::list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
         int sz = (*it_block).size();
         
-        vector<elementT> v((*it_block).begin() , (*it_block).end());
+        std::vector<elementT> v((*it_block).begin() , (*it_block).end());
         uniqueDistT med = selectKth(v,(sz/2)); // O(M)
         
         auto pos = it_block;
         pos++;
 
-
-        auto new_block = D1.insert(pos,list<elementT>());
+        auto new_block = D1.insert(pos,std::list<elementT>());
         auto it = (*it_block).begin();
     
         while(it != (*it_block).end()){ // O(M)
             if((*it).second >= med){
-                // (*new_block).push_back((*it));
                 (*new_block).push_back(move(*it));
                 auto it_new = (*new_block).end(); it_new--;
                 where_is[1][(*it).first] = {new_block, it_new};
@@ -218,13 +273,13 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
         UBs.erase(it_lb);
     }
     
-    void batchPrepend(const list<elementT> &l) { // O(|l| log(|l|/M) ) 
+    void batchPrepend(const std::list<elementT> &l) { // O(|l| log(|l|/M) ) 
         int sz = l.size();
         
         if(sz == 0) return;
         if(sz <= M){
     
-            D0.push_front(list<elementT>());
+            D0.push_front(std::list<elementT>());
             auto new_block = D0.begin();
             
             for(auto &x : l){ 
@@ -247,10 +302,10 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
             return;
         }
 
-        vector<elementT> v(l.begin(), l.end());
+        std::vector<elementT> v(l.begin(), l.end());
         uniqueDistT med = selectKth(v, sz/2);
     
-        list<elementT> less,great;
+        std::list<elementT> less,great;
         for(auto [a,b]: l){
             if(b < med){
                 less.push_back({a,b});
@@ -264,75 +319,29 @@ struct batchPQ { // batch priority queue, implemented as in Lemma 3.3
         batchPrepend(great);
         batchPrepend(less);
     }
-    
-    void batchPrepend(const vector<uniqueDistT> &v){
-        list<elementT> l;
-        for(auto x: v){
-            l.push_back({get<2>(x),x});
-        }
-        batchPrepend(l);
-    }
-    
-    pair<uniqueDistT, vector<int>> pull(){ // O(M)
-        vector<elementT> s0,s1;
-        s0.reserve(2 * M); s1.reserve(M);
-    
-        auto it_block = D0.begin();
-        while(it_block != D0.end() && s0.size() <= M){ // O(M)   
-            for (const auto& x : *it_block) s0.push_back(x);
-            it_block++;
-        }
-    
-        it_block = D1.begin();
-        while(it_block != D1.end() && s1.size() <= M){   //O(M)
-            for (const auto& x : *it_block) s1.push_back(x);
-            it_block++;
-        }
-    
-        if(s1.size() + s0.size() <= M){
-            vector<int> ret;
-            ret.reserve(s1.size()+s0.size());
-            for(auto [a,b] : s0) {
-                ret.push_back(a);
-                delete_({b});
-            }
-            for(auto [a,b] : s1){
-                ret.push_back(a);
-                delete_({b});
-            } 
-            
-            return {B, ret};
-        }else{  
-            vector<elementT> &l = s0;
-            l.insert(l.end(), s1.begin(), s1.end());
-
-            uniqueDistT med = selectKth(l, M);
-            vector<int> ret;
-            ret.reserve(M);
-            for(auto [a,b]: l){
-                if(b < med) {
-                    ret.push_back(a);
-                    delete_({b});
-                }
-            }
-            return {med,ret};
-        }
-    }
 };
 
 template<typename wT>
-struct bmssp { // bmssp class
+class bmssp { // bmssp class
+
+    template<typename K, typename V>
+    using hash_map = std::unordered_map<K, V>;
+    template<typename K>
+    using hash_set = std::unordered_set<K>;
+
     int n, k, t;
-    const wT oo = numeric_limits<wT>::max() / 10;
+
+    std::vector<std::vector<std::pair<int, wT>>> ori_adj;
+    std::vector<std::vector<std::pair<int, wT>>> adj;
+    std::vector<wT> d;
+    std::vector<int> pred, path_sz;
+    std::vector<int> rev_map;
+    std::vector<short int> last_complete_lvl;
  
-    vector<vector<pair<int, wT>>> ori_adj;
-    vector<vector<pair<int, wT>>> adj;
-    vector<wT> d;
-    vector<int> pred, path_sz;
-    vector<int> rev_map;
-    vector<short int> last_complete_lvl;
- 
-    vector<hash_map<int, int>> neig;
+    std::vector<hash_map<int, int>> neig;
+
+public:
+    const wT oo = std::numeric_limits<wT>::max() / 10;
     bmssp(int n_): n(n_) {
         ori_adj.assign(n, {});
         neig.assign(n, {});
@@ -342,6 +351,7 @@ struct bmssp { // bmssp class
         ori_adj = adj;
         neig.assign(n, {});
     }
+    
     void addEdge(int a, int b, wT w) {
         ori_adj[a].emplace_back(b, w);
     }
@@ -350,9 +360,9 @@ struct bmssp { // bmssp class
     // else, prepage_graph(true)
     void prepare_graph(bool exec_constant_degree_trasnformation = false) {
         // erase duplicated edges
-        vector<pair<int, int>> tmp_edges(n, {-1, -1});
+        std::vector<std::pair<int, int>> tmp_edges(n, {-1, -1});
         for(int i = 0; i < n; i++) {
-            vector<pair<int, wT>> nw_adj;
+            std::vector<std::pair<int, wT>> nw_adj;
             nw_adj.reserve(ori_adj[i].size());
             for(auto [j, w]: ori_adj[i]) {
                 if(tmp_edges[j].first != i) {
@@ -360,7 +370,7 @@ struct bmssp { // bmssp class
                     tmp_edges[j] = {i, nw_adj.size() - 1};
                 } else {
                     int id = tmp_edges[j].second;
-                    nw_adj[id].second = min(nw_adj[id].second, w);
+                    nw_adj[id].second = std::min(nw_adj[id].second, w);
                 }
             }
             ori_adj[i] = move(nw_adj);
@@ -430,15 +440,8 @@ struct bmssp { // bmssp class
             ori_adj.clear();
         }
     }
-    
-    int toAnyCustomNode(int real_id) {
-        return neig[real_id].begin()->second;
-    }
-    int customToReal(int id) {
-        return rev_map[id];
-    }
  
-    vector<wT> execute(int s) {
+    std::vector<wT> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
@@ -449,33 +452,32 @@ struct bmssp { // bmssp class
         path_sz[s] = 0;
         
         const int l = ceil(log2(adj.size()) / t);
-        const uniqueDistT inf_dist = make_tuple(oo, 0, 0, 0);
+        const uniqueDistT inf_dist = std::make_tuple(oo, 0, 0, 0);
         bmsspRec(l, inf_dist, {s});
  
-        vector<wT> res(n);
+        std::vector<wT> res(n);
         for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
         return res;
     }
-    
-    // ===================================================================
- 
-    // set stuff
-    // template<typename T>
-    // void removeDuplicates(vector<T> &v) { // sort is faster
-    //     hash_set<T> s(v.begin(), v.end());
-    //     v = vector<T>(s.begin(), s.end());
-    //     // sort(v.begin(), v.end());
-    //     // v.erase(unique(v.begin(), v.end()), v.end());
-    // }
+
+private:
+    int toAnyCustomNode(int real_id) {
+        return neig[real_id].begin()->second;
+    }
+    int customToReal(int id) {
+        return rev_map[id];
+    }
+
     template<typename T>
-    bool isUnique(const vector<T> &v) {
+    bool isUnique(const std::vector<T> &v) {
         auto v2 = v;
         sort(v2.begin(), v2.end());
         v2.erase(unique(v2.begin(), v2.end()), v2.end());
         return v2.size() == v.size();
     }
 
-    using uniqueDistT = tuple<wT, int, int, int>;
+    // Unique distances helpers: Assumption 2.1
+    using uniqueDistT = std::tuple<wT, int, int, int>;
     inline uniqueDistT getDist(int u, int v, wT w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -487,17 +489,18 @@ struct bmssp { // bmssp class
         d[v] = d[u] + w;
         path_sz[v] = path_sz[u] + 1;
     }
+
     // ===================================================================
-    vector<int> root;
-    vector<short int> treesz;
-    pair<vector<int>, hash_set<int>> findPivots(uniqueDistT B, const vector<int> &S) { // Algorithm 1
+    std::vector<int> root;
+    std::vector<short int> treesz;
+    std::pair<std::vector<int>, hash_set<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
         hash_set<int> vis;
         vis.insert(S.begin(), S.end());
 
-        vector<int> active = S;
+        std::vector<int> active = S;
         for(int x: S) root[x] = x, treesz[x] = 0;
         for(int i = 1; i <= k; i++) {
-            vector<int> nw_active;
+            std::vector<int> nw_active;
             nw_active.reserve(active.size() * 4);
             for(int u: active) {
                 for(auto [v, w]: adj[u]) {
@@ -519,7 +522,7 @@ struct bmssp { // bmssp class
             active = move(nw_active);
         }
 
-        vector<int> P;
+        std::vector<int> P;
         P.reserve(vis.size() / k);
         for(int u: vis) treesz[root[u]]++;
         for(int u: S) if(treesz[u] >= k) P.push_back(u);
@@ -528,11 +531,11 @@ struct bmssp { // bmssp class
         return {P, vis};
     }
  
-    pair<uniqueDistT, vector<int>> baseCase(uniqueDistT B, int x) { // Algorithm 2
-        vector<int> complete;
+    std::pair<uniqueDistT, std::vector<int>> baseCase(uniqueDistT B, int x) { // Algorithm 2
+        std::vector<int> complete;
         complete.reserve(k + 1);
  
-        priority_queue<uniqueDistT, vector<uniqueDistT>, greater<uniqueDistT>> heap;
+        std::priority_queue<uniqueDistT, std::vector<uniqueDistT>, std::greater<uniqueDistT>> heap;
         heap.push(getDist(x));
         while(heap.empty() == false && complete.size() < k + 1) {
             int u = get<2>(heap.top());
@@ -558,7 +561,7 @@ struct bmssp { // bmssp class
         return {nB, complete};
     }
  
-    pair<uniqueDistT, vector<int>> bmsspRec(short int l, uniqueDistT B, const vector<int> &S) { // Algorithm 3
+    std::pair<uniqueDistT, std::vector<int>> bmsspRec(short int l, uniqueDistT B, const std::vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
         
         auto [P, bellman_vis] = findPivots(B, S);
@@ -568,9 +571,9 @@ struct bmssp { // bmssp class
         for(int p: P) D.insert(getDist(p));
  
         uniqueDistT last_complete_B = B;
-        for(int p: P) last_complete_B = min(last_complete_B, getDist(p));
+        for(int p: P) last_complete_B = std::min(last_complete_B, getDist(p));
  
-        vector<int> complete;
+        std::vector<int> complete;
         const long long quota = k * (1ll << (l * t));
         complete.reserve(quota + bellman_vis.size());
         while(complete.size() < quota && D.size()) {
@@ -585,7 +588,7 @@ struct bmssp { // bmssp class
             // point 6, page 10 => complete does not intersect with nw_complete
             // assert(isUnique(complete));
  
-            vector<uniqueDistT> can_prepend;
+            std::vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
                 D.erase(u); // priority queue fix
@@ -595,7 +598,7 @@ struct bmssp { // bmssp class
                     if(new_dist <= getDist(v)) {
                         updateDist(u, v, w);
                         if(trying_B <= new_dist && new_dist < B) {
-                            D.insert(new_dist); // d[v] can be greater equal than min(D), occur 1x per vertex
+                            D.insert(new_dist); // d[v] can be greater equal than std::min(D), occur 1x per vertex
                         } else if(complete_B <= new_dist && new_dist < trying_B) {
                             can_prepend.emplace_back(new_dist); // d[v] is less than all in D, can occur 1x at each level per vertex
                         }
@@ -621,3 +624,5 @@ struct bmssp { // bmssp class
     }
 };
 }
+
+#endif
