@@ -4,8 +4,9 @@
 
 #include <vector>
 #include <string>
-#define CATCH_CONFIG_MAIN
-#include <catch2/catch_test_macros.hpp>
+
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "../helpers/external/doctest.h"
 
 TEST_CASE("King graphs with a wall") {
     using distT = double;
@@ -22,7 +23,7 @@ TEST_CASE("King graphs with a wall") {
         for(int source: {0, grid_sz - 1, grid_sz * (grid_sz - 1), n - 2, n / 2}) {
             auto expected = dijkstra.execute(source); 
             auto realized = bmssp.execute(source);
-            REQUIRE(expected == realized);
+            CHECK(expected == realized);
         }
     }
 }
