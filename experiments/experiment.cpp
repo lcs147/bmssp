@@ -69,6 +69,7 @@ signed main(int argc, char **argv) {
 
     timerT timer;
     vector<distT> d;
+    vector<int> pred;
     auto [adj, m] = readGraph<distT>(graph_path);
 
     vector<int> times;
@@ -78,7 +79,7 @@ signed main(int argc, char **argv) {
         
         for(int i = 0; i < reps; i++) {
             timer.start();
-            d = spp.execute(s);
+            tie(d, pred) = spp.execute(s);
             timer.stop();
             times.push_back(timer.elapsed());
         }
@@ -86,7 +87,7 @@ signed main(int argc, char **argv) {
         spp::dijkstra<distT> spp(adj);
         for(int i = 0; i < reps; i++) {
             timer.start();
-            d = spp.execute(s);
+            tie(d, pred) = spp.execute(s);
             timer.stop();
             times.push_back(timer.elapsed());
         }
