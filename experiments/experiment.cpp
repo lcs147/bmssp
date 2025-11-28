@@ -1,16 +1,16 @@
 
 #ifdef LOCAL
-#include "debug.cpp"
+#include "../helpers/debug.cpp"
 #else
 #define debug(...) 0
 #endif
 
-#include "bmssp.hpp"
-#include "dijkstra.hpp"
+#include "../bmssp.hpp"
+#include "../helpers/dijkstra.hpp"
 
 #include <bits/stdc++.h>
-#include "helpers/common.hpp"
-#include "helpers/external/json.hpp"
+#include "../helpers/common.hpp"
+#include "../helpers/external/json.hpp"
 using namespace std;
 
 double calculateMean(auto data) {
