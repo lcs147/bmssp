@@ -11,6 +11,7 @@
 #include<utility>
 #include<limits>
 #include<queue>
+#include<algorithm>
 #include<unordered_map>
 #include<unordered_set>
 
@@ -441,7 +442,7 @@ public:
         }
     }
  
-    std::vector<wT> execute(int s) {
+    std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
@@ -455,9 +456,26 @@ public:
         const uniqueDistT inf_dist = std::make_tuple(oo, 0, 0, 0);
         bmsspRec(l, inf_dist, {s});
  
-        std::vector<wT> res(n);
-        for(int i = 0; i < n; i++) res[i] = d[toAnyCustomNode(i)];
-        return res;
+        std::vector<wT> ret_distance(n);
+        std::vector<int> ret_pred(n);
+        for(int i = 0; i < n; i++) {
+            ret_distance[i] = d[toAnyCustomNode(i)];
+            ret_pred[i] = pred[toAnyCustomNode(i)];
+        }
+        return {ret_distance, ret_pred};
+    }
+
+    std::vector<int> get_shortest_path(int real_u) {
+        int u = toAnyCustomNode(real_u);
+        if(d[u] == oo) return {};
+
+        int path_sz = get<1>(getDist(u)) + 1;
+        std::vector<int> path(path_sz);
+        for(int i = path_sz - 1; i >= 0; i--) {
+            path[i] = customToReal(u);
+            u = pred[u];
+        }
+        return path; // {source, ..., real_u}
     }
 
 private:
