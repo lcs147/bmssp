@@ -1,19 +1,21 @@
-#include<bits/stdc++.h>
-using namespace std;
+#include<string>
+#include<iostream>
+#include<fstream>
+#include<sstream>
 
 template<typename distT>
-auto readGraph(string path) {
-    vector<vector<pair<int, distT>>> adj;
+auto readGraph(std::string path) {
+    std::vector<std::vector<std::pair<int, distT>>> adj;
 
     int n = -1, m = 0;
     distT c = 0;
-    string line, tmp;
-    ifstream in(path);
+    std::string line, tmp;
+    std::ifstream in(path);
 
-    while(getline(in, line)) {
-        stringstream ss(line);
+    while(std::getline(in, line)) {
+        std::stringstream ss(line);
         if(line[0] == 'p') {
-            string tmp;
+            std::string tmp;
             ss >> tmp >> tmp >> n >> m;
             adj.assign(n + 1, {});
         } else if(line[0] == 'a') {
@@ -21,9 +23,9 @@ auto readGraph(string path) {
             distT w;
             ss >> tmp >> a >> b >> w;
             adj[a].emplace_back(b, w);
-            c = max(c, w);
+            c = std::max(c, w);
         }
     }
     
-    return make_pair(adj, m);
+    return std::make_pair(adj, m);
 }

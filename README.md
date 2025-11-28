@@ -45,9 +45,9 @@ Copy the `bmssp.hpp` header into your project and include it.
 The following demonstrates how to compute shortest paths. Nodes must be numbered from `0` to `n-1`.
 
 ```cpp
+#include "../bmssp.hpp"
 #include <iostream>
 #include <vector>
-#include "bmssp.hpp"
 
 using T = long long;
 
@@ -71,10 +71,10 @@ int main() {
     // use solver.prepare_graph(true) if the graph does not have contant out-degree
 
     // 4. Compute shortest paths
-    std::vector<T> distances = solver.execute(source_node);
+    auto [distances, predecessors] = solver.execute(source_node);
 
     // 5. Print results
-    std::cout << "Shortest paths from source " << source_node << ":" << std::endl;
+    std::cout << "Shortest distance from source " << source_node << ":" << std::endl;
     for (int i = 0; i < n; ++i) {
         std::cout << "  To " << i << ": ";
         if (distances[i] == solver.oo) {
@@ -83,6 +83,14 @@ int main() {
             std::cout << distances[i] << std::endl;
         }
     }
+    
+    std::cout << "Shortest path from source " << source_node << ":" << std::endl;
+    for (int i = 0; i < n; ++i) {
+        std::cout << "  To " << i << ": ";
+        auto path = solver.get_shortest_path(i);
+        for(int x: path) std::cout << x << " ";
+        std::cout << std::endl;
+    }
 
     return 0;
 }
@@ -90,12 +98,18 @@ int main() {
 
 **Output:**
 ```
-Shortest paths from source 0:
+Shortest distance from source 0:
   To 0: 0
   To 1: 7
   To 2: 3
   To 3: 9
   To 4: 5
+Shortest path from source 0:
+  To 0: 0 
+  To 1: 0 2 1 
+  To 2: 0 2 
+  To 3: 0 2 1 3 
+  To 4: 0 2 4 
 ```
 
 ## API
@@ -103,7 +117,8 @@ Shortest paths from source 0:
 *   `bmssp<T>(int n)`: Constructor for a graph with `n` vertices.
 *   `void addEdge(int u, int v, T weight)`: Adds a directed edge.
 *   `void prepare_graph(bool exec_const_degree_transformation)`: Prepares the graph for computation. Must be called once after adding all edges.
-*   `std::vector<T> execute(int s)`: Computes shortest paths from a source node `s`.
+*   `std::pair<std::vector<T>, std::vector<int>> execute(int s)`: Computes shortest paths from a source node `s`.
+*   `std::vector<int> get_shortest_path(int destination)`: Returns a shortest path from `s` to `destination`
 
 ## How to Cite This Implementation in Your Research?
 
