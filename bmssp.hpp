@@ -14,6 +14,7 @@
 #include<algorithm>
 #include<unordered_map>
 #include<unordered_set>
+#include<cassert>
 
 namespace spp {
 
@@ -602,14 +603,14 @@ private:
             // all new complete_B are greater than the old ones <= point 6, page 10
             // assert(last_complete_B < complete_B);
  
-            complete.insert(complete.end(), nw_complete.begin(), nw_complete.end());
+            complete.insert(complete.end(), nw_complete.begin(), nw_complete.end()); // U = U union Ui
             // point 6, page 10 => complete does not intersect with nw_complete
-            // assert(isUnique(complete));
+            assert(isUnique(complete));
  
             std::vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
-                D.erase(u); // priority queue fix
+                // D.erase(u); // priority queue fix
                 last_complete_lvl[u] = l;
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
