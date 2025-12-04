@@ -1,7 +1,7 @@
 #include "bmssp.hpp"
 #include "helpers/common.hpp"
 
-#include <bits/stdc++.h>
+#include<numeric>
 using namespace std;
 
 long long check_sum(auto &v) {
