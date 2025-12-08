@@ -1,3 +1,6 @@
+#ifndef CASTRO_THAILSSON_BMSSP_DIJKSTRA
+#define CASTRO_THAILSSON_BMSSP_DIJKSTRA
+
 #include<vector>
 #include<utility>
 #include<limits>
@@ -57,3 +60,5 @@ struct dijkstra {
     }
 };
 }
+
+#endif
