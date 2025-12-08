@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 message(STATUS "CHECKING C++ VERSION: ${CMAKE_CXX_STANDARD}")
 
-add_executable(my_tests tests/tests.cpp)
+add_executable(tests tests/tests.cpp)
 
-target_compile_options(my_tests PRIVATE  --max-errors=2)
-target_link_options(my_tests PRIVATE --max-errors=2)
+target_compile_options(tests PRIVATE  --max-errors=2)
+target_link_options(tests PRIVATE --max-errors=2)
