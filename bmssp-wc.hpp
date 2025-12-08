@@ -5,6 +5,7 @@
 #define CASTRO_THAILSSON_BMSSP_WC_DUAN25_H
 
 #include<set>
+#include<map>
 #include<list>
 #include<cmath>
 #include<vector>
@@ -12,8 +13,6 @@
 #include<limits>
 #include<queue>
 #include<algorithm>
-#include<unordered_map>
-#include<unordered_set>
 
 namespace spp_wc {
 
