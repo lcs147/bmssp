@@ -361,6 +361,8 @@ class bmssp { // bmssp class
     std::vector<int> pred, path_sz;
 
     std::vector<int> node_map, node_rev_map;
+    
+    bool cd_transfomed;
 
 public:
     const wT oo = std::numeric_limits<wT>::max() / 10;
@@ -379,6 +381,7 @@ public:
     // if the graph already has constant degree, prepage_graph(false)
     // else, prepage_graph(true)
     void prepare_graph(bool exec_constant_degree_trasnformation = false) {
+        cd_transfomed = exec_constant_degree_trasnformation;
         // erase duplicated edges
         std::vector<std::pair<int, int>> tmp_edges(n, {-1, -1});
         for(int i = 0; i < n; i++) {
@@ -399,16 +402,8 @@ public:
 
         if(exec_constant_degree_trasnformation == false) {
             adj = move(ori_adj);
-            ori_adj.clear();
-            d.resize(n);
-            root.resize(n);
-            pred.resize(n);
-            treesz.resize(n);
             node_map.resize(n);
             node_rev_map.resize(n);
-            path_sz.resize(n, 0);
-            last_complete_lvl.resize(n);
-            pivot_vis.resize(n);
             
             for(int i = 0; i < n; i++) {
                 node_map[i] = i;
@@ -417,8 +412,7 @@ public:
 
             k = floor(pow(log2(n), 1.0 / 3.0));
             t = floor(pow(log2(n), 2.0 / 3.0));
-        } else {
-            // Make the graph become constant degree
+        } else { // Make the graph become constant degree
             int cnt = 0;
             std::vector<std::map<int, int>> edge_id(n);
             for(int i = 0; i < n; i++) {
@@ -432,16 +426,8 @@ public:
 
             cnt++;
             adj.assign(cnt, {});
-            
-            d.resize(cnt);
-            root.resize(cnt);
-            pred.resize(cnt);
-            treesz.resize(cnt);
             node_map.resize(cnt);
             node_rev_map.resize(cnt);
-            path_sz.resize(cnt, 0);
-            last_complete_lvl.resize(cnt);
-            pivot_vis.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
                 for(auto cur = edge_id[i].begin(); cur != edge_id[i].end(); cur++) {
@@ -456,20 +442,29 @@ public:
                     adj[edge_id[i][j]].emplace_back(edge_id[j][i], w);
                 }
                 if(edge_id[i].size()) {
-                    node_map[i] = edge_id[i][0];
+                    node_map[i] = edge_id[i].begin()->second;
                 } else {
                     node_map[i] = cnt - 1;
                 }
             }
-            k = floor(pow(log2(cnt), 1.0 / 3.0));
-            t = floor(pow(log2(cnt), 2.0 / 3.0));
             
             ori_adj.clear();
         }
+        
+            
+        d.resize(adj.size());
+        root.resize(adj.size());
+        pred.resize(adj.size());
+        treesz.resize(adj.size());
+        path_sz.resize(adj.size(), 0);
+        last_complete_lvl.resize(adj.size());
+        pivot_vis.resize(adj.size());
+        k = floor(pow(log2(adj.size()), 1.0 / 3.0));
+        t = floor(pow(log2(adj.size()), 2.0 / 3.0));
         l = ceil(log2(adj.size()) / t);
-        Ds.assign(l, n);
+        Ds.assign(l, adj.size());
     }
- 
+
     std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
@@ -480,29 +475,53 @@ public:
         d[s] = 0;
         path_sz[s] = 0;
         
+        const int l = ceil(log2(adj.size()) / t);
         const uniqueDistT inf_dist = std::make_tuple(oo, 0, 0, 0);
         bmsspRec(l, inf_dist, {s});
- 
-        std::vector<wT> ret_distance(n);
-        std::vector<int> ret_pred(n);
-        for(int i = 0; i < n; i++) {
-            ret_distance[i] = d[toAnyCustomNode(i)];
-            ret_pred[i] = pred[toAnyCustomNode(i)];
+        
+        if(!cd_transfomed) {
+            return {d, pred};
+        } else {
+            std::vector<wT> ret_distance(n);
+            std::vector<int> ret_pred(n);
+            for(int i = 0; i < n; i++) {
+                ret_distance[i] = d[toAnyCustomNode(i)];
+                ret_pred[i] = customToReal(getPred(toAnyCustomNode(i)));
+            }
+            return {ret_distance, ret_pred};
         }
-        return {ret_distance, ret_pred};
     }
 
     std::vector<int> get_shortest_path(int real_u) {
-        int u = toAnyCustomNode(real_u);
-        if(d[u] == oo) return {};
+        if(!cd_transfomed) {
+            int u = real_u;
+            if(d[u] == oo) return {};
 
-        int path_sz = get<1>(getDist(u)) + 1;
-        std::vector<int> path(path_sz);
-        for(int i = path_sz - 1; i >= 0; i--) {
-            path[i] = customToReal(u);
-            u = pred[u];
+            int path_sz = get<1>(getDist(u)) + 1;
+            std::vector<int> path(path_sz);
+            for(int i = path_sz - 1; i >= 0; i--) {
+                path[i] = u;
+                u = pred[u];
+            }
+            return path; // {source, ..., real_u}
+        } else {
+            int u = toAnyCustomNode(real_u);
+            if(d[u] == oo) return {};
+
+            int max_path_sz = get<1>(getDist(u)) + 1;
+            std::vector<int> path;
+            path.reserve(max_path_sz);
+
+            int oldu;
+            do {
+                path.push_back(customToReal(u));
+                oldu = u;
+                u = getPred(u);
+            } while(customToReal(u) != customToReal(oldu));
+
+            reverse(path.begin(), path.end());
+            return path; // {source, ..., real_u}
         }
-        return path; // {source, ..., real_u}
     }
 
 private:
@@ -511,6 +530,15 @@ private:
     }
     int customToReal(int id) {
         return node_rev_map[id];
+    }
+    int getPred(int u) {
+        int real_u = customToReal(u);
+
+        int dad = u;
+        do dad = pred[dad];
+        while(customToReal(dad) == real_u && pred[dad] != dad);
+
+        return dad;
     }
 
     template<typename T>
@@ -594,10 +622,11 @@ private:
         std::priority_queue<uniqueDistT, std::vector<uniqueDistT>, std::greater<uniqueDistT>> heap;
         heap.push(getDist(x));
         while(heap.empty() == false && complete.size() < k + 1) {
-            int u = get<2>(heap.top());
-            int du = get<0>(heap.top());
+            auto du = heap.top();
+            int u = get<2>(du);
             heap.pop();
-            if(du > d[u]) continue;
+
+            if(du > getDist(u)) continue;
 
             complete.push_back(u);
             for(auto [v, w]: adj[u]) {
