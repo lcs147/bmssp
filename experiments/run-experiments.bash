@@ -37,7 +37,7 @@ TYPES=(
 # --- Compilation ---
 echo "Compiling experiment.cpp..."
 # Using the -o flag to place the executable directly in SCRIPT_DIR
-g++ -std=c++20 -O3 "${ROOT_DIR}/experiment.cpp" -o "${SCRIPT_DIR}/a"
+g++ -std=c++20 -O3 "experiment.cpp" -o "${SCRIPT_DIR}/a"
 
 if [ $? -ne 0 ]; then
     echo "Compilation failed. Exiting."

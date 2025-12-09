@@ -410,8 +410,8 @@ public:
                 node_rev_map[i] = i;
             }
 
-            k = floor(pow(log2(n), 1.0 / 3.0));
-            t = floor(pow(log2(n), 2.0 / 3.0));
+            // k = floor(pow(log2(n), 1.0 / 3.0));
+            // t = floor(pow(log2(n), 2.0 / 3.0));
         } else { // Make the graph become constant degree
             int cnt = 0;
             std::vector<std::map<int, int>> edge_id(n);
@@ -448,10 +448,9 @@ public:
                 }
             }
             
-            ori_adj.clear();
         }
         
-            
+        ori_adj.clear();
         d.resize(adj.size());
         root.resize(adj.size());
         pred.resize(adj.size());
