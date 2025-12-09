@@ -1,0 +1,63 @@
+[
+{
+    "algorithm": "dijkstra",
+    "checksum": 922352948302692324,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598624,
+    "reps": 5,
+    "source": 1,
+    "std_us": 17952.0,
+    "time_us": 583263.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922751485968789490,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947348,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8170.0,
+    "time_us": 4557026.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922346671378257439,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207946,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2701.0,
+    "time_us": 155328.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 922346671192347576,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207946,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8762.0,
+    "time_us": 617594.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922423137591261113,
+    "graph_name": "USA-road-t.W.gr",
+    "m": 15248146,
+    "n": 6262105,
+    "reps": 5,
+    "source": 1,
+    "std_us": 2642.0,
+    "time_us": 1014531.0
+}
+,
