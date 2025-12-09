@@ -1,10 +1,11 @@
 // Copyright (c) 2025 Lucas Castro and Thailsson Clementino
 // Licensed under the MIT License.
 
-#ifndef CASTRO_THAILSSON_BMSSP_DUAN25_H
-#define CASTRO_THAILSSON_BMSSP_DUAN25_H
+#ifndef CASTRO_THAILSSON_BMSSP_WC_DUAN25_H
+#define CASTRO_THAILSSON_BMSSP_WC_DUAN25_H
 
 #include<set>
+#include<map>
 #include<list>
 #include<cmath>
 #include<vector>
@@ -12,16 +13,38 @@
 #include<limits>
 #include<queue>
 #include<algorithm>
-#include<unordered_map>
-#include<unordered_set>
 
 namespace spp {
+
+template<typename dataT>
+struct worst_case_hash_map {
+    short int counter = 1;
+    std::vector<short int> flag;
+    std::vector<std::pair<int, dataT>> data;
+    worst_case_hash_map(int n): data(n), flag(n) {}; // O(n)
+
+    void erase(int id) { // O(1)
+        flag[id] = counter - 1;
+    }
+    dataT& operator[](int id) { // O(1)
+        flag[id] = counter;
+        data[id].first = id;
+        return data[id].second;
+    }
+    std::vector<std::pair<int, dataT>>::iterator find(int id) { // O(1)
+        if(flag[id] != counter) return data.end();
+        return data.begin() + id;
+    }
+    std::vector<std::pair<int, dataT>>::iterator end() { return data.end(); } // O(1)
+
+    void clear() { counter++; } // O(1)
+};
 
 template<typename uniqueDistT>
 class batchPQ { // batch priority queue, implemented as in Lemma 3.3
 
-    template<typename K, typename V>
-    using hash_map = std::unordered_map<K, V>;
+    template<typename V>
+    using hash_map = worst_case_hash_map<V>;
 
     using elementT = std::pair<int,uniqueDistT>;
     
@@ -36,15 +59,28 @@ class batchPQ { // batch priority queue, implemented as in Lemma 3.3
     typename std::list<std::list<elementT>>::iterator it_min;
     
     std::list<std::list<elementT>> D0,D1;
-    std::set<std::pair<uniqueDistT,typename std::list<std::list<elementT>>::iterator>,CompareUB> UBs; // (UB, it_block)
+    std::set<std::pair<uniqueDistT,typename std::list<std::list<elementT>>::iterator>,CompareUB> UBs;
     
     int M,size_;
     uniqueDistT B;
     
-    hash_map<int, uniqueDistT> actual_value;
-    hash_map<int, std::pair< typename std::list<std::list<elementT>>::iterator , typename std::list<elementT>::iterator> > where_is[2];
+    hash_map<uniqueDistT> actual_value;
+    hash_map<std::pair<typename std::list<std::list<elementT>>::iterator, typename std::list<elementT>::iterator>> where_is0, where_is1;
     
 public:
+
+    batchPQ(int n): actual_value(n), where_is0(n), where_is1(n){} // O(n)
+
+    void initialize(int M_, uniqueDistT B_) { // O(1)
+        M = M_; B = B_;
+        D0 = {};
+        D1 = {std::list<elementT>()};
+        UBs = {make_pair(B_,D1.begin())};
+        size_ = 0;
+
+        actual_value.clear();
+        where_is0.clear(); where_is1.clear();
+    }
 
     int size(){
         return size_;
@@ -70,7 +106,7 @@ public:
         
         // Inserting key/value (a,b)
         auto it = it_block->insert(it_block->end(),{a,b});
-        where_is[1][a] = {it_block, it};
+        where_is1[a] = {it_block, it};
         actual_value[a] = b;
     
         size_++;
@@ -138,13 +174,6 @@ public:
         if(actual_value.find(key) != actual_value.end())
             delete_({-1, -1, key, -1});
     }
-
-    // Initialize
-    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) { // O(1)
-        D1.push_back(std::list<elementT>());
-        UBs.insert({B_,D1.begin()});
-        size_ = 0;
-    }
     
 private:
     uniqueDistT medianOfMedians(std::vector<elementT>::iterator bg, std::vector<elementT>::iterator en) {
@@ -184,12 +213,12 @@ private:
         int a = get<2>(x);
         uniqueDistT b = actual_value[a];
         
-        auto it_w = where_is[1].find(a);
-        if((it_w != where_is[1].end())){
+        auto it_w = where_is1.find(a);
+        if((it_w != where_is1.end())){
             auto [it_block,it] = it_w->second;
             
             (*it_block).erase(it);
-            where_is[1].erase(a);
+            where_is1.erase(a);
     
             if((*it_block).size() == 0){
                 auto it_UB_block = UBs.lower_bound({b,it_block});  
@@ -200,9 +229,9 @@ private:
                 }
             }
         }else{
-            auto [it_block,it] = where_is[0][a];
+            auto [it_block,it] = where_is0[a];
             (*it_block).erase(it);
-            where_is[0].erase(a);
+            where_is0.erase(a);
             if((*it_block).size() == 0) D0.erase(it_block); 
         }
     
@@ -253,7 +282,7 @@ private:
             if((*it).second >= med){
                 (*new_block).push_back(move(*it));
                 auto it_new = (*new_block).end(); it_new--;
-                where_is[1][(*it).first] = {new_block, it_new};
+                where_is1[(*it).first] = {new_block, it_new};
     
                 it = (*it_block).erase(it);
             }else{
@@ -295,7 +324,7 @@ private:
     
                 (*new_block).push_back(x);
                 auto it_new = (*new_block).end(); it_new--;
-                where_is[0][x.first] = {new_block, it_new};
+                where_is0[x.first] = {new_block, it_new};
                 actual_value[x.first] = x.second;
                 size_++;
             }
@@ -324,33 +353,25 @@ private:
 
 template<typename wT>
 class bmssp { // bmssp class
-
-    template<typename K, typename V>
-    using hash_map = std::unordered_map<K, V>;
-    template<typename K>
-    using hash_set = std::unordered_set<K>;
-
-    int n, k, t;
+    int n, k, t, l;
 
     std::vector<std::vector<std::pair<int, wT>>> ori_adj;
     std::vector<std::vector<std::pair<int, wT>>> adj;
     std::vector<wT> d;
     std::vector<int> pred, path_sz;
-    std::vector<int> rev_map;
-    std::vector<short int> last_complete_lvl;
- 
-    std::vector<hash_map<int, int>> neig;
+
+    std::vector<int> node_map, node_rev_map;
+    
+    bool cd_transfomed;
 
 public:
     const wT oo = std::numeric_limits<wT>::max() / 10;
     bmssp(int n_): n(n_) {
         ori_adj.assign(n, {});
-        neig.assign(n, {});
     }
     bmssp(const auto &adj) {
         n = adj.size();
         ori_adj = adj;
-        neig.assign(n, {});
     }
     
     void addEdge(int a, int b, wT w) {
@@ -360,6 +381,7 @@ public:
     // if the graph already has constant degree, prepage_graph(false)
     // else, prepage_graph(true)
     void prepare_graph(bool exec_constant_degree_trasnformation = false) {
+        cd_transfomed = exec_constant_degree_trasnformation;
         // erase duplicated edges
         std::vector<std::pair<int, int>> tmp_edges(n, {-1, -1});
         for(int i = 0; i < n; i++) {
@@ -380,68 +402,69 @@ public:
 
         if(exec_constant_degree_trasnformation == false) {
             adj = move(ori_adj);
-            ori_adj.clear();
-            d.resize(n);
-            root.resize(n);
-            pred.resize(n);
-            treesz.resize(n);
-            rev_map.resize(n);
-            path_sz.resize(n, 0);
-            last_complete_lvl.resize(n);
+            node_map.resize(n);
+            node_rev_map.resize(n);
             
             for(int i = 0; i < n; i++) {
-                neig[i][i] = i;
-                rev_map[i] = i;
+                node_map[i] = i;
+                node_rev_map[i] = i;
             }
 
             k = floor(pow(log2(n), 1.0 / 3.0));
             t = floor(pow(log2(n), 2.0 / 3.0));
-        } else {
-            // Make the graph become constant degree
+        } else { // Make the graph become constant degree
             int cnt = 0;
+            std::vector<std::map<int, int>> edge_id(n);
             for(int i = 0; i < n; i++) {
                 for(auto [j, w]: ori_adj[i]) {
-                    if(neig[i].find(j) == neig[i].end()) {
-                        neig[i][j] = cnt++;
-                        neig[j][i] = cnt++;
+                    if(edge_id[i].find(j) == edge_id[i].end()) {
+                        edge_id[i][j] = cnt++;
+                        edge_id[j][i] = cnt++;
                     }
                 }
             }
 
             cnt++;
             adj.assign(cnt, {});
-            
-            d.resize(cnt);
-            root.resize(cnt);
-            pred.resize(cnt);
-            treesz.resize(cnt);
-            rev_map.resize(cnt);
-            path_sz.resize(cnt, 0);
-            last_complete_lvl.resize(cnt);
+            node_map.resize(cnt);
+            node_rev_map.resize(cnt);
     
             for(int i = 0; i < n; i++) { // create 0-weight cycles
-                for(auto cur = neig[i].begin(); cur != neig[i].end(); cur++) {
+                for(auto cur = edge_id[i].begin(); cur != edge_id[i].end(); cur++) {
                     auto nxt = next(cur);
-                    if(nxt == neig[i].end()) nxt = neig[i].begin();
+                    if(nxt == edge_id[i].end()) nxt = edge_id[i].begin();
                     adj[cur->second].emplace_back(nxt->second, wT());
-                    rev_map[cur->second] = i;
+                    node_rev_map[cur->second] = i;
                 }
             }
             for(int i = 0; i < n; i++) { // add edges
                 for(auto [j, w]: ori_adj[i]) {
-                    adj[neig[i][j]].emplace_back(neig[j][i], w);
+                    adj[edge_id[i][j]].emplace_back(edge_id[j][i], w);
                 }
-                if(neig[i].size() == 0) { // for vertices without edges
-                    neig[i][n] = cnt - 1;
+                if(edge_id[i].size()) {
+                    node_map[i] = edge_id[i].begin()->second;
+                } else {
+                    node_map[i] = cnt - 1;
                 }
             }
-            k = floor(pow(log2(cnt), 1.0 / 3.0));
-            t = floor(pow(log2(cnt), 2.0 / 3.0));
             
             ori_adj.clear();
         }
+        
+            
+        d.resize(adj.size());
+        root.resize(adj.size());
+        pred.resize(adj.size());
+        treesz.resize(adj.size());
+        path_sz.resize(adj.size(), 0);
+        last_complete_lvl.resize(adj.size());
+        pivot_vis.resize(adj.size());
+        k = floor(pow(log2(adj.size()), 1.0 / 3.0));
+        t = floor(pow(log2(adj.size()), 2.0 / 3.0));
+        l = ceil(log2(adj.size()) / t);
+        Ds.assign(l, adj.size());
     }
- 
+
     std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
@@ -453,37 +476,69 @@ public:
         path_sz[s] = 0;
         
         const int l = ceil(log2(adj.size()) / t);
-        const uniqueDistT inf_dist = std::make_tuple(oo, 0, 0, 0);
+        const uniqueDistT inf_dist = {oo, 0, 0, 0};
         bmsspRec(l, inf_dist, {s});
- 
-        std::vector<wT> ret_distance(n);
-        std::vector<int> ret_pred(n);
-        for(int i = 0; i < n; i++) {
-            ret_distance[i] = d[toAnyCustomNode(i)];
-            ret_pred[i] = pred[toAnyCustomNode(i)];
+        
+        if(!cd_transfomed) {
+            return {d, pred};
+        } else {
+            std::vector<wT> ret_distance(n);
+            std::vector<int> ret_pred(n);
+            for(int i = 0; i < n; i++) {
+                ret_distance[i] = d[toAnyCustomNode(i)];
+                ret_pred[i] = customToReal(getPred(toAnyCustomNode(i)));
+            }
+            return {ret_distance, ret_pred};
         }
-        return {ret_distance, ret_pred};
     }
 
     std::vector<int> get_shortest_path(int real_u) {
-        int u = toAnyCustomNode(real_u);
-        if(d[u] == oo) return {};
+        if(!cd_transfomed) {
+            int u = real_u;
+            if(d[u] == oo) return {};
 
-        int path_sz = get<1>(getDist(u)) + 1;
-        std::vector<int> path(path_sz);
-        for(int i = path_sz - 1; i >= 0; i--) {
-            path[i] = customToReal(u);
-            u = pred[u];
+            int path_sz = get<1>(getDist(u)) + 1;
+            std::vector<int> path(path_sz);
+            for(int i = path_sz - 1; i >= 0; i--) {
+                path[i] = u;
+                u = pred[u];
+            }
+            return path; // {source, ..., real_u}
+        } else {
+            int u = toAnyCustomNode(real_u);
+            if(d[u] == oo) return {};
+
+            int max_path_sz = get<1>(getDist(u)) + 1;
+            std::vector<int> path;
+            path.reserve(max_path_sz);
+
+            int oldu;
+            do {
+                path.push_back(customToReal(u));
+                oldu = u;
+                u = getPred(u);
+            } while(customToReal(u) != customToReal(oldu));
+
+            reverse(path.begin(), path.end());
+            return path; // {source, ..., real_u}
         }
-        return path; // {source, ..., real_u}
     }
 
 private:
     int toAnyCustomNode(int real_id) {
-        return neig[real_id].begin()->second;
+        return node_map[real_id];
     }
     int customToReal(int id) {
-        return rev_map[id];
+        return node_rev_map[id];
+    }
+    int getPred(int u) {
+        int real_u = customToReal(u);
+
+        int dad = u;
+        do dad = pred[dad];
+        while(customToReal(dad) == real_u && pred[dad] != dad);
+
+        return dad;
     }
 
     template<typename T>
@@ -495,7 +550,20 @@ private:
     }
 
     // Unique distances helpers: Assumption 2.1
-    using uniqueDistT = std::tuple<wT, int, int, int>;
+    struct uniqueDistT : std::tuple<wT, int, int, int> {
+        static constexpr wT SCALE = 1e10;
+        static constexpr wT SCALE_INV = ((wT) 1.0) / SCALE; 
+
+        uniqueDistT() = default;
+        static inline wT sanitize(wT w) {
+            if constexpr (std::is_floating_point_v<wT>) {
+                return std::round(w * SCALE) * SCALE_INV;
+            }
+            return w;
+        }
+        uniqueDistT(wT w, int i1, int i2, int i3) 
+            : std::tuple<wT, int, int, int>(sanitize(w), i1, i2, i3) {}
+    };
     inline uniqueDistT getDist(int u, int v, wT w) {
         return {d[u] + w, path_sz[u] + 1, v, u};
     }
@@ -511,9 +579,19 @@ private:
     // ===================================================================
     std::vector<int> root;
     std::vector<short int> treesz;
-    std::pair<std::vector<int>, hash_set<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
-        hash_set<int> vis;
-        vis.insert(S.begin(), S.end());
+
+    short int counter_pivot = 0;
+    std::vector<short int> pivot_vis;
+    std::pair<std::vector<int>, std::vector<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
+        counter_pivot++;
+
+        std::vector<int> vis;
+        vis.reserve(2 * k * S.size());
+
+        for(int x: S) {
+            vis.push_back(x);
+            pivot_vis[x] = counter_pivot;
+        }
 
         std::vector<int> active = S;
         for(int x: S) root[x] = x, treesz[x] = 0;
@@ -524,15 +602,16 @@ private:
                 for(auto [v, w]: adj[u]) {
                     if(getDist(u, v, w) <= getDist(v)) {
                         updateDist(u, v, w);
-                        if(getDist(v) < B) {
+                        if(getDist(v) < B && pivot_vis[v] != counter_pivot) {
                             root[v] = root[u];
                             nw_active.push_back(v);
+                            pivot_vis[v] = counter_pivot;
                         }
                     }
                 }
             }
             for(const auto &x: nw_active) {
-                vis.insert(x);
+                vis.push_back(x);
             }
             if(vis.size() > k * S.size()) {
                 return {S, vis};
@@ -556,10 +635,11 @@ private:
         std::priority_queue<uniqueDistT, std::vector<uniqueDistT>, std::greater<uniqueDistT>> heap;
         heap.push(getDist(x));
         while(heap.empty() == false && complete.size() < k + 1) {
-            int u = get<2>(heap.top());
-            int du = get<0>(heap.top());
+            auto du = heap.top();
+            int u = get<2>(du);
             heap.pop();
-            if(du > d[u]) continue;
+
+            if(du > getDist(u)) continue;
 
             complete.push_back(u);
             for(auto [v, w]: adj[u]) {
@@ -579,13 +659,16 @@ private:
         return {nB, complete};
     }
  
+    std::vector<batchPQ<uniqueDistT>> Ds;
+    std::vector<short int> last_complete_lvl;
     std::pair<uniqueDistT, std::vector<int>> bmsspRec(short int l, uniqueDistT B, const std::vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
         
         auto [P, bellman_vis] = findPivots(B, S);
  
         const long long batch_size = (1ll << ((l - 1) * t));
-        batchPQ<uniqueDistT> D(batch_size, B);
+        auto &D = Ds[l - 1];
+        D.initialize(batch_size, B);
         for(int p: P) D.insert(getDist(p));
  
         uniqueDistT last_complete_B = B;

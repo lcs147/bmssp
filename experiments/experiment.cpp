@@ -1,4 +1,6 @@
 
+#include <bits/stdc++.h>
+using namespace std;
 #ifdef LOCAL
 #include "../helpers/debug.cpp"
 #else
@@ -49,8 +51,8 @@ struct timerT {
     }
 };
 
-long long check_sum(auto &v) {
-    return accumulate(v.begin(), v.end(), 0ll);
+double check_sum(auto &v) {
+    return accumulate(v.begin(), v.end(), double());
 }
 
 using distT = double;
@@ -75,7 +77,7 @@ signed main(int argc, char **argv) {
     vector<int> times;
     if(algorithm == "bmssp") {
         spp::bmssp<distT> spp(adj);
-        spp.prepare_graph(false);
+        spp.prepare_graph(true);
         
         for(int i = 0; i < reps; i++) {
             timer.start();
@@ -92,6 +94,7 @@ signed main(int argc, char **argv) {
             times.push_back(timer.elapsed());
         }
     }
+    d.pop_back();
 
     nlohmann::json j;
     j["algorithm"] = algorithm;
