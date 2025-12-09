@@ -1,3 +1,6 @@
+#ifndef CASTRO_THAILSSON_BMSSP_COMMON
+#define CASTRO_THAILSSON_BMSSP_COMMON
+
 #include<string>
 #include<iostream>
 #include<fstream>
@@ -29,3 +32,5 @@ auto readGraph(std::string path) {
     
     return std::make_pair(adj, m);
 }
+
+#endif
