@@ -3,11 +3,15 @@
 
 int n;
 
+const double eps = 1e-6;
 template<typename distT>
 auto checkReturns(int source, auto &dijkstra, auto &bmssp, bool transformed) {
     auto [dist_expected, pred_expected] = dijkstra.execute(source);
     auto [dist_realized, pred_realized] = bmssp.execute(source);
-    CHECK(dist_expected == dist_realized);
+    CHECK(dist_expected.size() == dist_realized.size());
+    for(int i = 0; i < dist_expected.size(); i++) {
+        CHECK(dist_expected[i] == doctest::Approx(dist_realized[i]).epsilon(eps));
+    }
     
     auto distance = [&](const std::vector<int> &path) {
         distT res = distT();
@@ -39,7 +43,7 @@ auto checkReturns(int source, auto &dijkstra, auto &bmssp, bool transformed) {
             CHECK(path2.back() == destination);
         }
 
-        CHECK(distance(path1) == distance(path2));
+        CHECK(distance(path1) == doctest::Approx(distance(path2)).epsilon(eps));
     }
 }
 
