@@ -1,4 +1,3 @@
-
 #include "../helpers/external/doctest.h"
 
 #include "../bmssp.hpp"
@@ -39,7 +38,7 @@ TEST_CASE("Small random graphs") {
         bmssp.prepare_graph(false);
 
         n = adj.size();
-        for(int source: {1, n / 3, n / 2, n / 3 * 2, n - 1}) {
+        for(int source: {0, n / 3, n / 2, n / 3 * 2, n - 1}) {
             checkReturns<distT>(source, dijkstra, bmssp, false);
         }
     }
@@ -75,7 +74,7 @@ TEST_CASE("Small random graphs - CD") {
         bmssp.prepare_graph(true);
 
         n = adj.size();
-        for(int source: {1, n / 3, n / 2, n / 3 * 2, n - 1}) {
+        for(int source: {0, n / 3, n / 2, n / 3 * 2, n - 1}) {
             checkReturns<distT>(source, dijkstra, bmssp, true);
         }
     }

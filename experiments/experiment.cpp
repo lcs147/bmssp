@@ -66,7 +66,7 @@ signed main(int argc, char **argv) {
     int reps = 1;
     if(argc >= 4) reps = atoi(argv[3]);
     
-    int s = 1;
+    int s = 0;
     if(argc >= 5) s = atoi(argv[4]);
 
     timerT timer;
@@ -94,7 +94,6 @@ signed main(int argc, char **argv) {
             times.push_back(timer.elapsed());
         }
     }
-    d.pop_back();
 
     nlohmann::json j;
     j["algorithm"] = algorithm;
