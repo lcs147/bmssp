@@ -18,8 +18,8 @@ namespace spp {
 
 template<typename dataT>
 struct worst_case_hash_map {
-    short int counter = 1;
-    std::vector<short int> flag;
+    int counter = 1;
+    std::vector<int> flag;
     std::vector<std::pair<int, dataT>> data;
     worst_case_hash_map(int n): data(n), flag(n) {}; // O(n)
 
@@ -469,6 +469,7 @@ public:
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
+        fill(pivot_vis.begin(), pivot_vis.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
