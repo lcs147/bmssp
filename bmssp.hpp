@@ -580,8 +580,8 @@ private:
     std::vector<int> root;
     std::vector<short int> treesz;
 
-    short int counter_pivot = 0;
-    std::vector<short int> pivot_vis;
+    int counter_pivot = 0;
+    std::vector<int> pivot_vis;
     std::pair<std::vector<int>, std::vector<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
         counter_pivot++;
 
@@ -602,10 +602,12 @@ private:
                 for(auto [v, w]: adj[u]) {
                     if(getDist(u, v, w) <= getDist(v)) {
                         updateDist(u, v, w);
-                        if(getDist(v) < B && pivot_vis[v] != counter_pivot) {
+                        if(getDist(v) < B) {
                             root[v] = root[u];
-                            nw_active.push_back(v);
-                            pivot_vis[v] = counter_pivot;
+                            if(pivot_vis[v] != counter_pivot) {
+                                pivot_vis[v] = counter_pivot;
+                                nw_active.push_back(v);
+                            }
                         }
                     }
                 }
@@ -719,7 +721,9 @@ private:
         if(D.size() == 0) retB = B;     // successful
         else retB = last_complete_B;    // partial
  
-        for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
+        for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) {
+            complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
+        }
         // get only the ones not in complete already, for it to become disjoint
         return {retB, complete};
     }
