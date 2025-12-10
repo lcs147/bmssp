@@ -45,8 +45,8 @@ if [ $? -ne 0 ]; then
 fi
 echo "Compilation successful."
 
-echo "Setting virtual memory limit to unlimited..."
-ulimit -v unlimited
+# echo "Setting virtual memory limit to unlimited..."
+# ulimit -a
 
 # --- Experiment Run ---
 echo "Clearing previous results and preparing output file: ${OUTPUT_FILE}"
@@ -57,7 +57,7 @@ for FILE in "${FILES[@]}"; do
     for TYPE in "${TYPES[@]}"; do
         FILE_PATH="${FILES_DIR}/${FILE}" 
         printf "Running experiment on ${FILE} with ${TYPE}\n"
-        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 5 1 >> "$OUTPUT_FILE"
+        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 5 0 >> "$OUTPUT_FILE"
         printf ",\n" >> "$OUTPUT_FILE"
     done
 done
