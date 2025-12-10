@@ -10,6 +10,7 @@ auto checkReturns(int source, auto &dijkstra, auto &bmssp, bool transformed) {
     auto [dist_realized, pred_realized] = bmssp.execute(source);
     CHECK(dist_expected.size() == dist_realized.size());
     for(int i = 0; i < dist_expected.size(); i++) {
+        INFO("Failing index i: ", i);
         CHECK(dist_expected[i] == doctest::Approx(dist_realized[i]).epsilon(eps));
     }
     
