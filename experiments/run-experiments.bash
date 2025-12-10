@@ -45,6 +45,9 @@ if [ $? -ne 0 ]; then
 fi
 echo "Compilation successful."
 
+echo "Setting virtual memory limit to unlimited..."
+ulimit -v unlimited
+
 # --- Experiment Run ---
 echo "Clearing previous results and preparing output file: ${OUTPUT_FILE}"
 rm -f "$OUTPUT_FILE"

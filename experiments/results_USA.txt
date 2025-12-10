@@ -7,8 +7,8 @@
     "n": 3598624,
     "reps": 5,
     "source": 1,
-    "std_us": 17952.0,
-    "time_us": 583263.0
+    "std_us": 3732.0,
+    "time_us": 551331.0
 }
 ,
 ,
@@ -20,8 +20,8 @@
     "n": 23947348,
     "reps": 5,
     "source": 1,
-    "std_us": 8170.0,
-    "time_us": 4557026.0
+    "std_us": 171268.0,
+    "time_us": 4758928.0
 }
 ,
 ,
@@ -33,20 +33,20 @@
     "n": 1207946,
     "reps": 5,
     "source": 1,
-    "std_us": 2701.0,
-    "time_us": 155328.0
+    "std_us": 4483.0,
+    "time_us": 163352.0
 }
 ,
 {
     "algorithm": "bmssp",
-    "checksum": 922346671192347576,
+    "checksum": 922346671378257439,
     "graph_name": "USA-road-t.NW.gr",
     "m": 2840208,
     "n": 1207946,
     "reps": 5,
     "source": 1,
-    "std_us": 8762.0,
-    "time_us": 617594.0
+    "std_us": 70865.0,
+    "time_us": 2473095.0
 }
 ,
 {
@@ -57,7 +57,81 @@
     "n": 6262105,
     "reps": 5,
     "source": 1,
-    "std_us": 2642.0,
-    "time_us": 1014531.0
+    "std_us": 23704.0,
+    "time_us": 1122569.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922488782744588475,
+    "graph_name": "USA-road-t.CTR.gr",
+    "m": 34292496,
+    "n": 14081817,
+    "reps": 5,
+    "source": 1,
+    "std_us": 86980.0,
+    "time_us": 3604676.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922337602516673418,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321271,
+    "reps": 5,
+    "source": 1,
+    "std_us": 609.0,
+    "time_us": 39151.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 922337602516673418,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321271,
+    "reps": 5,
+    "source": 1,
+    "std_us": 8016.0,
+    "time_us": 607129.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922337437497217268,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264347,
+    "reps": 5,
+    "source": 1,
+    "std_us": 768.0,
+    "time_us": 32794.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 922337437497217268,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264347,
+    "reps": 5,
+    "source": 1,
+    "std_us": 9770.0,
+    "time_us": 582477.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 922340331504461829,
+    "graph_name": "USA-road-t.NE.gr",
+    "m": 3897636,
+    "n": 1524454,
+    "reps": 5,
+    "source": 1,
+    "std_us": 1769.0,
+    "time_us": 227170.0
 }
 ,

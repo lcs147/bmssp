@@ -409,7 +409,7 @@ public:
                 node_map[i] = i;
                 node_rev_map[i] = i;
             }
-
+    
             // k = floor(pow(log2(n), 1.0 / 3.0));
             // t = floor(pow(log2(n), 2.0 / 3.0));
         } else { // Make the graph become constant degree
@@ -450,14 +450,14 @@ public:
             
         }
         
-        ori_adj.clear();
+        // ori_adj.clear();
         d.resize(adj.size());
         root.resize(adj.size());
         pred.resize(adj.size());
         treesz.resize(adj.size());
         path_sz.resize(adj.size(), 0);
         last_complete_lvl.resize(adj.size());
-        pivot_vis.resize(adj.size());
+        pivot_vis.resize(adj.size(),0);
         k = floor(pow(log2(adj.size()), 1.0 / 3.0));
         t = floor(pow(log2(adj.size()), 2.0 / 3.0));
         l = ceil(log2(adj.size()) / t);
@@ -465,12 +465,15 @@ public:
     }
 
     std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
+        
         fill(d.begin(), d.end(), oo);
         fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
+        //cout << d.size() <<  " " << toAnyCustomNode(0) << " " << toAnyCustomNode(1) << "\n";
+        //cout << s << " " << toAnyCustomNode(2790) << "\n";
         d[s] = 0;
         path_sz[s] = 0;
         
@@ -479,6 +482,7 @@ public:
         bmsspRec(l, inf_dist, {s});
         
         if(!cd_transfomed) {
+            //cout << d[0] << " " << d[2790] << " " << d.size() << "\n";
             return {d, pred};
         } else {
             std::vector<wT> ret_distance(n);
@@ -487,6 +491,7 @@ public:
                 ret_distance[i] = d[toAnyCustomNode(i)];
                 ret_pred[i] = customToReal(getPred(toAnyCustomNode(i)));
             }
+           //cout << ret_distance[0] << " " << ret_distance[2790] << " " << ret_distance.size() << "\n";
             return {ret_distance, ret_pred};
         }
     }
@@ -573,14 +578,19 @@ private:
         pred[v] = u;
         d[v] = d[u] + w;
         path_sz[v] = path_sz[u] + 1;
+
+        // if(v == 12799 || v == 2790 || customToReal(v) == 1913 ){
+
+        //    cout << "update " << customToReal(u) << " -> " << customToReal(v) << " "  << d[v] << "\n";
+        // }
     }
 
     // ===================================================================
     std::vector<int> root;
     std::vector<short int> treesz;
 
-    short int counter_pivot = 0;
-    std::vector<short int> pivot_vis;
+    int counter_pivot = 0;
+    std::vector<int> pivot_vis;
     std::pair<std::vector<int>, std::vector<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
         counter_pivot++;
 
@@ -600,11 +610,14 @@ private:
             for(int u: active) {
                 for(auto [v, w]: adj[u]) {
                     if(getDist(u, v, w) <= getDist(v)) {
-                        updateDist(u, v, w);
-                        if(getDist(v) < B && pivot_vis[v] != counter_pivot) {
+                         updateDist(u, v, w);
+                     //   if(v == 12799 || v == 2790 || customToReal(v) == 1913 ) cout << "FinfPivots\n";
+                        if(getDist(v) < B){
                             root[v] = root[u];
-                            nw_active.push_back(v);
-                            pivot_vis[v] = counter_pivot;
+                            if(pivot_vis[v] != counter_pivot) {
+                                nw_active.push_back(v);
+                                pivot_vis[v] = counter_pivot;
+                            }
                         }
                     }
                 }
@@ -646,6 +659,7 @@ private:
                 auto old_dist = getDist(v);
                 if(new_dist <= old_dist && new_dist < B) {
                     updateDist(u, v, w);
+                   // if(v == 12799 || v == 2790 || customToReal(v) == 1913 ) cout << "BaseCase\n";
                     heap.push(new_dist);
                 }
             }
@@ -698,8 +712,10 @@ private:
                     if(new_dist <= getDist(v)) {
                         updateDist(u, v, w);
                         if(trying_B <= new_dist && new_dist < B) {
+                            //if(v == 12799 || v == 2790 || customToReal(v) == 1913 ) cout << "A\n";
                             D.insert(new_dist); // d[v] can be greater equal than std::min(D), occur 1x per vertex
                         } else if(complete_B <= new_dist && new_dist < trying_B) {
+                          //  if(v == 12799 || v == 2790 || customToReal(v) == 1913 ) cout << "B\n";
                             can_prepend.emplace_back(new_dist); // d[v] is less than all in D, can occur 1x at each level per vertex
                         }
                     }

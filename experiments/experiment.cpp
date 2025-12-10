@@ -77,7 +77,7 @@ signed main(int argc, char **argv) {
     vector<int> times;
     if(algorithm == "bmssp") {
         spp::bmssp<distT> spp(adj);
-        spp.prepare_graph(true);
+        spp.prepare_graph(false);
         
         for(int i = 0; i < reps; i++) {
             timer.start();
