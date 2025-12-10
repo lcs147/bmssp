@@ -50,19 +50,19 @@ struct timerT {
         return chrono::duration_cast<chrono::microseconds>(end - begin).count();
     }
 };
+using distT = long long int;
 
-double check_sum(auto &v) {
-    return accumulate(v.begin(), v.end(), double());
+distT check_sum(auto &v) {
+    return accumulate(v.begin(), v.end(), distT());
 }
 
-using distT = double;
 
 signed main(int argc, char **argv) {
     if(argc < 3) return 1;
-
+    
     string graph_path = argv[1];
     string algorithm = argv[2];
-
+    
     int reps = 1;
     if(argc >= 4) reps = atoi(argv[3]);
     
