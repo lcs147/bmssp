@@ -10,9 +10,8 @@ auto checkReturns(int source, auto &dijkstra, auto &bmssp, bool transformed) {
     auto [dist_realized, pred_realized] = bmssp.execute(source);
     CHECK(dist_expected.size() == dist_realized.size());
     for(int i = 0; i < dist_expected.size(); i++) {
-        CHECK(dist_expected[i] == doctest::Approx(dist_realized[i]).epsilon(eps));
+        REQUIRE_MESSAGE(dist_expected[i] == doctest::Approx(dist_realized[i]).epsilon(eps), "vertex ", i, " has wrong distance");
     }
-    
     auto distance = [&](const std::vector<int> &path) {
         distT res = distT();
         for(int i = 0; i + 1 < path.size(); i++) {

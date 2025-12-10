@@ -15,6 +15,7 @@ auto readGraph(std::string path) {
     std::string line, tmp;
     std::ifstream in(path);
 
+    bool has_0 = false;
     while(std::getline(in, line)) {
         std::stringstream ss(line);
         if(line[0] == 'p') {
@@ -27,9 +28,16 @@ auto readGraph(std::string path) {
             ss >> tmp >> a >> b >> w;
             adj[a].emplace_back(b, w);
             c = std::max(c, w);
+            has_0 = has_0 || (a == 0) || (b == 0);
         }
     }
-    
+    if(has_0 == false) {
+        for(int i = 0; i + 1 < adj.size(); i++) {
+            adj[i] = move(adj[i + 1]);
+            for(auto &[j, w]: adj[i]) j--;
+        }
+    }
+    adj.pop_back();
     return std::make_pair(adj, m);
 }
 
