@@ -65,7 +65,7 @@ TEST_CASE("King graphs with a wall - CD") {
 
 TEST_CASE("Small random graphs - CD") {
     using distT = long long;
-    std::vector<std::string> paths = {"../tests/graphs/random32D3.gr", "../tests/graphs/random256D3.gr", "../tests/graphs/random1024D3.gr", "../tests/graphs/random4096D3.gr"};
+    std::vector<std::string> paths = {"../tests/graphs/random32D3.gr", "../tests/graphs/random256D3.gr", "../tests/graphs/random1024D3.gr","../tests/graphs/random4096D3.gr"};
     for(std::string path: paths) {
         auto [adj, m] = readGraph<distT>(path);
 
@@ -79,3 +79,5 @@ TEST_CASE("Small random graphs - CD") {
         }
     }
 }
+
+
