@@ -467,7 +467,6 @@ public:
 
     std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
         fill(d.begin(), d.end(), oo);
-        fill(path_sz.begin(), path_sz.end(), oo);
         fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
         fill(pivot_vis.begin(), pivot_vis.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
@@ -526,10 +525,10 @@ public:
     }
 
 private:
-    int toAnyCustomNode(int real_id) {
+    inline int toAnyCustomNode(int real_id) {
         return node_map[real_id];
     }
-    int customToReal(int id) {
+    inline int customToReal(int id) {
         return node_rev_map[id];
     }
     int getPred(int u) {
@@ -605,16 +604,16 @@ private:
                         updateDist(u, v, w);
                         if(getDist(v) < B) {
                             root[v] = root[u];
-                            if(pivot_vis[v] != counter_pivot) {
-                                pivot_vis[v] = counter_pivot;
-                                nw_active.push_back(v);
-                            }
+                            nw_active.push_back(v);
                         }
                     }
                 }
             }
             for(const auto &x: nw_active) {
-                vis.push_back(x);
+                if(pivot_vis[x] != counter_pivot) {
+                    pivot_vis[x] = counter_pivot;
+                    vis.push_back(x);
+                }
             }
             if(vis.size() > k * S.size()) {
                 return {S, vis};
