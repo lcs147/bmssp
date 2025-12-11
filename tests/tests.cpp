@@ -2,3 +2,4 @@
 #include "../helpers/external/doctest.h"
 
 #include "tests-wc.cpp"
+#include "tests-expected.cpp"
