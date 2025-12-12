@@ -1,6 +1,5 @@
 #include "../helpers/external/doctest.h"
 
-#include "../bmssp.hpp"
 #include "common.cpp"
 
 #include "../helpers/dijkstra.hpp"

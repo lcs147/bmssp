@@ -9,7 +9,6 @@
  *          https://boost.org/LICENSE_1_0.txt)
  */
 // Adjusted from Alexandrescu paper to support arbitrary comparators.
-#pragma once
 
 #include <algorithm>
 #include <cassert>

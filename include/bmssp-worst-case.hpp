@@ -13,6 +13,8 @@
 #include<limits>
 #include<queue>
 #include<algorithm>
+#include"external/median_of_ninthers.h"
+#include"external/unordered_dense.h"
 
 namespace spp {
 
@@ -176,39 +178,6 @@ public:
     }
     
 private:
-    uniqueDistT medianOfMedians(std::vector<elementT>::iterator bg, std::vector<elementT>::iterator en) {
-        std::vector<elementT> l(bg, en);
-        while (true) {
-            int n = l.size();
-
-            if (n <= 5) {
-                sort(l.begin(), l.end(), [](const auto& a, const auto& b) {
-                    return a.second < b.second;
-                });
-                return l[l.size() / 2].second;
-            }
-
-            std::vector<elementT> medians;
-            medians.reserve((n + 4) / 5);
-
-            auto it = l.begin();
-            while (it != l.end()) {
-                std::vector<elementT> group;
-                group.reserve(5);
-                for (int j = 0; j < 5 && it != l.end(); ++j, ++it)
-                    group.push_back(*it);
-
-                sort(group.begin(), group.end(), [](const auto& a, const auto& b) {
-                    return a.second < b.second;
-                });
-
-                medians.push_back(group[group.size() / 2]);
-            }
-
-            l = move(medians);
-        }
-    }
-
     void delete_(uniqueDistT x){    
         int a = get<2>(x);
         uniqueDistT b = actual_value[a];
@@ -239,29 +208,11 @@ private:
         size_--;
     }
     
-    uniqueDistT selectKth(std::vector<elementT> &v, int k) { 
-        int l=0, r=v.size()-1;
-        
-        for(;l<=r;){
-            uniqueDistT p = medianOfMedians(v.begin() + l, v.begin() + r + 1);
-            
-            int i = l, j = r, m = l;
-            
-            while(m <= j){
-                if(v[m].second < p) {
-                    std::swap(v[m++],v[i++]);
-                }else if(v[m].second > p){
-                    std::swap(v[m],v[j--]);
-                }else{
-                    m++;
-                }
-            }
-        
-            if (k < i) r = i - 1;     // k está na parte menor
-            else if (k > j) l = j + 1;     // k está na parte maior
-            else return v[k].second; // k está entre os iguais ao pivot
-        } 
-        
+    uniqueDistT selectKth(std::vector<elementT> &v, int k) {
+        const auto comparator = [](const auto &a, const auto &b){
+            return a.second < b.second;
+        };
+        miniselect::median_of_ninthers_select(v.begin(), v.begin() + k, v.end(), comparator);
         return v[k].second;
     }
 

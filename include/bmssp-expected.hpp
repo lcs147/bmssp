@@ -13,27 +13,14 @@
 #include<limits>
 #include<queue>
 #include<algorithm>
-#include<unordered_map>
-#include"helpers/external/miniselect/floyd_rivest_select.h"
+#include"external/floyd_rivest_select.h"
 
 namespace spp_expected {
 
-// template<typename K, typename V>
-// using hash_map = ankerl::unordered_dense::map<K, V>;
-// template<typename K>
-// using hash_set = ankerl::unordered_dense::set<K>;
-
-
-template<typename K, typename V>
-using hash_map = std::unordered_map<K, V>;
-template<typename K>
-using hash_set = std::unordered_set<K>;
-
 template<typename uniqueDistT>
-class batchPQ { // batch priority queue, implemented as in Lemma 3.3
-    // template<typename K, typename V>
-    // using hash_map = ankerl::unordered_dense::map<K, V>;
-
+class batchPQ { // batch priority queue
+    template<typename K, typename V>
+    using hash_map = ankerl::unordered_dense::map<K, V>;
     using elementT = std::pair<int,uniqueDistT>;
     
     struct CompareUB {
@@ -57,10 +44,17 @@ class batchPQ { // batch priority queue, implemented as in Lemma 3.3
     
 public:
 
-    batchPQ(int M_, uniqueDistT B_): M(M_), B(B_) {
-        D1.push_back(std::list<elementT>());
-        UBs.insert(make_pair(B_,D1.begin()));
+    batchPQ(int n): actual_value(n), where_is0(n), where_is1(n){} // O(n)
+
+    void initialize(int M_, uniqueDistT B_) { // O(1)
+        M = M_; B = B_;
+        D0 = {};
+        D1 = {std::list<elementT>()};
+        UBs = {make_pair(B_,D1.begin())};
         size_ = 0;
+
+        actual_value.clear();
+        where_is0.clear(); where_is1.clear();
     }
 
     int size(){
@@ -186,16 +180,15 @@ private:
         actual_value.erase(a);
         size_--;
     }
-
+    
     uniqueDistT selectKth(std::vector<elementT> &v, int k) {
-        miniselect::floyd_rivest_select(v.begin(), v.begin() + k, v.end(), [](const auto &a, const auto &b){
+        const auto comparator = [](const auto &a, const auto &b){
             return a.second < b.second;
-        });
-        // std::nth_element(v.begin(), v.begin() + k, v.end(), [](const auto &a, const auto &b){
-        //     return a.second < b.second;
-        // });
+        };
+        miniselect::floyd_rivest_select(v.begin(), v.begin() + k, v.end(), comparator);
         return v[k].second;
     }
+
         
     void split(std::list<std::list<elementT>>::iterator it_block){ // O(M) + O(lg(Block Numbers))
         int sz = (*it_block).size();
@@ -282,10 +275,8 @@ private:
     }
 };
 
-
 template<typename wT>
-class bmssp {
-
+class bmssp { // bmssp class
     int n, k, t, l;
 
     std::vector<std::vector<std::pair<int, wT>>> ori_adj;
@@ -347,7 +338,7 @@ public:
             t = floor(pow(log2(n), 2.0 / 3.0));
         } else { // Make the graph become constant degree
             int cnt = 0;
-            std::vector<hash_map<int, int>> edge_id(n);
+            std::vector<std::map<int, int>> edge_id(n);
             for(int i = 0; i < n; i++) {
                 for(auto [j, w]: ori_adj[i]) {
                     if(edge_id[i].find(j) == edge_id[i].end()) {
@@ -386,16 +377,22 @@ public:
         
             
         d.resize(adj.size());
-        path_sz.resize(adj.size());
+        root.resize(adj.size());
         pred.resize(adj.size());
+        treesz.resize(adj.size());
+        path_sz.resize(adj.size(), 0);
+        last_complete_lvl.resize(adj.size());
+        pivot_vis.resize(adj.size());
         k = floor(pow(log2(adj.size()), 1.0 / 3.0));
         t = floor(pow(log2(adj.size()), 2.0 / 3.0));
         l = ceil(log2(adj.size()) / t);
+        Ds.assign(l, adj.size());
     }
 
     std::pair<std::vector<wT>, std::vector<int>> execute(int s) {
         fill(d.begin(), d.end(), oo);
-        fill(path_sz.begin(), path_sz.end(), oo);
+        fill(last_complete_lvl.begin(), last_complete_lvl.end(), -1);
+        fill(pivot_vis.begin(), pivot_vis.end(), -1);
         for(int i = 0; i < pred.size(); i++) pred[i] = i;
         
         s = toAnyCustomNode(s);
@@ -504,14 +501,24 @@ private:
     }
 
     // ===================================================================
-    std::pair<std::vector<int>, hash_set<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
-        hash_set<int> vis(S.begin(), S.end());
-        std::vector<int> active = S;
-        
-        hash_map<int, int> root;
-        root.reserve(S.size());
-        for(int x: S) root[x] = x;
+    std::vector<int> root;
+    std::vector<short int> treesz;
 
+    int counter_pivot = 0;
+    std::vector<int> pivot_vis;
+    std::pair<std::vector<int>, std::vector<int>> findPivots(uniqueDistT B, const std::vector<int> &S) { // Algorithm 1
+        counter_pivot++;
+
+        std::vector<int> vis;
+        vis.reserve(2 * k * S.size());
+
+        for(int x: S) {
+            vis.push_back(x);
+            pivot_vis[x] = counter_pivot;
+        }
+
+        std::vector<int> active = S;
+        for(int x: S) root[x] = x, treesz[x] = 0;
         for(int i = 1; i <= k; i++) {
             std::vector<int> nw_active;
             nw_active.reserve(active.size() * 4);
@@ -526,16 +533,20 @@ private:
                     }
                 }
             }
-            vis.insert(nw_active.begin(), nw_active.end());
-            if(vis.size() > k * S.size()) return {S, vis};
+            for(const auto &x: nw_active) {
+                if(pivot_vis[x] != counter_pivot) {
+                    pivot_vis[x] = counter_pivot;
+                    vis.push_back(x);
+                }
+            }
+            if(vis.size() > k * S.size()) {
+                return {S, vis};
+            }
             active = move(nw_active);
         }
 
         std::vector<int> P;
         P.reserve(vis.size() / k);
-
-        hash_map<int, short int> treesz;
-        treesz.reserve(P.size());
         for(int u: vis) treesz[root[u]]++;
         for(int u: S) if(treesz[u] >= k) P.push_back(u);
         
@@ -543,13 +554,12 @@ private:
         return {P, vis};
     }
  
-    std::pair<uniqueDistT, hash_set<int>> baseCase(uniqueDistT B, int x) { // Algorithm 2
-        hash_set<int> complete;
+    std::pair<uniqueDistT, std::vector<int>> baseCase(uniqueDistT B, int x) { // Algorithm 2
+        std::vector<int> complete;
         complete.reserve(k + 1);
  
         std::priority_queue<uniqueDistT, std::vector<uniqueDistT>, std::greater<uniqueDistT>> heap;
         heap.push(getDist(x));
-        int last = -1;
         while(heap.empty() == false && complete.size() < k + 1) {
             auto du = heap.top();
             int u = get<2>(du);
@@ -557,8 +567,7 @@ private:
 
             if(du > getDist(u)) continue;
 
-            complete.insert(u);
-            last = u;
+            complete.push_back(u);
             for(auto [v, w]: adj[u]) {
                 auto new_dist = getDist(u, v, w);
                 auto old_dist = getDist(v);
@@ -569,41 +578,48 @@ private:
             }
         }
         if(complete.size() <= k) return {B, complete};
-        
-        uniqueDistT nB = getDist(last);
-        complete.erase(last);
+ 
+        uniqueDistT nB = getDist(complete.back());
+        complete.pop_back();
 
         return {nB, complete};
     }
  
     std::vector<batchPQ<uniqueDistT>> Ds;
     std::vector<short int> last_complete_lvl;
-    std::pair<uniqueDistT, hash_set<int>> bmsspRec(short int l, uniqueDistT B, const std::vector<int> &S) { // Algorithm 3
+    std::pair<uniqueDistT, std::vector<int>> bmsspRec(short int l, uniqueDistT B, const std::vector<int> &S) { // Algorithm 3
         if(l == 0) return baseCase(B, S[0]);
         
         auto [P, bellman_vis] = findPivots(B, S);
  
         const long long batch_size = (1ll << ((l - 1) * t));
-        batchPQ<uniqueDistT> D(batch_size, B);
+        auto &D = Ds[l - 1];
+        D.initialize(batch_size, B);
         for(int p: P) D.insert(getDist(p));
  
         uniqueDistT last_complete_B = B;
         for(int p: P) last_complete_B = std::min(last_complete_B, getDist(p));
  
-        hash_set<int> complete;
+        std::vector<int> complete;
         const long long quota = k * (1ll << (l * t));
         complete.reserve(quota + bellman_vis.size());
         while(complete.size() < quota && D.size()) {
             auto [trying_B, miniS] = D.pull();
+            // all with dist < trying_B, can be reached by miniS <= req 2, alg 3
             auto [complete_B, nw_complete] = bmsspRec(l - 1, trying_B, miniS);
+            
             // all new complete_B are greater than the old ones <= point 6, page 10
             // assert(last_complete_B < complete_B);
  
-            complete.insert(nw_complete.begin(), nw_complete.end());
+            complete.insert(complete.end(), nw_complete.begin(), nw_complete.end());
+            // point 6, page 10 => complete does not intersect with nw_complete
+            // assert(isUnique(complete));
+ 
             std::vector<uniqueDistT> can_prepend;
             can_prepend.reserve(nw_complete.size() * 5 + miniS.size());
             for(int u: nw_complete) {
                 D.erase(u); // priority queue fix
+                last_complete_lvl[u] = l;
                 for(auto [v, w]: adj[u]) {
                     auto new_dist = getDist(u, v, w);
                     if(new_dist <= getDist(v)) {
@@ -618,7 +634,9 @@ private:
             }
             for(int x: miniS) {
                 if(complete_B <= getDist(x)) can_prepend.emplace_back(getDist(x));
+                // second condition is not necessary
             }
+            // can_prepend is not necessarily all unique
             D.batchPrepend(can_prepend);
  
             last_complete_B = complete_B;
@@ -627,9 +645,10 @@ private:
         if(D.size() == 0) retB = B;     // successful
         else retB = last_complete_B;    // partial
  
-        for(int x: bellman_vis) if(getDist(x) < retB) {
-            complete.insert(x);
+        for(int x: bellman_vis) if(last_complete_lvl[x] != l && getDist(x) < retB) {
+            complete.push_back(x); // this get the completed vertices from bellman-ford, it has P in it as well
         }
+        // get only the ones not in complete already, for it to become disjoint
         return {retB, complete};
     }
 };
