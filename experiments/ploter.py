@@ -166,7 +166,7 @@ def save_performance_table(df, filename, output_dir):
     try:
         df_formatted = df.copy()
         
-        for col in ['Tempo Dijkstra (ms)', 'Tempo BMSPP (ms)', 'Ratio BMSPP / Dijkstra']:
+        for col in ['Tempo Dijkstra (ms)', 'Tempo BMSPP (ms)','Desvio Dijkstra (ms)','Desvio BMSPP (ms)', 'Ratio BMSPP / Dijkstra']:
             if col in df_formatted.columns:
                 df_formatted[col] = df_formatted[col].apply(lambda x: f'{x:.3f}' if pd.notna(x) else '')
         
@@ -177,6 +177,58 @@ def save_performance_table(df, filename, output_dir):
         
     except Exception as e:
         print(f"ERROR during table saving: {e}")
+
+
+def formatar_erro(media, desvio_padrao):
+    if media >= 1000:
+        media_str = f"{media:,.3f}".replace(",", "_TEMP_").replace(".", ",").replace("_TEMP_", ".")
+    elif media >= 10:
+        media_str = f"{media:.3f}"
+    else:
+        media_str = f"{media:.3f}"
+
+    desvio_str = f"{desvio_padrao:.3f}"
+    
+    # Usa o comando '\pm' do LaTeX
+    return f"${media_str} \\pm {desvio_str}$"
+
+def df_para_tabela_latex(df, nome_arquivo='tabela_latex.tex'):
+    
+    cabecalho_latex = r"""
+\begin{tabular}{lccccc}
+\hline
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Instance}}} & \multirow{2}{*}{\textbf{$n$ (approx.)}} & \multirow{2}{*}{\textbf{$m$ (approx.)}} & \multicolumn{2}{c}{\textbf{Time (ms)}} & \multirow{2}{*}{\textbf{Ratio}} \\ \cline{4-5}
+\multicolumn{1}{c}{} & & & \multicolumn{1}{c}{\cite{dljkstra1959note}} & \cite{duan2025breaking} & \\ \hline"""
+        
+    linhas_latex = []
+
+    # Iterar sobre as linhas do DataFrame
+    for index, row in df.iterrows():
+        dijkstra_tempo = formatar_erro(row['Tempo Dijkstra (ms)'], row['Desvio Dijkstra (ms)'])
+        bmssp_tempo = formatar_erro(row['Tempo BMSPP (ms)'], row['Desvio BMSPP (ms)'])
+
+        n_str = row['Número de Vértices']
+        m_str = row['Número de Arestas']
+        
+        ratio_str = f"{row['Ratio BMSPP / Dijkstra']:.3f}"
+        linha = (f"{row['Graph File']} & {n_str} & {m_str} & {dijkstra_tempo} & {bmssp_tempo} & {ratio_str} \\\\")
+        
+        linhas_latex.append(linha)
+    
+    corpo_latex = "\n".join(linhas_latex)
+    
+    rodape_latex = r"""\hline
+\end{tabular}"""
+    
+    tabela_completa = cabecalho_latex + "\n" + corpo_latex + "\n" + rodape_latex
+    
+    with open(nome_arquivo, 'w', encoding='utf-8') as f:
+        f.write(tabela_completa)
+        
+    print(f"✅ Tabela LaTeX gerada e salva em '{nome_arquivo}'")
+    print("\n--- Conteúdo do Arquivo ---\n")
+
+
 
 
 if __name__ == "__main__":
@@ -218,7 +270,7 @@ if __name__ == "__main__":
 
             df_pivot = df.pivot_table(index='n', columns='algorithm', values='time', aggfunc='mean').reset_index()
             df_pivot.columns.name = None
-
+            
             if 'bmssp' in df_pivot.columns and 'dijkstra' in df_pivot.columns:
                 df_pivot['ratio'] = df_pivot['bmssp'] / df_pivot['dijkstra']
                 df_ratio = df_pivot.dropna(subset=['ratio']) 
@@ -230,16 +282,19 @@ if __name__ == "__main__":
             else:
                 print("\nSkipping Ratio Plot: 'bmssp' or 'dijkstra' data missing in results.")
 
-            df_summary = df.groupby(['n', 'm', 'graph_file', 'algorithm'])['time'].mean().unstack(level='algorithm')
-
+            df_summary = df.groupby(['n', 'm', 'graph_file', 'algorithm'])[['time','std']].mean().unstack(level='algorithm')
+            
             df_summary = df_summary.reset_index()
+            df_summary.columns = ['n', 'm', 'graph_file'] + [f'{col[1]}_{col[0]}' for col in df_summary.columns[3:]]
             df_summary.columns.name = None
             print(df_summary)
 
             df_summary.rename(columns={
                 'graph_file': 'Graph File',
-                'dijkstra': 'Tempo Dijkstra (ms)',
-                'bmssp': 'Tempo BMSPP (ms)',
+                'dijkstra_time': 'Tempo Dijkstra (ms)',
+                'bmssp_time': 'Tempo BMSPP (ms)',
+                'dijkstra_std': 'Desvio Dijkstra (ms)',
+                'bmssp_std': 'Desvio BMSPP (ms)',
                 'n': 'Número de Vértices',
                 'm': 'Número de Arestas'
             }, inplace=True)
@@ -251,11 +306,16 @@ if __name__ == "__main__":
                 'Número de Vértices',
                 'Número de Arestas',
                 'Tempo Dijkstra (ms)',
+                'Desvio Dijkstra (ms)',
                 'Tempo BMSPP (ms)',
+                'Desvio BMSPP (ms)',
                 'Ratio BMSPP / Dijkstra'
             ]
 
             final_table = df_summary[cols_order].sort_values(by='Número de Vértices').copy()
+            
+            print(final_table.columns)
 
-            # 7. Save the Final Table
+            # Save the Final Table
             save_performance_table(final_table, OUTPUT_TABLE_FILENAME, OUTPUT_DIR)
+            df_para_tabela_latex(final_table, OUTPUT_DIR+"/table_latex.tex")
