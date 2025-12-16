@@ -1,0 +1,37 @@
+[
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 15744623022539,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598623,
+    "reps": 5,
+    "source": 0,
+    "std_us": 12103.0,
+    "time_us": 2219893.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 15744623022539,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598623,
+    "reps": 5,
+    "source": 0,
+    "std_us": 13564.0,
+    "time_us": 2142898.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 414282309539438,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947347,
+    "reps": 5,
+    "source": 0,
+    "std_us": 21981.0,
+    "time_us": 20160205.0
+}
+,
