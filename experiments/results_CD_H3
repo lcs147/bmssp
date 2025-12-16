@@ -1,0 +1,49 @@
+[
+{
+    "algorithm": "bmssp-CD",
+    "checksum": 925622,
+    "graph_name": "H3random8.gr",
+    "m": 24,
+    "n": 8,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6.0,
+    "time_us": 31.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 925622,
+    "graph_name": "H3random8.gr",
+    "m": 24,
+    "n": 8,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3.0,
+    "time_us": 6.0
+}
+,
+{
+    "algorithm": "bmssp-CD",
+    "checksum": 6231654390,
+    "graph_name": "H3random16384.gr",
+    "m": 49152,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6628.0,
+    "time_us": 107865.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 6231654390,
+    "graph_name": "H3random16384.gr",
+    "m": 49152,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 248.0,
+    "time_us": 7169.0
+}
+,

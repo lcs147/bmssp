@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#include "../bmssp.hpp"
+#include "../single_include/bmssp.hpp"
 #include "../helpers/dijkstra.hpp"
 
 #include <bits/stdc++.h>
@@ -81,7 +81,8 @@ signed main(int argc, char **argv) {
             times.push_back(timer.elapsed());
         }
     } else if(algorithm == "bmssp-expected"){
-        spp::dijkstra<distT> spp(adj);
+        spp_expected::bmssp<distT> spp(adj);
+        spp.prepare_graph(false);
         for(int i = 0; i < reps; i++) {
             timer.start();
             tie(d, pred) = spp.execute(s);

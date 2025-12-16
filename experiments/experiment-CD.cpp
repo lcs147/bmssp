@@ -1,11 +1,6 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-#ifdef LOCAL
-#include "../helpers/debug.cpp"
-#else
-#define debug(...) 0
-#endif
 
 #include "../single_include/bmssp.hpp"
 #include "../helpers/dijkstra.hpp"
@@ -50,7 +45,7 @@ struct timerT {
         return chrono::duration_cast<chrono::microseconds>(end - begin).count();
     }
 };
-using distT = double;
+using distT = long long int;
 
 distT check_sum(auto &v) {
     return accumulate(v.begin(), v.end(), distT());
@@ -85,8 +80,9 @@ signed main(int argc, char **argv) {
             timer.stop();
             times.push_back(timer.elapsed());
         }
-    } else {
-        spp::dijkstra<distT> spp(adj);
+    } else if(algorithm == "bmssp-CD"){
+        spp::bmssp<distT> spp(adj);
+        spp.prepare_graph(true);
         for(int i = 0; i < reps; i++) {
             timer.start();
             tie(d, pred) = spp.execute(s);
