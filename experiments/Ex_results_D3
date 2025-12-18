@@ -1,0 +1,572 @@
+[
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 120461838139,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1906.0,
+    "time_us": 212536.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 120461838139,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 2404.0,
+    "time_us": 233222.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 579200200677,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1835.0,
+    "time_us": 1296598.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 579200200677,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5960.0,
+    "time_us": 1515812.0
+}
+,
+,
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 11585101138,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "n": 32768,
+    "reps": 5,
+    "source": 0,
+    "std_us": 664.0,
+    "time_us": 15753.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 11585101138,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "n": 32768,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1022.0,
+    "time_us": 18210.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 213745838982,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "n": 524288,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1166.0,
+    "time_us": 561520.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 213745838982,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "n": 524288,
+    "reps": 5,
+    "source": 0,
+    "std_us": 7547.0,
+    "time_us": 644347.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 1044465471,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 105.0,
+    "time_us": 1832.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 1044465471,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 118.0,
+    "time_us": 2209.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 237773604,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 35.0,
+    "time_us": 482.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 237773604,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 60.0,
+    "time_us": 569.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 55379343575,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "n": 131072,
+    "reps": 5,
+    "source": 0,
+    "std_us": 246.0,
+    "time_us": 82566.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 55379343575,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "n": 131072,
+    "reps": 5,
+    "source": 0,
+    "std_us": 2868.0,
+    "time_us": 86682.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 20065138454444,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "n": 33554432,
+    "reps": 5,
+    "source": 0,
+    "std_us": 30790.0,
+    "time_us": 80508480.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 20065138454444,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "n": 33554432,
+    "reps": 5,
+    "source": 0,
+    "std_us": 429927.0,
+    "time_us": 93630580.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 4860770866,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 710.0,
+    "time_us": 7561.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 4860770866,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 355.0,
+    "time_us": 8276.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 2337013270,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "n": 8192,
+    "reps": 5,
+    "source": 0,
+    "std_us": 41.0,
+    "time_us": 3763.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 2337013270,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "n": 8192,
+    "reps": 5,
+    "source": 0,
+    "std_us": 251.0,
+    "time_us": 4404.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 2963503,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "n": 32,
+    "reps": 5,
+    "source": 0,
+    "std_us": 9.0,
+    "time_us": 37.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 2963503,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "n": 32,
+    "reps": 5,
+    "source": 0,
+    "std_us": 11.0,
+    "time_us": 45.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 775.0,
+    "time_us": 35969.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1799.0,
+    "time_us": 43211.0
+}
+,
+,
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388608,
+    "reps": 5,
+    "source": 0,
+    "std_us": 36052.0,
+    "time_us": 14663760.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388608,
+    "reps": 5,
+    "source": 0,
+    "std_us": 158983.0,
+    "time_us": 17269090.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 99492612,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "n": 512,
+    "reps": 5,
+    "source": 0,
+    "std_us": 9.0,
+    "time_us": 209.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 99492612,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "n": 512,
+    "reps": 5,
+    "source": 0,
+    "std_us": 18.0,
+    "time_us": 257.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 448461,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "n": 8,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3.0,
+    "time_us": 7.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 448461,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "n": 8,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4.0,
+    "time_us": 8.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 8388704,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 8.0,
+    "time_us": 63.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 8388704,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 12.0,
+    "time_us": 72.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 816019,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "n": 16,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6.0,
+    "time_us": 14.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 816019,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "n": 16,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6.0,
+    "time_us": 17.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 514990907,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "n": 2048,
+    "reps": 5,
+    "source": 0,
+    "std_us": 26.0,
+    "time_us": 858.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 514990907,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "n": 2048,
+    "reps": 5,
+    "source": 0,
+    "std_us": 127.0,
+    "time_us": 1117.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 1030639719731,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "n": 2097152,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5767.0,
+    "time_us": 2984520.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 1030639719731,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "n": 2097152,
+    "reps": 5,
+    "source": 0,
+    "std_us": 15740.0,
+    "time_us": 3540690.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 10527030737084,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 14179.0,
+    "time_us": 32733411.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 10527030737084,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 263213.0,
+    "time_us": 37598046.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 20764195,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "n": 128,
+    "reps": 5,
+    "source": 0,
+    "std_us": 10.0,
+    "time_us": 126.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 20764195,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "n": 128,
+    "reps": 5,
+    "source": 0,
+    "std_us": 16.0,
+    "time_us": 156.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 48799139,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 9.0,
+    "time_us": 137.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 48799139,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 18.0,
+    "time_us": 172.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 2259762709004,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6736.0,
+    "time_us": 7622572.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 2259762709004,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 53925.0,
+    "time_us": 8842806.0
+}
+,
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 42066620932352,
+    "graph_name": "random67108864D3.gr",
+    "m": 201326592,
+    "n": 67108864,
+    "reps": 5,
+    "source": 0,
+    "std_us": 2192333.0,
+    "time_us": 212341662.0
+}
+,
+
+]

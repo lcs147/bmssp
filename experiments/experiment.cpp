@@ -50,7 +50,7 @@ struct timerT {
         return chrono::duration_cast<chrono::microseconds>(end - begin).count();
     }
 };
-using distT = double;
+using distT = long long int;
 
 distT check_sum(auto &v) {
     return accumulate(v.begin(), v.end(), distT());

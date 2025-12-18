@@ -1,0 +1,291 @@
+[
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 15744623022539,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598623,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4284.0,
+    "time_us": 2063483.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 15744623022539,
+    "graph_name": "USA-road-t.E.gr",
+    "m": 8778114,
+    "n": 3598623,
+    "reps": 5,
+    "source": 0,
+    "std_us": 15613.0,
+    "time_us": 2048268.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 414282309539438,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947347,
+    "reps": 5,
+    "source": 0,
+    "std_us": 7794.0,
+    "time_us": 19576321.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 414282309539438,
+    "graph_name": "USA-road-t.USA.gr",
+    "m": 58333344,
+    "n": 23947347,
+    "reps": 5,
+    "source": 0,
+    "std_us": 82088.0,
+    "time_us": 18315890.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 9467701006184,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207945,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1387.0,
+    "time_us": 529171.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 9467701006184,
+    "graph_name": "USA-road-t.NW.gr",
+    "m": 2840208,
+    "n": 1207945,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1900.0,
+    "time_us": 544993.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 85933922091439,
+    "graph_name": "USA-road-t.W.gr",
+    "m": 15248146,
+    "n": 6262104,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4853.0,
+    "time_us": 4032778.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 85933922091439,
+    "graph_name": "USA-road-t.W.gr",
+    "m": 15248146,
+    "n": 6262104,
+    "reps": 5,
+    "source": 0,
+    "std_us": 27774.0,
+    "time_us": 3832615.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 151579068820351,
+    "graph_name": "USA-road-t.CTR.gr",
+    "m": 34292496,
+    "n": 14081816,
+    "reps": 5,
+    "source": 0,
+    "std_us": 22386.0,
+    "time_us": 13077753.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 151579068820351,
+    "graph_name": "USA-road-t.CTR.gr",
+    "m": 34292496,
+    "n": 14081816,
+    "reps": 5,
+    "source": 0,
+    "std_us": 74824.0,
+    "time_us": 11738670.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 398833553159,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321270,
+    "reps": 5,
+    "source": 0,
+    "std_us": 475.0,
+    "time_us": 139939.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 398833553159,
+    "graph_name": "USA-road-t.BAY.gr",
+    "m": 800172,
+    "n": 321270,
+    "reps": 5,
+    "source": 0,
+    "std_us": 607.0,
+    "time_us": 153031.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 233812473957,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264346,
+    "reps": 5,
+    "source": 0,
+    "std_us": 714.0,
+    "time_us": 119204.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 233812473957,
+    "graph_name": "USA-road-t.NY.gr",
+    "m": 733846,
+    "n": 264346,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1382.0,
+    "time_us": 132189.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 3127821654987,
+    "graph_name": "USA-road-t.NE.gr",
+    "m": 3897636,
+    "n": 1524453,
+    "reps": 5,
+    "source": 0,
+    "std_us": 2692.0,
+    "time_us": 700542.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 3127821654987,
+    "graph_name": "USA-road-t.NE.gr",
+    "m": 3897636,
+    "n": 1524453,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4105.0,
+    "time_us": 754700.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 1643623395460,
+    "graph_name": "USA-road-t.COL.gr",
+    "m": 1057066,
+    "n": 435666,
+    "reps": 5,
+    "source": 0,
+    "std_us": 2056.0,
+    "time_us": 212648.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 1643623395460,
+    "graph_name": "USA-road-t.COL.gr",
+    "m": 1057066,
+    "n": 435666,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1977.0,
+    "time_us": 230132.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 25014990935213,
+    "graph_name": "USA-road-t.LKS.gr",
+    "m": 6885658,
+    "n": 2758119,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3088.0,
+    "time_us": 1390777.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 25014990935213,
+    "graph_name": "USA-road-t.LKS.gr",
+    "m": 6885658,
+    "n": 2758119,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4308.0,
+    "time_us": 1421803.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 8027395053608,
+    "graph_name": "USA-road-t.FLA.gr",
+    "m": 2712798,
+    "n": 1070376,
+    "reps": 5,
+    "source": 0,
+    "std_us": 896.0,
+    "time_us": 454769.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 8027395053608,
+    "graph_name": "USA-road-t.FLA.gr",
+    "m": 2712798,
+    "n": 1070376,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1705.0,
+    "time_us": 510886.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 16312331565068,
+    "graph_name": "USA-road-t.CAL.gr",
+    "m": 4657742,
+    "n": 1890815,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3379.0,
+    "time_us": 837492.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 16312331565068,
+    "graph_name": "USA-road-t.CAL.gr",
+    "m": 4657742,
+    "n": 1890815,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5956.0,
+    "time_us": 860054.0
+}
+,
+
+]
