@@ -1,4 +1,4 @@
-name: CI Tests
+name: Almagamation + CI Tests
 
 on:
   pull_request:
@@ -19,18 +19,24 @@ jobs:
 
     steps:
       - name: Checkout code
+        if: ${{ !env.ACT }}
         uses: actions/checkout@v4
-        # with:
-          # ref: ${{ github.head_ref || github.ref }}
+        with:
+          ref: ${{ github.head_ref || github.ref }}
 
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install cmake build-essential -y
-          
+
       - name: Check If Imports are Self-contained
-        run: g++ -std=c++20 -O0 helpers/header_tester.cpp
-      
+        run: |
+          g++ -std=c++20 -O0 tests/imports-tester-expected.cpp
+          g++ -std=c++20 -O0 tests/imports-tester-wc.cpp
+
+      - name: Check If The README example is correct
+        run: g++ -std=c++20 -O0 helpers/readme.cpp
+
       # --- Header Generation ---
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -41,7 +47,9 @@ jobs:
         run: pip install quom
 
       - name: Generate Single Header
-        run: quom ${{ env.ORIGINAL_HEADER_PATH }} ${{ env.SINGLE_HEADER_PATH }}
+        run: |
+          mkdir -p $(dirname ${{ env.SINGLE_HEADER_PATH }})
+          quom ${{ env.ORIGINAL_HEADER_PATH }} ${{ env.SINGLE_HEADER_PATH }}
 
       # --- Build & Test ---
       - name: Configure CMake
@@ -55,16 +63,18 @@ jobs:
         run: ./tests
 
       - name: Commit and Push
+        # Only run on push to master, and skip if running locally via 'act'
         if: "${{ !env.ACT && github.event_name == 'push' }}"
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          
+
           git add ${{ env.SINGLE_HEADER_PATH }}
-          
+
           if git diff --staged --quiet; then
             echo "No changes detected. Skipping push."
           else
             git commit -m "Auto-generate amalgamated header [skip ci]"
-            git push
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
           fi

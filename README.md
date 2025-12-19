@@ -64,7 +64,7 @@ int main() {
 
     // 2. Initialize and build the graph
     spp::bmssp<T> solver(n);
-    // You can also use the version with average-case guarantees that uses less memory
+    // You can also use the version with average-case guarantees that uses less memory:
     // spp_expected::bmssp<T> solver(n);
     for (const auto& [u, v, weight] : edges) {
         solver.addEdge(u, v, weight);
