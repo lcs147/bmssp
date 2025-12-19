@@ -20,7 +20,7 @@ void runOnGraph(std::string path) {
 
     auto run = [&](auto &spp) {
         auto [dist, pred] = spp.execute(0);
-        auto path = spp.get_shortest_path(n - 1);
+        auto path = spp.get_shortest_path(n - 1, pred);
         ankerl::nanobench::doNotOptimizeAway(dist);
         ankerl::nanobench::doNotOptimizeAway(pred);
         ankerl::nanobench::doNotOptimizeAway(path);
@@ -66,7 +66,6 @@ for (auto const& r : results) {
     std::cout << "--------------------------------------------------------------------------------\n";
 }
 int main() {
-    // runOnGraph<long long>("../tests/graphs/random4096D3.gr");
     runOnGraph<long long>("../tests/graphs/random16384D3.gr");
     runOnGraph<long long>("../tests/graphs/USA-road-t.NY.gr");
 }
