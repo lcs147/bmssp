@@ -45,14 +45,14 @@ struct dijkstra {
         return {d, p};
     };
     
-    vector<int> get_shortest_path(int u) {
+    vector<int> get_shortest_path(int u, const vector<int> &pred) {
         if(d[u] == oo) return {};
 
         vector<int> path;
         path.reserve(n);
         while(u != -1) {
             path.push_back(u);
-            u = p[u];
+            u = pred[u];
         }
         reverse(path.begin(), path.end());
 

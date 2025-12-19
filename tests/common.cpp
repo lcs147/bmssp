@@ -30,13 +30,13 @@ auto checkReturns(int source, auto &dijkstra, auto &bmssp, bool transformed) {
     };
     
     for(int destination: {1, n / 3, n / 2, n / 3 * 2, n - 1}) {
-        auto path1 = dijkstra.get_shortest_path(destination);
+        auto path1 = dijkstra.get_shortest_path(destination, pred_expected);
         if(path1.size()) {
             CHECK(path1[0] == source);
             CHECK(path1.back() == destination);
         }
 
-        auto path2 = bmssp.get_shortest_path(destination);
+        auto path2 = bmssp.get_shortest_path(destination, pred_realized);
         if(path2.size()) {
             CHECK(path2[0] == source);
             CHECK(path2.back() == destination);

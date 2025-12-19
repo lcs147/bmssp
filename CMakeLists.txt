@@ -15,5 +15,5 @@ add_executable(tests tests/tests.cpp)
 target_compile_options(tests PRIVATE  --max-errors=2)
 
 add_executable(benchmarks tests/benchmarks.cpp)
-set_target_properties(benchmarks PROPERTIES EXCLUDE_FROM_ALL TRUE)
+# set_target_properties(benchmarks PROPERTIES EXCLUDE_FROM_ALL TRUE)
 target_compile_options(benchmarks PRIVATE  --max-errors=2 -O3)

@@ -14,6 +14,7 @@
 #include<queue>
 #include<algorithm>
 #include"external/floyd_rivest_select.h"
+#include"external/unordered_dense.h"
 
 namespace spp_expected {
 
@@ -416,7 +417,7 @@ public:
         }
     }
 
-    std::vector<int> get_shortest_path(int real_u) {
+    std::vector<int> get_shortest_path(int real_u, const std::vector<int> &real_pred) {
         if(!cd_transfomed) {
             int u = real_u;
             if(d[u] == oo) return {};
@@ -429,25 +430,24 @@ public:
             }
             return path; // {source, ..., real_u}
         } else {
-            int u = toAnyCustomNode(real_u);
-            if(d[u] == oo) return {};
+            int u = real_u;
+            if(d[toAnyCustomNode(u)] == oo) return {};
 
-            int max_path_sz = get<1>(getDist(u)) + 1;
+            int max_path_sz = get<1>(getDist(toAnyCustomNode(u))) + 1;
             std::vector<int> path;
             path.reserve(max_path_sz);
 
             int oldu;
             do {
-                path.push_back(customToReal(u));
+                path.push_back(u);
                 oldu = u;
-                u = getPred(u);
-            } while(customToReal(u) != customToReal(oldu));
+                u = real_pred[u];
+            } while(u != oldu);
 
             reverse(path.begin(), path.end());
             return path; // {source, ..., real_u}
         }
     }
-
 private:
     inline int toAnyCustomNode(int real_id) {
         return node_map[real_id];
