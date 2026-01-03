@@ -71,19 +71,6 @@
     "time_us": 7810279.0
 }
 ,
-,
-{
-    "algorithm": "bmssp",
-    "checksum": 9081398447815,
-    "graph_name": "H3random16777216.gr",
-    "m": 50331648,
-    "n": 16777216,
-    "reps": 5,
-    "source": 0,
-    "std_us": 25659.0,
-    "time_us": 32481274.0
-}
-,
 {
     "algorithm": "bmssp-CD",
     "checksum": 3333895,
@@ -396,19 +383,6 @@
     "time_us": 854.0
 }
 ,
-,
-{
-    "algorithm": "bmssp",
-    "checksum": 23346931214907,
-    "graph_name": "H3random33554432.gr",
-    "m": 100663296,
-    "n": 33554432,
-    "reps": 5,
-    "source": 0,
-    "std_us": 46982.0,
-    "time_us": 83223543.0
-}
-,
 {
     "algorithm": "bmssp-CD",
     "checksum": 276614564951,
@@ -529,5 +503,4 @@
     "time_us": 127.0
 }
 ,
-
 ]

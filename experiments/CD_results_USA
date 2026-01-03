@@ -23,19 +23,6 @@
     "time_us": 2060846.0
 }
 ,
-,
-{
-    "algorithm": "bmssp",
-    "checksum": 414282309539438,
-    "graph_name": "USA-road-t.USA.gr",
-    "m": 58333344,
-    "n": 23947347,
-    "reps": 5,
-    "source": 0,
-    "std_us": 31611.0,
-    "time_us": 19358638.0
-}
-,
 {
     "algorithm": "bmssp-CD",
     "checksum": 9467701006184,

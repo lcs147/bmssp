@@ -47,8 +47,6 @@
     "time_us": 1515812.0
 }
 ,
-,
-,
 {
     "algorithm": "bmssp-wc",
     "checksum": 11585101138,
@@ -288,8 +286,6 @@
     "std_us": 1799.0,
     "time_us": 43211.0
 }
-,
-,
 ,
 {
     "algorithm": "bmssp-wc",
@@ -553,19 +549,6 @@
     "source": 0,
     "std_us": 53925.0,
     "time_us": 8842806.0
-}
-,
-,
-{
-    "algorithm": "bmssp-expected",
-    "checksum": 42066620932352,
-    "graph_name": "random67108864D3.gr",
-    "m": 201326592,
-    "n": 67108864,
-    "reps": 5,
-    "source": 0,
-    "std_us": 2192333.0,
-    "time_us": 212341662.0
 }
 ,
 

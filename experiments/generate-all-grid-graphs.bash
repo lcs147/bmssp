@@ -101,7 +101,7 @@ for N in "${N_VALUES[@]}"; do
     echo "Generating grid-graph $((N/2))X$((N*2)) (Vertices). Output: ${OUTPUT_FILE}"
 
     # Arguments: N (n_row), N (n_col), 0 (Max weight), 1971 (Seed)
-    "${EXECUTABLE}" "$((N/2))" "$((N*2))" 0 1971 > "${OUTPUT_FILE}"
+    "${EXECUTABLE}" "$((N/2))" "$((N*2))" 100000 1971 > "${OUTPUT_FILE}"
     
     if [ $? -eq 0 ]; then
         echo "  [SUCCESS] Generated file size: $(du -h "${OUTPUT_FILE}" | cut -f1)"
