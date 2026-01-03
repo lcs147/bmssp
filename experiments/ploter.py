@@ -181,7 +181,7 @@ def save_performance_table(df, filename, output_dir):
 
 def formatar_erro(media, desvio_padrao):
     if media >= 1000:
-        media_str = f"{media:,.3f}".replace(",", "_TEMP_").replace(".", ",").replace("_TEMP_", ".")
+        media_str = f"{media:.3f}"
     elif media >= 10:
         media_str = f"{media:.3f}"
     else:
