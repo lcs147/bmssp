@@ -7,8 +7,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 6229.0,
-    "time_us": 16610146.0
+    "std_us": 4526.0,
+    "time_us": 16160012.0
 }
 ,
 {
@@ -19,8 +19,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 16543.0,
-    "time_us": 14881508.0
+    "std_us": 17998.0,
+    "time_us": 14783519.0
 }
 ,
 {
@@ -31,8 +31,8 @@
     "n": 4096,
     "reps": 5,
     "source": 0,
-    "std_us": 179.0,
-    "time_us": 2147.0
+    "std_us": 93.0,
+    "time_us": 2171.0
 }
 ,
 {
@@ -43,8 +43,8 @@
     "n": 4096,
     "reps": 5,
     "source": 0,
-    "std_us": 72.0,
-    "time_us": 2322.0
+    "std_us": 90.0,
+    "time_us": 2314.0
 }
 ,
 {
@@ -56,7 +56,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 22.0,
-    "time_us": 185.0
+    "time_us": 177.0
 }
 ,
 {
@@ -68,7 +68,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 15.0,
-    "time_us": 192.0
+    "time_us": 188.0
 }
 ,
 {
@@ -91,8 +91,8 @@
     "n": 256,
     "reps": 5,
     "source": 0,
-    "std_us": 11.0,
-    "time_us": 152.0
+    "std_us": 21.0,
+    "time_us": 176.0
 }
 ,
 {
@@ -103,8 +103,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 467.0,
-    "time_us": 142487.0
+    "std_us": 4348.0,
+    "time_us": 144753.0
 }
 ,
 {
@@ -115,8 +115,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 669.0,
-    "time_us": 138876.0
+    "std_us": 1039.0,
+    "time_us": 140197.0
 }
 ,
 {
@@ -125,46 +125,46 @@
     "graph_name": "random32X128RGridED.gr",
     "m": 31812,
     "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 85.0,
+    "time_us": 1988.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 289898.2690999992,
+    "graph_name": "random32X128RGridED.gr",
+    "m": 31812,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 44.0,
+    "time_us": 2125.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 26067.360679999987,
+    "graph_name": "random32X32SGridED.gr",
+    "m": 7812,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 32.0,
+    "time_us": 582.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 26067.360679999987,
+    "graph_name": "random32X32SGridED.gr",
+    "m": 7812,
+    "n": 1024,
     "reps": 5,
     "source": 0,
     "std_us": 61.0,
-    "time_us": 2068.0
-}
-,
-{
-    "algorithm": "bmssp-expected",
-    "checksum": 289898.2690999992,
-    "graph_name": "random32X128RGridED.gr",
-    "m": 31812,
-    "n": 4096,
-    "reps": 5,
-    "source": 0,
-    "std_us": 28.0,
-    "time_us": 2101.0
-}
-,
-{
-    "algorithm": "bmssp-wc",
-    "checksum": 26067.360679999987,
-    "graph_name": "random32X32SGridED.gr",
-    "m": 7812,
-    "n": 1024,
-    "reps": 5,
-    "source": 0,
-    "std_us": 20.0,
-    "time_us": 613.0
-}
-,
-{
-    "algorithm": "bmssp-expected",
-    "checksum": 26067.360679999987,
-    "graph_name": "random32X32SGridED.gr",
-    "m": 7812,
-    "n": 1024,
-    "reps": 5,
-    "source": 0,
-    "std_us": 24.0,
-    "time_us": 655.0
+    "time_us": 697.0
 }
 ,
 {
@@ -175,8 +175,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 5790.0,
-    "time_us": 705404.0
+    "std_us": 633.0,
+    "time_us": 683540.0
 }
 ,
 {
@@ -187,8 +187,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 5969.0,
-    "time_us": 673582.0
+    "std_us": 5521.0,
+    "time_us": 664788.0
 }
 ,
 {
@@ -199,8 +199,8 @@
     "n": 16384,
     "reps": 5,
     "source": 0,
-    "std_us": 193.0,
-    "time_us": 8056.0
+    "std_us": 44.0,
+    "time_us": 7619.0
 }
 ,
 {
@@ -211,8 +211,8 @@
     "n": 16384,
     "reps": 5,
     "source": 0,
-    "std_us": 295.0,
-    "time_us": 9342.0
+    "std_us": 280.0,
+    "time_us": 9478.0
 }
 ,
 {
@@ -223,8 +223,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 8399.0,
-    "time_us": 4142918.0
+    "std_us": 5876.0,
+    "time_us": 4030253.0
 }
 ,
 {
@@ -235,8 +235,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 106912.0,
-    "time_us": 4028127.0
+    "std_us": 107169.0,
+    "time_us": 3952511.0
 }
 ,
 {
@@ -247,8 +247,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 3556.0,
-    "time_us": 16603252.0
+    "std_us": 3952.0,
+    "time_us": 16059605.0
 }
 ,
 {
@@ -259,8 +259,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 44402.0,
-    "time_us": 15826348.0
+    "std_us": 48999.0,
+    "time_us": 15587046.0
 }
 ,
 {
@@ -271,8 +271,8 @@
     "n": 65536,
     "reps": 5,
     "source": 0,
-    "std_us": 149.0,
-    "time_us": 34016.0
+    "std_us": 82.0,
+    "time_us": 31212.0
 }
 ,
 {
@@ -283,8 +283,8 @@
     "n": 65536,
     "reps": 5,
     "source": 0,
-    "std_us": 629.0,
-    "time_us": 34402.0
+    "std_us": 702.0,
+    "time_us": 33378.0
 }
 ,
 {
@@ -295,8 +295,8 @@
     "n": 1024,
     "reps": 5,
     "source": 0,
-    "std_us": 30.0,
-    "time_us": 503.0
+    "std_us": 22.0,
+    "time_us": 499.0
 }
 ,
 {
@@ -307,8 +307,8 @@
     "n": 1024,
     "reps": 5,
     "source": 0,
-    "std_us": 36.0,
-    "time_us": 587.0
+    "std_us": 14.0,
+    "time_us": 549.0
 }
 ,
 {
@@ -320,7 +320,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 9.0,
-    "time_us": 71.0
+    "time_us": 67.0
 }
 ,
 {
@@ -331,8 +331,8 @@
     "n": 64,
     "reps": 5,
     "source": 0,
-    "std_us": 26.0,
-    "time_us": 87.0
+    "std_us": 11.0,
+    "time_us": 73.0
 }
 ,
 {
@@ -343,8 +343,8 @@
     "n": 16384,
     "reps": 5,
     "source": 0,
-    "std_us": 90.0,
-    "time_us": 7721.0
+    "std_us": 154.0,
+    "time_us": 7550.0
 }
 ,
 {
@@ -356,7 +356,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 86.0,
-    "time_us": 7863.0
+    "time_us": 7897.0
 }
 ,
 {
@@ -367,8 +367,8 @@
     "n": 64,
     "reps": 5,
     "source": 0,
-    "std_us": 10.0,
-    "time_us": 84.0
+    "std_us": 11.0,
+    "time_us": 88.0
 }
 ,
 {
@@ -379,7 +379,7 @@
     "n": 64,
     "reps": 5,
     "source": 0,
-    "std_us": 12.0,
+    "std_us": 13.0,
     "time_us": 95.0
 }
 ,
@@ -391,8 +391,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 9807.0,
-    "time_us": 3994982.0
+    "std_us": 5588.0,
+    "time_us": 4117005.0
 }
 ,
 {
@@ -403,8 +403,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 9632.0,
-    "time_us": 3813375.0
+    "std_us": 9382.0,
+    "time_us": 3709408.0
 }
 ,
 {
@@ -415,8 +415,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 533.0,
-    "time_us": 707137.0
+    "std_us": 445.0,
+    "time_us": 708683.0
 }
 ,
 {
@@ -427,8 +427,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 4976.0,
-    "time_us": 714278.0
+    "std_us": 6077.0,
+    "time_us": 694776.0
 }
 ,
 {
@@ -439,8 +439,8 @@
     "n": 65536,
     "reps": 5,
     "source": 0,
-    "std_us": 40.0,
-    "time_us": 30490.0
+    "std_us": 346.0,
+    "time_us": 32898.0
 }
 ,
 {
@@ -451,8 +451,8 @@
     "n": 65536,
     "reps": 5,
     "source": 0,
-    "std_us": 160.0,
-    "time_us": 31500.0
+    "std_us": 983.0,
+    "time_us": 33975.0
 }
 ,
 {
@@ -463,8 +463,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 591.0,
-    "time_us": 147402.0
+    "std_us": 463.0,
+    "time_us": 146680.0
 }
 ,
 {
@@ -475,8 +475,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 827.0,
-    "time_us": 152038.0
+    "std_us": 1900.0,
+    "time_us": 149615.0
 }
 ,
 
