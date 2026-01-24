@@ -142,7 +142,7 @@ Directly:
 
 Bibtex:
 ```bibtex
-@misc{castro_implementation_2025,
+@misc{ctr_implementation_2025,
   title = {Implementation and Brief Experimental Analysis of the {{Duan}} et al. (2025) Algorithm for Single-Source Shortest Paths},
   author = {Castro, Lucas and Clementino, Thailsson and {de Freitas}, Rosiane},
   year = 2025,
