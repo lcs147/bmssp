@@ -1,0 +1,25 @@
+
+\begin{tabular}{lccccc}
+\hline
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Instance}}} & \multirow{2}{*}{\textbf{$n$ (approx.)}} & \multirow{2}{*}{\textbf{$m$ (approx.)}} & \multicolumn{2}{c}{\textbf{Time (ms)}} & \multirow{2}{*}{\textbf{Ratio}} \\ \cline{4-5}
+\multicolumn{1}{c}{} & & & \multicolumn{1}{c}{\cite{dljkstra1959note}} & \cite{duan2025breaking} & \\ \hline
+random8X32RGridR.gr & 256 & 1812 & $0.006 \pm 0.002$ & $0.167 \pm 0.011$ & 27.833 \\
+random16X16SGridR.gr & 256 & 1860 & $0.027 \pm 0.004$ & $0.175 \pm 0.040$ & 6.481 \\
+random16X64RGridR.gr & 1024 & 7716 & $0.038 \pm 0.005$ & $0.661 \pm 0.027$ & 17.395 \\
+random32X32SGridR.gr & 1024 & 7812 & $0.132 \pm 0.008$ & $0.557 \pm 0.027$ & 4.220 \\
+random32X128RGridR.gr & 4096 & 31812 & $0.179 \pm 0.009$ & $2.750 \pm 0.054$ & 15.363 \\
+random64X64SGridR.gr & 4096 & 32004 & $0.611 \pm 0.100$ & $2.154 \pm 0.027$ & 3.525 \\
+random64X256RGridR.gr & 16384 & 129156 & $0.846 \pm 0.024$ & $4.403 \pm 0.060$ & 5.204 \\
+random128X128SGridR.gr & 16384 & 129540 & $2.564 \pm 0.050$ & $8.704 \pm 0.122$ & 3.395 \\
+random256X256SGridR.gr & 65536 & 521220 & $12.016 \pm 0.195$ & $35.362 \pm 0.484$ & 2.943 \\
+random128X512RGridR.gr & 65536 & 520452 & $4.401 \pm 0.202$ & $20.400 \pm 0.259$ & 4.635 \\
+random256X1024RGridR.gr & 262144 & 2089476 & $21.566 \pm 0.365$ & $91.943 \pm 0.303$ & 4.263 \\
+random512X512SGridR.gr & 262144 & 2091012 & $58.823 \pm 0.393$ & $172.667 \pm 2.889$ & 2.935 \\
+random512X2048RGridR.gr & 1048576 & 8373252 & $105.333 \pm 1.966$ & $405.541 \pm 0.606$ & 3.850 \\
+random1024X1024SGridR.gr & 1048576 & 8376324 & $265.690 \pm 1.800$ & $801.460 \pm 2.057$ & 3.017 \\
+random1024X4096RGridR.gr & 4194304 & 33523716 & $713.970 \pm 1.055$ & $3128.100 \pm 3.239$ & 4.381 \\
+random2048X2048SGridR.gr & 4194304 & 33529860 & $1465.386 \pm 4.764$ & $5249.212 \pm 20.311$ & 3.582 \\
+random2048X8192RGridR.gr & 16777216 & 134156292 & $3846.053 \pm 1.898$ & $14253.338 \pm 22.633$ & 3.706 \\
+random4096X4096SGridR.gr & 16777216 & 134168580 & $7097.615 \pm 24.926$ & $23100.643 \pm 20.561$ & 3.255 \\
+\hline
+\end{tabular}

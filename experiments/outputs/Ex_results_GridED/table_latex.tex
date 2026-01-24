@@ -1,0 +1,25 @@
+
+\begin{tabular}{lccccc}
+\hline
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{Instance}}} & \multirow{2}{*}{\textbf{$n$ (approx.)}} & \multirow{2}{*}{\textbf{$m$ (approx.)}} & \multicolumn{2}{c}{\textbf{Time (ms)}} & \multirow{2}{*}{\textbf{Ratio}} \\ \cline{4-5}
+\multicolumn{1}{c}{} & & & \multicolumn{1}{c}{BMSSP} & BMSSP-Expected & \\ \hline
+random8X32RGridED.gr & 256 & 1812 & $0.145 \pm 0.011$ & $0.152 \pm 0.011$ & 1.048 \\
+random16X16SGridED.gr & 256 & 1860 & $0.185 \pm 0.022$ & $0.192 \pm 0.015$ & 1.038 \\
+random16X64RGridED.gr & 1024 & 7716 & $0.503 \pm 0.030$ & $0.587 \pm 0.036$ & 1.167 \\
+random32X32SGridED.gr & 1024 & 7812 & $0.613 \pm 0.020$ & $0.655 \pm 0.024$ & 1.069 \\
+random32X128RGridED.gr & 4096 & 31812 & $2.068 \pm 0.061$ & $2.101 \pm 0.028$ & 1.016 \\
+random64X64SGridED.gr & 4096 & 32004 & $2.147 \pm 0.179$ & $2.322 \pm 0.072$ & 1.082 \\
+random64X256RGridED.gr & 16384 & 129156 & $7.721 \pm 0.090$ & $7.863 \pm 0.086$ & 1.018 \\
+random128X128SGridED.gr & 16384 & 129540 & $8.056 \pm 0.193$ & $9.342 \pm 0.295$ & 1.160 \\
+random256X256SGridED.gr & 65536 & 521220 & $34.016 \pm 0.149$ & $34.402 \pm 0.629$ & 1.011 \\
+random128X512RGridED.gr & 65536 & 520452 & $30.490 \pm 0.040$ & $31.500 \pm 0.160$ & 1.033 \\
+random256X1024RGridED.gr & 262144 & 2089476 & $142.487 \pm 0.467$ & $138.876 \pm 0.669$ & 0.975 \\
+random512X512SGridED.gr & 262144 & 2091012 & $147.402 \pm 0.591$ & $152.038 \pm 0.827$ & 1.031 \\
+random512X2048RGridED.gr & 1048576 & 8373252 & $705.404 \pm 5.790$ & $673.582 \pm 5.969$ & 0.955 \\
+random1024X1024SGridED.gr & 1048576 & 8376324 & $707.137 \pm 0.533$ & $714.278 \pm 4.976$ & 1.010 \\
+random1024X4096RGridED.gr & 4194304 & 33523716 & $3994.982 \pm 9.807$ & $3813.375 \pm 9.632$ & 0.955 \\
+random2048X2048SGridED.gr & 4194304 & 33529860 & $4142.918 \pm 8.399$ & $4028.127 \pm 106.912$ & 0.972 \\
+random2048X8192RGridED.gr & 16777216 & 134156292 & $16610.146 \pm 6.229$ & $14881.508 \pm 16.543$ & 0.896 \\
+random4096X4096SGridED.gr & 16777216 & 134168580 & $16603.252 \pm 3.556$ & $15826.348 \pm 44.402$ & 0.953 \\
+\hline
+\end{tabular}

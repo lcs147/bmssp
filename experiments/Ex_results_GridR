@@ -1,0 +1,483 @@
+[
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 3042684628.0,
+    "graph_name": "random64X64SGridR.gr",
+    "m": 32004,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 121.0,
+    "time_us": 2939.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 3042684628.0,
+    "graph_name": "random64X64SGridR.gr",
+    "m": 32004,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 82.0,
+    "time_us": 3161.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 531266907.0,
+    "graph_name": "random16X64RGridR.gr",
+    "m": 7716,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 66.0,
+    "time_us": 879.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 531266907.0,
+    "graph_name": "random16X64RGridR.gr",
+    "m": 7716,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 37.0,
+    "time_us": 928.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 74115001.0,
+    "graph_name": "random8X32RGridR.gr",
+    "m": 1812,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 11.0,
+    "time_us": 222.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 74115001.0,
+    "graph_name": "random8X32RGridR.gr",
+    "m": 1812,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 13.0,
+    "time_us": 248.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 89195599380805.0,
+    "graph_name": "random2048X2048SGridR.gr",
+    "m": 33529860,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 8222.0,
+    "time_us": 4772150.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 89195599380805.0,
+    "graph_name": "random2048X2048SGridR.gr",
+    "m": 33529860,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 54978.0,
+    "time_us": 4779115.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 124081884539227.0,
+    "graph_name": "random1024X4096RGridR.gr",
+    "m": 33523716,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3658.0,
+    "time_us": 4602729.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 124081884539227.0,
+    "graph_name": "random1024X4096RGridR.gr",
+    "m": 33523716,
+    "n": 4194304,
+    "reps": 5,
+    "source": 0,
+    "std_us": 13541.0,
+    "time_us": 4576182.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 8860654.0,
+    "graph_name": "random8X8SGridR.gr",
+    "m": 420,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 10.0,
+    "time_us": 79.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 8860654.0,
+    "graph_name": "random8X8SGridR.gr",
+    "m": 420,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 13.0,
+    "time_us": 92.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 32446928027.0,
+    "graph_name": "random64X256RGridR.gr",
+    "m": 129156,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 93.0,
+    "time_us": 10714.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 32446928027.0,
+    "graph_name": "random64X256RGridR.gr",
+    "m": 129156,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 89.0,
+    "time_us": 12042.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 23987046992.0,
+    "graph_name": "random128X128SGridR.gr",
+    "m": 129540,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 173.0,
+    "time_us": 10652.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 23987046992.0,
+    "graph_name": "random128X128SGridR.gr",
+    "m": 129540,
+    "n": 16384,
+    "reps": 5,
+    "source": 0,
+    "std_us": 310.0,
+    "time_us": 11836.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 984216075373293.0,
+    "graph_name": "random2048X8192RGridR.gr",
+    "m": 134156292,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5397.0,
+    "time_us": 20760381.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 984216075373293.0,
+    "graph_name": "random2048X8192RGridR.gr",
+    "m": 134156292,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 52477.0,
+    "time_us": 20342425.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 1997899424933.0,
+    "graph_name": "random256X1024RGridR.gr",
+    "m": 2089476,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 729.0,
+    "time_us": 186422.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 1997899424933.0,
+    "graph_name": "random256X1024RGridR.gr",
+    "m": 2089476,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1340.0,
+    "time_us": 193359.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 11797344.0,
+    "graph_name": "random4X16RGridR.gr",
+    "m": 396,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 23.0,
+    "time_us": 83.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 11797344.0,
+    "graph_name": "random4X16RGridR.gr",
+    "m": 396,
+    "n": 64,
+    "reps": 5,
+    "source": 0,
+    "std_us": 11.0,
+    "time_us": 86.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 1435846207249.0,
+    "graph_name": "random512X512SGridR.gr",
+    "m": 2091012,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 332.0,
+    "time_us": 185904.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 1435846207249.0,
+    "graph_name": "random512X512SGridR.gr",
+    "m": 2091012,
+    "n": 262144,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4969.0,
+    "time_us": 203802.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 709311068710186.0,
+    "graph_name": "random4096X4096SGridR.gr",
+    "m": 134168580,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5573.0,
+    "time_us": 19558697.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 709311068710186.0,
+    "graph_name": "random4096X4096SGridR.gr",
+    "m": 134168580,
+    "n": 16777216,
+    "reps": 5,
+    "source": 0,
+    "std_us": 334471.0,
+    "time_us": 19704930.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 57973473.0,
+    "graph_name": "random16X16SGridR.gr",
+    "m": 1860,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 12.0,
+    "time_us": 198.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 57973473.0,
+    "graph_name": "random16X16SGridR.gr",
+    "m": 1860,
+    "n": 256,
+    "reps": 5,
+    "source": 0,
+    "std_us": 42.0,
+    "time_us": 235.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 184080287569.0,
+    "graph_name": "random256X256SGridR.gr",
+    "m": 521220,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 114.0,
+    "time_us": 42934.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 184080287569.0,
+    "graph_name": "random256X256SGridR.gr",
+    "m": 521220,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 952.0,
+    "time_us": 46783.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 15582792005294.0,
+    "graph_name": "random512X2048RGridR.gr",
+    "m": 8373252,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 1106.0,
+    "time_us": 859999.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 15582792005294.0,
+    "graph_name": "random512X2048RGridR.gr",
+    "m": 8373252,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 3782.0,
+    "time_us": 886459.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 11266298496703.0,
+    "graph_name": "random1024X1024SGridR.gr",
+    "m": 8376324,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 5007.0,
+    "time_us": 852756.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 11266298496703.0,
+    "graph_name": "random1024X1024SGridR.gr",
+    "m": 8376324,
+    "n": 1048576,
+    "reps": 5,
+    "source": 0,
+    "std_us": 12774.0,
+    "time_us": 891755.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 4251795930.0,
+    "graph_name": "random32X128RGridR.gr",
+    "m": 31812,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 68.0,
+    "time_us": 3179.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 4251795930.0,
+    "graph_name": "random32X128RGridR.gr",
+    "m": 31812,
+    "n": 4096,
+    "reps": 5,
+    "source": 0,
+    "std_us": 88.0,
+    "time_us": 3434.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 396489446.0,
+    "graph_name": "random32X32SGridR.gr",
+    "m": 7812,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 11.0,
+    "time_us": 763.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 396489446.0,
+    "graph_name": "random32X32SGridR.gr",
+    "m": 7812,
+    "n": 1024,
+    "reps": 5,
+    "source": 0,
+    "std_us": 42.0,
+    "time_us": 885.0
+}
+,
+{
+    "algorithm": "bmssp-wc",
+    "checksum": 252394439012.0,
+    "graph_name": "random128X512RGridR.gr",
+    "m": 520452,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 174.0,
+    "time_us": 45743.0
+}
+,
+{
+    "algorithm": "bmssp-expected",
+    "checksum": 252394439012.0,
+    "graph_name": "random128X512RGridR.gr",
+    "m": 520452,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 507.0,
+    "time_us": 48676.0
+}
+,
+
+]

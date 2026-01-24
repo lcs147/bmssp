@@ -1,4 +1,4 @@
-name: CI Tests
+name: Almagamation + CI Tests
 
 on:
   pull_request:
@@ -6,29 +6,75 @@ on:
   push:
     branches: [ "master" ]
 
+permissions:
+  contents: write
+
+env:
+  SINGLE_HEADER_PATH: single_include/bmssp.hpp
+  ORIGINAL_HEADER_PATH: include/bmssp.hpp
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
+        if: ${{ !env.ACT }}
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
 
-      - name: Install dependencies (CMake, C++ Compiler)
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install cmake build-essential -y
-          g++ --version
 
       - name: Check If Imports are Self-contained
-        run: g++ -std=c++20 -O0 helpers/header_tester.cpp
+        run: |
+          g++ -std=c++20 -O0 tests/imports-tester-expected.cpp
+          g++ -std=c++20 -O0 tests/imports-tester-wc.cpp
 
+      - name: Check If The README example is correct
+        run: g++ -std=c++20 -O0 tests/readme.cpp
+
+      # --- Header Generation ---
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Quom
+        run: pip install quom
+
+      - name: Generate Single Header
+        run: |
+          mkdir -p $(dirname ${{ env.SINGLE_HEADER_PATH }})
+          quom ${{ env.ORIGINAL_HEADER_PATH }} ${{ env.SINGLE_HEADER_PATH }}
+
+      # --- Build & Test ---
       - name: Configure CMake
-        run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B ${{ github.workspace }}/build -DSINGLE_HEADER="${{ env.SINGLE_HEADER_PATH }}"
 
       - name: Build Project
-        run: cmake --build ${{ github.workspace }}/build --config Release
+        run: cmake --build ${{ github.workspace }}/build --target tests --config Release
 
       - name: Run Tests
-        run: ./tests
         working-directory: ${{ github.workspace }}/build
+        run: ./tests
+
+      - name: Commit and Push
+        # Only run on push to master, and skip if running locally via 'act'
+        if: "${{ !env.ACT && github.event_name == 'push' }}"
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+          git add ${{ env.SINGLE_HEADER_PATH }}
+
+          if git diff --staged --quiet; then
+            echo "No changes detected. Skipping push."
+          else
+            git commit -m "Auto-generate amalgamated header [skip ci]"
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
+          fi

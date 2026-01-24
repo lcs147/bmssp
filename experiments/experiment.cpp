@@ -7,7 +7,7 @@ using namespace std;
 #define debug(...) 0
 #endif
 
-#include "../bmssp.hpp"
+#include "../single_include/bmssp.hpp"
 #include "../helpers/dijkstra.hpp"
 
 #include <bits/stdc++.h>

@@ -7,8 +7,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 596.0,
-    "time_us": 73609.0
+    "std_us": 609.0,
+    "time_us": 73481.0
 }
 ,
 {
@@ -19,8 +19,8 @@
     "n": 262144,
     "reps": 5,
     "source": 0,
-    "std_us": 903.0,
-    "time_us": 237379.0
+    "std_us": 969.0,
+    "time_us": 208062.0
 }
 ,
 {
@@ -31,8 +31,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 2058.0,
-    "time_us": 418830.0
+    "std_us": 1434.0,
+    "time_us": 421216.0
 }
 ,
 {
@@ -43,8 +43,8 @@
     "n": 1048576,
     "reps": 5,
     "source": 0,
-    "std_us": 565.0,
-    "time_us": 1450863.0
+    "std_us": 1306.0,
+    "time_us": 1286205.0
 }
 ,
 {
@@ -55,8 +55,8 @@
     "n": 32768,
     "reps": 5,
     "source": 0,
-    "std_us": 68.0,
-    "time_us": 4769.0
+    "std_us": 113.0,
+    "time_us": 4675.0
 }
 ,
 {
@@ -67,8 +67,8 @@
     "n": 32768,
     "reps": 5,
     "source": 0,
-    "std_us": 539.0,
-    "time_us": 20455.0
+    "std_us": 558.0,
+    "time_us": 16356.0
 }
 ,
 {
@@ -79,8 +79,8 @@
     "n": 524288,
     "reps": 5,
     "source": 0,
-    "std_us": 2412.0,
-    "time_us": 174674.0
+    "std_us": 2665.0,
+    "time_us": 177561.0
 }
 ,
 {
@@ -91,8 +91,8 @@
     "n": 524288,
     "reps": 5,
     "source": 0,
-    "std_us": 1475.0,
-    "time_us": 631082.0
+    "std_us": 1586.0,
+    "time_us": 564448.0
 }
 ,
 {
@@ -103,8 +103,8 @@
     "n": 4096,
     "reps": 5,
     "source": 0,
-    "std_us": 17.0,
-    "time_us": 431.0
+    "std_us": 29.0,
+    "time_us": 432.0
 }
 ,
 {
@@ -115,8 +115,8 @@
     "n": 4096,
     "reps": 5,
     "source": 0,
-    "std_us": 38.0,
-    "time_us": 2244.0
+    "std_us": 30.0,
+    "time_us": 1818.0
 }
 ,
 {
@@ -127,7 +127,7 @@
     "n": 1024,
     "reps": 5,
     "source": 0,
-    "std_us": 6.0,
+    "std_us": 5.0,
     "time_us": 87.0
 }
 ,
@@ -139,8 +139,8 @@
     "n": 1024,
     "reps": 5,
     "source": 0,
-    "std_us": 21.0,
-    "time_us": 575.0
+    "std_us": 89.0,
+    "time_us": 504.0
 }
 ,
 {
@@ -151,8 +151,8 @@
     "n": 131072,
     "reps": 5,
     "source": 0,
-    "std_us": 654.0,
-    "time_us": 28035.0
+    "std_us": 1932.0,
+    "time_us": 29175.0
 }
 ,
 {
@@ -163,8 +163,8 @@
     "n": 131072,
     "reps": 5,
     "source": 0,
-    "std_us": 1126.0,
-    "time_us": 95711.0
+    "std_us": 1353.0,
+    "time_us": 81830.0
 }
 ,
 {
@@ -175,8 +175,8 @@
     "n": 33554432,
     "reps": 5,
     "source": 0,
-    "std_us": 14522.0,
-    "time_us": 21765062.0
+    "std_us": 13479.0,
+    "time_us": 21812125.0
 }
 ,
 {
@@ -187,8 +187,8 @@
     "n": 33554432,
     "reps": 5,
     "source": 0,
-    "std_us": 49101.0,
-    "time_us": 85382069.0
+    "std_us": 48540.0,
+    "time_us": 82592131.0
 }
 ,
 {
@@ -199,8 +199,8 @@
     "n": 16384,
     "reps": 5,
     "source": 0,
-    "std_us": 40.0,
-    "time_us": 2199.0
+    "std_us": 246.0,
+    "time_us": 2308.0
 }
 ,
 {
@@ -211,8 +211,8 @@
     "n": 16384,
     "reps": 5,
     "source": 0,
-    "std_us": 410.0,
-    "time_us": 8639.0
+    "std_us": 225.0,
+    "time_us": 6875.0
 }
 ,
 {
@@ -223,8 +223,8 @@
     "n": 8192,
     "reps": 5,
     "source": 0,
-    "std_us": 81.0,
-    "time_us": 1036.0
+    "std_us": 45.0,
+    "time_us": 1039.0
 }
 ,
 {
@@ -235,8 +235,8 @@
     "n": 8192,
     "reps": 5,
     "source": 0,
-    "std_us": 58.0,
-    "time_us": 4634.0
+    "std_us": 91.0,
+    "time_us": 3722.0
 }
 ,
 {
@@ -247,8 +247,8 @@
     "n": 32,
     "reps": 5,
     "source": 0,
-    "std_us": 2.0,
-    "time_us": 1.0
+    "std_us": 1.0,
+    "time_us": 2.0
 }
 ,
 {
@@ -259,71 +259,71 @@
     "n": 32,
     "reps": 5,
     "source": 0,
-    "std_us": 9.0,
-    "time_us": 42.0
-}
-,
-{
-    "algorithm": "dijkstra",
-    "checksum": 27377916160,
-    "graph_name": "random65536D3.gr",
-    "m": 196608,
-    "n": 65536,
-    "reps": 5,
-    "source": 0,
-    "std_us": 143.0,
-    "time_us": 11237.0
-}
-,
-{
-    "algorithm": "bmssp",
-    "checksum": 27377916160,
-    "graph_name": "random65536D3.gr",
-    "m": 196608,
-    "n": 65536,
-    "reps": 5,
-    "source": 0,
-    "std_us": 413.0,
-    "time_us": 44527.0
-}
-,
-{
-    "algorithm": "dijkstra",
-    "checksum": 4454832199161,
-    "graph_name": "random8388608D3.gr",
-    "m": 25165824,
-    "n": 8388608,
-    "reps": 5,
-    "source": 0,
-    "std_us": 5503.0,
-    "time_us": 4494410.0
-}
-,
-{
-    "algorithm": "bmssp",
-    "checksum": 4454832199161,
-    "graph_name": "random8388608D3.gr",
-    "m": 25165824,
-    "n": 8388608,
-    "reps": 5,
-    "source": 0,
-    "std_us": 11004.0,
-    "time_us": 15646055.0
-}
-,
-{
-    "algorithm": "dijkstra",
-    "checksum": 99492612,
-    "graph_name": "random512D3.gr",
-    "m": 1536,
-    "n": 512,
-    "reps": 5,
-    "source": 0,
-    "std_us": 5.0,
+    "std_us": 8.0,
     "time_us": 36.0
 }
 ,
 {
+    "algorithm": "dijkstra",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 199.0,
+    "time_us": 10738.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "n": 65536,
+    "reps": 5,
+    "source": 0,
+    "std_us": 801.0,
+    "time_us": 38156.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388608,
+    "reps": 5,
+    "source": 0,
+    "std_us": 6786.0,
+    "time_us": 4437921.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "n": 8388608,
+    "reps": 5,
+    "source": 0,
+    "std_us": 15531.0,
+    "time_us": 14808467.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 99492612,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "n": 512,
+    "reps": 5,
+    "source": 0,
+    "std_us": 4.0,
+    "time_us": 38.0
+}
+,
+{
     "algorithm": "bmssp",
     "checksum": 99492612,
     "graph_name": "random512D3.gr",
@@ -331,8 +331,8 @@
     "n": 512,
     "reps": 5,
     "source": 0,
-    "std_us": 11.0,
-    "time_us": 259.0
+    "std_us": 12.0,
+    "time_us": 227.0
 }
 ,
 {
@@ -356,7 +356,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 3.0,
-    "time_us": 7.0
+    "time_us": 6.0
 }
 ,
 {
@@ -379,8 +379,8 @@
     "n": 64,
     "reps": 5,
     "source": 0,
-    "std_us": 8.0,
-    "time_us": 71.0
+    "std_us": 10.0,
+    "time_us": 69.0
 }
 ,
 {
@@ -403,8 +403,8 @@
     "n": 16,
     "reps": 5,
     "source": 0,
-    "std_us": 6.0,
-    "time_us": 16.0
+    "std_us": 5.0,
+    "time_us": 14.0
 }
 ,
 {
@@ -415,8 +415,8 @@
     "n": 2048,
     "reps": 5,
     "source": 0,
-    "std_us": 6.0,
-    "time_us": 192.0
+    "std_us": 20.0,
+    "time_us": 214.0
 }
 ,
 {
@@ -427,8 +427,8 @@
     "n": 2048,
     "reps": 5,
     "source": 0,
-    "std_us": 28.0,
-    "time_us": 1175.0
+    "std_us": 25.0,
+    "time_us": 880.0
 }
 ,
 {
@@ -439,8 +439,8 @@
     "n": 2097152,
     "reps": 5,
     "source": 0,
-    "std_us": 7659.0,
-    "time_us": 946968.0
+    "std_us": 5953.0,
+    "time_us": 939767.0
 }
 ,
 {
@@ -451,8 +451,8 @@
     "n": 2097152,
     "reps": 5,
     "source": 0,
-    "std_us": 8977.0,
-    "time_us": 3226209.0
+    "std_us": 9313.0,
+    "time_us": 2993859.0
 }
 ,
 {
@@ -463,8 +463,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 6375.0,
-    "time_us": 9998167.0
+    "std_us": 23569.0,
+    "time_us": 9899507.0
 }
 ,
 {
@@ -475,8 +475,8 @@
     "n": 16777216,
     "reps": 5,
     "source": 0,
-    "std_us": 188505.0,
-    "time_us": 34104239.0
+    "std_us": 118261.0,
+    "time_us": 32367954.0
 }
 ,
 {
@@ -488,7 +488,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 3.0,
-    "time_us": 6.0
+    "time_us": 5.0
 }
 ,
 {
@@ -499,8 +499,8 @@
     "n": 128,
     "reps": 5,
     "source": 0,
-    "std_us": 12.0,
-    "time_us": 148.0
+    "std_us": 11.0,
+    "time_us": 127.0
 }
 ,
 {
@@ -512,7 +512,7 @@
     "reps": 5,
     "source": 0,
     "std_us": 4.0,
-    "time_us": 13.0
+    "time_us": 14.0
 }
 ,
 {
@@ -523,8 +523,8 @@
     "n": 256,
     "reps": 5,
     "source": 0,
-    "std_us": 10.0,
-    "time_us": 163.0
+    "std_us": 8.0,
+    "time_us": 136.0
 }
 ,
 {
@@ -535,8 +535,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 3322.0,
-    "time_us": 2012560.0
+    "std_us": 4511.0,
+    "time_us": 2022890.0
 }
 ,
 {
@@ -547,8 +547,8 @@
     "n": 4194304,
     "reps": 5,
     "source": 0,
-    "std_us": 13655.0,
-    "time_us": 8218205.0
+    "std_us": 44385.0,
+    "time_us": 7702933.0
 }
 ,
 ]
