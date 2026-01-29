@@ -57,7 +57,7 @@ for FILE in "${FILES[@]}"; do
     for TYPE in "${TYPES[@]}"; do
         FILE_PATH="${FILES_DIR}/${FILE}" 
         printf "Running experiment on ${FILE} with ${TYPE}\n"
-        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 1 0 >> "$OUTPUT_FILE"
+        "${SCRIPT_DIR}/a" "$FILE_PATH" "$TYPE" 5 0 >> "$OUTPUT_FILE"
         printf ",\n" >> "$OUTPUT_FILE"
     done
 done

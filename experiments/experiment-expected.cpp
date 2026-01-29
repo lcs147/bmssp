@@ -6,6 +6,7 @@ using namespace std;
 #include "../helpers/dijkstra.hpp"
 
 #include <bits/stdc++.h>
+#include <sys/resource.h>
 #include "../helpers/common.hpp"
 #include "../helpers/external/json.hpp"
 using namespace std;
@@ -28,6 +29,14 @@ double calculatePopulationSD(auto data) {
     }
     double variance = squaredDifferenceSum / data.size();
     return sqrt(variance);
+}
+long long getPeakMemory() {
+    struct rusage usage;
+    if (getrusage(RUSAGE_SELF, &usage) == 0) {
+        long long peakMemory = usage.ru_maxrss * 1024;
+        return peakMemory;
+    }
+    return 0;
 }
 
 struct timerT {
@@ -101,6 +110,7 @@ signed main(int argc, char **argv) {
     j["time_us"] = ceil(calculateMean(times));
     j["std_us"] = ceil(calculatePopulationSD(times));
     j["checksum"] = check_sum(d);
+    j["max_memory"] = getPeakMemory();
 
     std::cout << j.dump(4) << std::endl;
     return 0;

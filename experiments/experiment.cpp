@@ -39,11 +39,7 @@ double calculatePopulationSD(auto data) {
 long long getPeakMemory() {
     struct rusage usage;
     if (getrusage(RUSAGE_SELF, &usage) == 0) {
-#ifdef __APPLE__
-        long long peakMemory = usage.ru_maxrss;
-#else
         long long peakMemory = usage.ru_maxrss * 1024;
-#endif
         return peakMemory;
     }
     return 0;
