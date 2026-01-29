@@ -36,16 +36,17 @@ double calculatePopulationSD(auto data) {
     return sqrt(variance);
 }
 
-void getPeakMemory() {
+long long getPeakMemory() {
     struct rusage usage;
     if (getrusage(RUSAGE_SELF, &usage) == 0) {
 #ifdef __APPLE__
-        long peakMemory = usage.ru_maxrss;
+        long long peakMemory = usage.ru_maxrss;
 #else
-        long peakMemory = usage.ru_maxrss * 1024;
+        long long peakMemory = usage.ru_maxrss * 1024;
 #endif
         return peakMemory;
     }
+    return 0;
 }
 
 struct timerT {

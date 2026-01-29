@@ -1,0 +1,643 @@
+[
+{
+    "algorithm": "dijkstra",
+    "checksum": 120461838139,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "max_memory": 58691584,
+    "n": 262144,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 80937.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 120461838139,
+    "graph_name": "random262144D3.gr",
+    "m": 786432,
+    "max_memory": 157814784,
+    "n": 262144,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 239626.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 579200200677,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "max_memory": 224702464,
+    "n": 1048576,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 452276.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 579200200677,
+    "graph_name": "random1048576D3.gr",
+    "m": 3145728,
+    "max_memory": 620666880,
+    "n": 1048576,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 1386450.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": -4611686018642136268,
+    "graph_name": "random268435456D3.gr",
+    "m": 805306368,
+    "max_memory": 19330740224,
+    "n": 268435456,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 1122315.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 11585101138,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "max_memory": 10240000,
+    "n": 32768,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 5910.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 11585101138,
+    "graph_name": "random32768D3.gr",
+    "m": 98304,
+    "max_memory": 24240128,
+    "n": 32768,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 19955.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 213745838982,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "max_memory": 114069504,
+    "n": 524288,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 198380.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 213745838982,
+    "graph_name": "random524288D3.gr",
+    "m": 1572864,
+    "max_memory": 312156160,
+    "n": 524288,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 628843.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 1044465471,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "max_memory": 4222976,
+    "n": 4096,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 465.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 1044465471,
+    "graph_name": "random4096D3.gr",
+    "m": 12288,
+    "max_memory": 6500352,
+    "n": 4096,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 1896.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 237773604,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "max_memory": 3698688,
+    "n": 1024,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 97.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 237773604,
+    "graph_name": "random1024D3.gr",
+    "m": 3072,
+    "max_memory": 4481024,
+    "n": 1024,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 505.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 55379343575,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "max_memory": 30855168,
+    "n": 131072,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 35560.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 55379343575,
+    "graph_name": "random131072D3.gr",
+    "m": 393216,
+    "max_memory": 80924672,
+    "n": 131072,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 97119.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 20065138454444,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "max_memory": 7013044224,
+    "n": 33554432,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 23672967.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 20065138454444,
+    "graph_name": "random33554432D3.gr",
+    "m": 100663296,
+    "max_memory": 22834565120,
+    "n": 33554432,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 85344453.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 4860770866,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "max_memory": 6987776,
+    "n": 16384,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 2298.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 4860770866,
+    "graph_name": "random16384D3.gr",
+    "m": 49152,
+    "max_memory": 13369344,
+    "n": 16384,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 7274.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 2337013270,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "max_memory": 5083136,
+    "n": 8192,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 1199.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 2337013270,
+    "graph_name": "random8192D3.gr",
+    "m": 24576,
+    "max_memory": 9003008,
+    "n": 8192,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 3900.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 2963503,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "max_memory": 2727936,
+    "n": 32,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 3.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 2963503,
+    "graph_name": "random32D3.gr",
+    "m": 96,
+    "max_memory": 2727936,
+    "n": 32,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 51.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "max_memory": 17219584,
+    "n": 65536,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 12078.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 27377916160,
+    "graph_name": "random65536D3.gr",
+    "m": 196608,
+    "max_memory": 43008000,
+    "n": 65536,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 36315.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 82977720177571,
+    "graph_name": "random134217728D3.gr",
+    "m": 402653184,
+    "max_memory": 28041564160,
+    "n": 134217728,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 119001546.0
+}
+,
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "max_memory": 1755693056,
+    "n": 8388608,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 4718901.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 4454832199161,
+    "graph_name": "random8388608D3.gr",
+    "m": 25165824,
+    "max_memory": 4939640832,
+    "n": 8388608,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 14945066.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 99492612,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "max_memory": 2711552,
+    "n": 512,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 43.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 99492612,
+    "graph_name": "random512D3.gr",
+    "m": 1536,
+    "max_memory": 4141056,
+    "n": 512,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 236.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 448461,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "max_memory": 2711552,
+    "n": 8,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 0.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 448461,
+    "graph_name": "random8D3.gr",
+    "m": 24,
+    "max_memory": 2711552,
+    "n": 8,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 13.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 8388704,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "max_memory": 2711552,
+    "n": 64,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 5.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 8388704,
+    "graph_name": "random64D3.gr",
+    "m": 192,
+    "max_memory": 2711552,
+    "n": 64,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 77.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 816019,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "max_memory": 2711552,
+    "n": 16,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 1.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 816019,
+    "graph_name": "random16D3.gr",
+    "m": 48,
+    "max_memory": 2711552,
+    "n": 16,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 26.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 514990907,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "max_memory": 4038656,
+    "n": 2048,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 203.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 514990907,
+    "graph_name": "random2048D3.gr",
+    "m": 6144,
+    "max_memory": 4988928,
+    "n": 2048,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 895.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 1030639719731,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "max_memory": 441569280,
+    "n": 2097152,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 924575.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 1030639719731,
+    "graph_name": "random2097152D3.gr",
+    "m": 6291456,
+    "max_memory": 1237843968,
+    "n": 2097152,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 3058892.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 10527030737084,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "max_memory": 3508334592,
+    "n": 16777216,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 9982005.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 10527030737084,
+    "graph_name": "random16777216D3.gr",
+    "m": 50331648,
+    "max_memory": 9875529728,
+    "n": 16777216,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 32831703.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 20764195,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "max_memory": 2711552,
+    "n": 128,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 10.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 20764195,
+    "graph_name": "random128D3.gr",
+    "m": 384,
+    "max_memory": 2711552,
+    "n": 128,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 152.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 48799139,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "max_memory": 2711552,
+    "n": 256,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 19.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 48799139,
+    "graph_name": "random256D3.gr",
+    "m": 768,
+    "max_memory": 3919872,
+    "n": 256,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 228.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 2259762709004,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "max_memory": 879538176,
+    "n": 4194304,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 2019977.0
+}
+,
+{
+    "algorithm": "bmssp",
+    "checksum": 2259762709004,
+    "graph_name": "random4194304D3.gr",
+    "m": 12582912,
+    "max_memory": 2857664512,
+    "n": 4194304,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 7791934.0
+}
+,
+{
+    "algorithm": "dijkstra",
+    "checksum": 42066620932352,
+    "graph_name": "random67108864D3.gr",
+    "m": 201326592,
+    "max_memory": 14022774784,
+    "n": 67108864,
+    "reps": 1,
+    "source": 0,
+    "std_us": 0.0,
+    "time_us": 49405836.0
+}
+,
+,
+
+]
